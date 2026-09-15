@@ -1,0 +1,82 @@
+@page
+@using Microsoft.AspNetCore.Http.Features
+@model TwoFactorAuthenticationModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+@{
+    var consentFeature = HttpContext.Features.Get<ITrackingConsentFeature>();
+    @if (consentFeature?.CanTrack ?? true)
+    {
+        @if (Model.Is2faEnabled)
+        {
+            if (Model.RecoveryCodesLeft == 0)
+            {
+                <div class="alert alert-danger">
+                    <strong>@Localizer["Recovery.None"]</strong>
+                    <p>@Localizer["Recovery.MustBeforeLink"]<a asp-page="./GenerateRecoveryCodes">@Localizer["Recovery.GenerateLink"]</a>@Localizer["Recovery.BeforeLogin"]</p>
+                </div>
+            }
+            else if (Model.RecoveryCodesLeft == 1)
+            {
+                <div class="alert alert-danger">
+                    <strong>@Localizer["Recovery.One"]</strong>
+                    <p>@Localizer["Recovery.CanBeforeLink"]<a asp-page="./GenerateRecoveryCodes">@Localizer["Recovery.GenerateLink"]</a>@Localizer["Recovery.End"]</p>
+                </div>
+            }
+            else if (Model.RecoveryCodesLeft <= 3)
+            {
+                <div class="alert alert-warning">
+                    <strong>@Localizer["Recovery.Few", Model.RecoveryCodesLeft]</strong>
+                    <p>@Localizer["Recovery.ShouldBeforeLink"]<a asp-page="./GenerateRecoveryCodes">@Localizer["Recovery.GenerateLink"]</a>@Localizer["Recovery.End"]</p>
+                </div>
+            }
+
+            <section class="manage-section">
+                <div class="manage-action-group manage-action-group-start">
+                    @if (Model.IsMachineRemembered)
+                    {
+                        <form method="post">
+                            <button type="submit" class="btn btn-outline-primary">@Localizer["Action.ForgetBrowser"]</button>
+                        </form>
+                    }
+                    <a asp-page="./Disable2fa" class="btn btn-outline-danger">@Localizer["Action.Disable2fa"]</a>
+                    <a asp-page="./GenerateRecoveryCodes" class="btn btn-outline-primary">@Localizer["Action.ResetRecoveryCodes"]</a>
+                </div>
+            </section>
+        }
+
+        <section class="manage-section">
+            <h4 class="manage-section-title">@Localizer["Authenticator.Title"]</h4>
+
+            <div class="manage-action-group manage-action-group-start">
+                @if (!Model.HasAuthenticator)
+                {
+                    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">@Localizer["Action.AddAuthenticator"]</a>
+                }
+                else
+                {
+                    <a id="enable-authenticator" asp-page="./EnableAuthenticator" class="btn btn-primary">@Localizer["Action.SetupAuthenticator"]</a>
+                    <a id="reset-authenticator" asp-page="./ResetAuthenticator" class="btn btn-outline-danger">@Localizer["Action.ResetAuthenticator"]</a>
+                }
+            </div>
+        </section>
+    }
+    else
+    {
+        <div class="alert alert-danger">
+            <strong>@Localizer["Privacy.Title"]</strong>
+            <p>@Localizer["Privacy.Body"]</p>
+        </div>
+    }
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,110 @@
+﻿@using BudgetManager.Web.Controllers
+@using BudgetManager.Web.Extensions
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+}
+
+@section right_actions
+{
+    <div>
+        <button type="button" class="btn btn-primary btn-sm js-entity-add">
+            <i class=" fa-solid fa-plus"></i> @SharedLocalizer["Action.Add"].Value
+        </button>
+    </div>
+}
+
+<div class="js-entity-manager"
+     data-list-url="@Url.Action(nameof(BankController.GetDatatable), nameof(BankController).ToControllerName())"
+     data-add-get-url="@Url.Action(nameof(BankController.GetAddPartial), nameof(BankController).ToControllerName())"
+     data-edit-get-url="@Url.Action(nameof(BankController.GetEditPartial), nameof(BankController).ToControllerName())"
+     data-add-post-url="@Url.Action(nameof(BankController.PostAdd), nameof(BankController).ToControllerName())"
+     data-edit-post-url="@Url.Action(nameof(BankController.PostEdit), nameof(BankController).ToControllerName())"
+     data-delete-url="@Url.Action(nameof(BankController.Delete), nameof(BankController).ToControllerName())"
+     data-add-title="@Localizer["Modal.Add.Title"]"
+     data-edit-title="@Localizer["Modal.Edit.Title"]"
+     data-delete-title="@Localizer["Modal.Delete.Title"]"
+     data-delete-confirmation="@Localizer["Modal.Delete.Confirmation"].Value.ToHtml()"
+     data-add-action="@SharedLocalizer["Action.Add"]"
+     data-edit-action="@SharedLocalizer["Action.Edit"]"
+     data-delete-action="@SharedLocalizer["Action.Delete"]"
+     data-datatable-empty="@Localizer["Datatable.Empty"]"
+     data-datatable-info="@Localizer["Datatable.Info"]"
+     data-datatable-info-filtered="@Localizer["Datatable.InfoFiltered"]"
+     data-datatable-lengthmenu-all="@Localizer["Datatable.LengthMenu.All"]"
+     data-datatable-lengthmenu-label="@Localizer["Datatable.LengthMenu.Label"]"
+     data-datatable-lengthmenu-show="@Localizer["Datatable.LengthMenu.Show"]"
+     data-datatable-zerorecord="@Localizer["Datatable.ZeroRecord"]"
+     data-datatable-search-placeholder="@Localizer["Datatable.SearchPlaceholder"]"
+     data-datatable-processing="@SharedLocalizer["Datatable.Processing"]"
+     data-datatable-first="@SharedLocalizer["Datatable.First"]"
+     data-datatable-last="@SharedLocalizer["Datatable.Last"]"
+     data-datatable-previous="@SharedLocalizer["Datatable.Previous"]"
+     data-datatable-next="@SharedLocalizer["Datatable.Next"]"
+     data-error="@SharedLocalizer["Error.Generic"]"
+     data-saved="@Localizer["Message.Saved"]"
+     data-deleted="@Localizer["Message.Deleted"]">
+
+    <div class="text-center">
+        <table class="table table-striped table-bordered table-hover table-with-fixed-header dt-responsive dataTable_withoutHeaderDiv js-entity-table">
+            <thead>
+                <tr>
+                    <th></th> <!-- Responsive -->
+                    <th class="text-start align-middle">@SharedLocalizer["ColumnTitle.Name"].Value</th>
+                    <th class="text-center align-middle">@Localizer["ColumnTitle.Bic"].Value</th>
+                    <th class="text-center align-middle">@Localizer["ColumnTitle.AccountsCount"].Value</th>
+                    <th></th> <!-- Boutons -->
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Section des div modales -->
+<div class="modal fade js-entity-edit-modal" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title">@Localizer["Modal.Common.Title"].Value</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm(FormMethod.Dialog, new { @class = "js-entity-form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="js-entity-edit-content"></div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary js-entity-save">@SharedLocalizer["Action.Save"].Value</button>
+                <button type="button" class="btn btn-outline-primary js-entity-cancel">@SharedLocalizer["Action.Cancel"].Value</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade js-entity-confirm-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger js-entity-confirm">@SharedLocalizer["Action.Yes"].Value</button>
+                <button type="button" class="btn btn-secondary js-entity-confirm-cancel">@SharedLocalizer["Action.No"].Value</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin de la section des div modales -->
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="@Url.Content("~/js/entity-manager.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/bank-manager.js")" type="text/javascript" asp-append-version="true"></script>
+}

@@ -1,0 +1,13 @@
+Hello {{FirstName}},
+
+Your Budget Manager account has been created.
+
+To complete your registration, you need to confirm your email address and create your password by opening the following link:
+
+{{ActivationUrl}}
+
+This link is valid until {{ExpiresOn}}. After this date, you will need to ask for a new activation email.
+
+If you did not request this, you can safely ignore this email.
+
+Budget Manager · Automated message, please do not reply.

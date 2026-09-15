@@ -1,0 +1,13 @@
+﻿Bonjour {{FirstName}},
+
+Votre compte Budget Manager a été créé.
+
+Pour finaliser votre inscription, vous devez confirmer votre adresse mail et créer votre mot de passe en ouvrant le lien suivant : 
+
+{{ActivationUrl}}
+
+Ce lien est valide jusqu'au {{ExpiresOn}}. Après cette date, vous devrez demander la réception d'un nouveau mail d'activation.
+
+Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer ce mail.
+
+Budget Manager · Message automatique, merci de ne pas répondre.

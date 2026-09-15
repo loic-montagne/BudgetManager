@@ -1,0 +1,36 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@model BudgetManager.Web.Models.Account.AccountFormModel
+
+@{
+    var edit = ViewData["Edit"] as bool? ?? false;
+}
+
+<input asp-for="Id" type="hidden" />
+
+<div class="form-floating mb-3">
+    <input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Placeholder.Name"]" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="Name" class="form-label">
+        @SharedLocalizer["Field.Name"]
+    </label>
+</div>
+
+<div class="form-floating mb-3">
+    <select asp-for="BankId" asp-items="Model.Banks" class="form-select" disabled="@edit">
+    </select>
+    <div class="invalid-feedback"></div>
+    <label asp-for="BankId" class="form-label">
+        @Localizer["Field.Bank"]
+    </label>
+</div>
+
+<div class="form-floating">
+    <input asp-for="Iban" class="form-control" placeholder="@Localizer["Placeholder.Iban"]" readonly="@edit" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="Iban" class="form-label">
+        @Localizer["Field.Iban"]
+    </label>
+</div>
+
+<partial name="_AuditablePartial" model="Model" />

@@ -1,0 +1,18 @@
+@using BudgetManager.Web.Models.Common
+@model ErrorModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+}
+
+<h1 class="text-danger">@Localizer["Title"]</h1>
+<h2 class="text-danger">@Localizer["Subtitle"]</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p><strong>@Localizer["RequestId"]</strong> <code>@Model.RequestId</code></p>
+}
+
+<h3>@Localizer["Development.Title"]</h3>
+<p>@Localizer["Development.Body1.Before"]<strong>@Localizer["Development.Body1.Strong"]</strong>@Localizer["Development.Body1.After"]</p>
+<p><strong>@Localizer["Development.Body2.Strong"]</strong> @Localizer["Development.Body2.Text"]</p>

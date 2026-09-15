@@ -1,0 +1,10 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/colors.css",
+    "inputFile": "wwwroot/scss/colors.scss"
+  },
+  {
+    "outputFile": "wwwroot/css/bootstrap.css",
+    "inputFile": "wwwroot/scss/bootstrap.scss"
+  }
+]

@@ -1,0 +1,78 @@
+﻿@using BudgetManager.Application.Common
+@using BudgetManager.Application.Features.User.GetCurrent
+@using System.Globalization
+@model CurrentUserDto
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@{
+    var firstInitial = string.IsNullOrWhiteSpace(Model.FirstName) ? null : Model.FirstName.Trim()[0].ToString();
+    var lastInitial = string.IsNullOrWhiteSpace(Model.LastName) ? null : Model.LastName.Trim()[0].ToString();
+    var initials = string.Concat(firstInitial, lastInitial).ToUpper(CultureInfo.CurrentUICulture);
+    var fullName = $"{Model.FirstName} {Model.LastName}".Trim();
+    var hasProfilePicture =
+        Model.ProfilePictureContent is { Length: > 0 } &&
+        !string.IsNullOrWhiteSpace(Model.ProfilePictureContentType);
+    var profilePictureSource = hasProfilePicture
+        ? $"data:{Model.ProfilePictureContentType};base64,{Convert.ToBase64String(Model.ProfilePictureContent!)}"
+        : null;
+}
+
+<div class="user-profile-menu-container">
+    <button type="button"
+            class="user-profile-menu-toggle"
+            aria-label="@Localizer["UserMenu.Open"]"
+            aria-expanded="false"
+            aria-controls="user-profile-menu">
+        @if (hasProfilePicture)
+        {
+            <img class="user-profile-avatar"
+                 src="@profilePictureSource"
+                 alt="@Localizer["UserMenu.ProfilePicture", fullName]" />
+        }
+        else
+        {
+            <span class="user-profile-avatar user-profile-initials" aria-hidden="true">@initials</span>
+        }
+    </button>
+
+    <div id="user-profile-menu"
+         class="user-profile-menu"
+         hidden>
+        <div class="user-profile-identity">
+            <strong class="user-profile-name">@fullName</strong>
+
+            @if (Model.Roles.Count > 0)
+            {
+                <span class="user-profile-roles">
+                    @string.Join(", ", Model.Roles.Select(role => role switch
+                    {
+                        ApplicationRoles.Administrator => SharedLocalizer["Role.Administrator"].Value,
+                        ApplicationRoles.User => SharedLocalizer["Role.User"].Value,
+                        _ => role
+                    }))
+                </span>
+            }
+
+            <span class="user-profile-email">@Model.Email</span>
+        </div>
+
+        <div class="user-profile-links">
+            <a class="user-profile-link"
+               asp-area="Identity"
+               asp-page="/Account/Manage/Index">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+                <span>@SharedLocalizer["Navigation.Profile"]</span>
+            </a>
+
+            <form asp-area="Identity"
+                  asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home")"
+                  method="post">
+                <button type="submit" class="user-profile-link user-profile-logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket" aria-hidden="true"></i>
+                    <span>@Localizer["UserMenu.Logout"]</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

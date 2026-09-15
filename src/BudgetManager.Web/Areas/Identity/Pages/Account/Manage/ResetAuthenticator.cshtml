@@ -1,0 +1,21 @@
+@page
+@model ResetAuthenticatorModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="alert alert-warning" role="alert">
+    <p><strong>@Localizer["Warning.Title"]</strong></p>
+    <p>@Localizer["Warning.Body"]</p>
+</div>
+
+<div class="manage-form-actions manage-form-actions-start">
+    <form id="reset-authenticator-form" method="post">
+        <button id="reset-authenticator-button" class="btn btn-danger" type="submit">@Localizer["Action.Reset"]</button>
+    </form>
+</div>

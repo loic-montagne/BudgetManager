@@ -1,0 +1,24 @@
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["HeaderTitle"] = SharedLocalizer["Navigation.Profile"];
+}
+
+<div class="manage-layout">
+    <aside class="manage-navigation">
+        <div class="manage-navigation-card">
+            <partial name="_ManageNav" />
+        </div>
+    </aside>
+
+    <section class="manage-content-card">
+        @RenderBody()
+    </section>
+</div>
+
+@await RenderSectionAsync("Scripts", required: false)
+
+@section styles {
+    <link href="@Url.Content("~/css/identity/manage.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+}

@@ -1,0 +1,264 @@
+.anonymous-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.anonymous-box {
+    width: 100%;
+    max-width: 430px;
+}
+
+.anonymous-card {
+    padding: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+    transition: var(--tran-05);
+}
+
+
+/* Light theme: visually match the login card border weight used in dark mode. */
+body:not(.dark) .anonymous-card {
+    border-width: .5px;
+}
+
+.anonymous-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.anonymous-card-header > div:first-child {
+    flex: 1;
+    min-width: 0;
+}
+
+.anonymous-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.anonymous-subtitle {
+    margin: .25rem 0 0;
+    font-size: .875rem;
+    color: var(--color-text-muted);
+}
+
+.anonymous-preferences {
+    flex-shrink: 0;
+}
+
+.anonymous-preferences-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+}
+
+.anonymous-back-link {
+    position: absolute;
+    top: 50%;
+    left: 1rem;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 2rem;
+    height: 2rem;
+
+    border-radius: 50%;
+    color: rgba(255, 255, 255, .8);
+    font-size: 1rem;
+    text-decoration: none;
+
+    transform: translateY(-50%);
+    transition:
+        color .2s ease,
+        background-color .2s ease;
+}
+
+.anonymous-back-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .15);
+    text-decoration: none;
+}
+
+.anonymous-culture {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+    font-size: .875rem;
+}
+
+.anonymous-culture form {
+    margin: 0;
+}
+
+.anonymous-culture-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    font: inherit;
+    cursor: pointer;
+    transition: color .2s ease;
+}
+
+.anonymous-culture-button:hover,
+.anonymous-culture-button.active {
+    color: var(--color-primary);
+}
+
+.anonymous-culture-button.active {
+    font-weight: 600;
+    cursor: default;
+}
+
+.anonymous-culture-separator {
+    color: var(--color-text-muted);
+}
+
+.anonymous-theme {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-shrink: 0;
+}
+
+.anonymous-theme .theme-icon {
+    width: 1rem;
+    text-align: center;
+    color: var(--color-text-muted);
+    transition: color .2s ease;
+}
+
+.anonymous-theme .theme-sun {
+    color: var(--brand-teal);
+}
+
+.anonymous-theme .theme-moon {
+    display: none;
+}
+
+body.dark .anonymous-theme .theme-sun {
+    display: none;
+}
+
+body.dark .anonymous-theme .theme-moon {
+    display: inline-block;
+    color: var(--brand-mint);
+}
+
+.anonymous-theme .toggle-switch {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 22px;
+    flex: 0 0 40px;
+    cursor: pointer;
+}
+
+.anonymous-theme .toggle-switch .switch {
+    position: relative;
+    display: block;
+    width: 40px;
+    height: 22px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 25px;
+    background-color: var(--color-surface-secondary);
+    transition: var(--tran-05);
+}
+
+.anonymous-theme .toggle-switch .switch::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    transform: translateY(-50%);
+    transition: var(--tran-04);
+}
+
+body.dark .anonymous-theme .toggle-switch .switch::before {
+    left: 20px;
+}
+
+.anonymous-remember {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.anonymous-remember .form-check-input {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.anonymous-remember .form-check-label {
+    margin: 0;
+    line-height: 1;
+}
+
+.anonymous-links {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    margin-top: 1rem;
+    font-size: .875rem;
+    text-align: center;
+}
+
+
+.anonymous-brand {
+    position: relative;
+    display: flex;
+    width: calc(100% + 4rem);
+    margin: -2rem -2rem 1.25rem;
+}
+
+.anonymous-brand-logo {
+    display: block;
+    width: 100%;
+    max-width: none;
+    height: 80px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    box-shadow: none;
+}
+
+.anonymous-links a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.anonymous-links a:hover {
+    color: var(--color-primary-hover);
+    text-decoration: underline;
+}
+
+.anonymous-card .validation-summary-errors ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.anonymous-card .validation-summary-errors li {
+    margin: 0;
+}

@@ -1,0 +1,98 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@model BudgetManager.Web.Models.User.UserFormModel
+
+@{
+    var edit = ViewData["Edit"] as bool? ?? false;
+}
+
+<input asp-for="Id" type="hidden" />
+
+<div class="form-floating mb-3">
+    <select asp-for="Role" asp-items="Model.Roles" class="form-select">
+    </select>
+    <div class="invalid-feedback"></div>
+    <label asp-for="Role" class="form-label">
+        @Localizer["Field.Role"]
+    </label>
+</div>
+
+<div class="form-floating mb-3">
+    <input asp-for="Email" class="form-control" placeholder="@Localizer["Placeholder.Email"]" readonly="@edit" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="Email" class="form-label">
+        @SharedLocalizer["Field.Email"]
+    </label>
+</div>
+
+<div class="form-floating mb-3">
+    <input asp-for="LastName" class="form-control" placeholder="@Localizer["Placeholder.LastName"]" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="LastName" class="form-label">
+        @SharedLocalizer["Field.LastName"]
+    </label>
+</div>
+
+<div class="form-floating mb-3">
+    <input asp-for="FirstName" class="form-control" placeholder="@Localizer["Placeholder.FirstName"]" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="FirstName" class="form-label">
+        @SharedLocalizer["Field.FirstName"]
+    </label>
+</div>
+
+<div class="form-floating mb-3">
+    <input asp-for="PhoneNumber"
+           id="phone-number"
+           class="form-control"
+           type="tel"
+           inputmode="tel"
+           placeholder="@SharedLocalizer["Placeholder.PhoneNumber"]"
+           autocomplete="tel" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="PhoneNumber" class="form-label">
+        @SharedLocalizer["Field.PhoneNumber"]
+    </label>
+    <div class="form-text">@SharedLocalizer["PhoneNumber.Help"]</div>
+</div>
+
+<div class="form-floating mb-3">
+    <select asp-for="PreferredCulture" asp-items="Model.Cultures" class="form-select">
+    </select>
+    <div class="invalid-feedback"></div>
+    <label asp-for="PreferredCulture" class="form-label">
+        @SharedLocalizer["Field.Language"]
+    </label>
+</div>
+
+<div class="form-floating mb-3">
+    <select asp-for="PreferredTheme" asp-items="Model.Themes" class="form-select">
+    </select>
+    <div class="invalid-feedback"></div>
+    <label asp-for="PreferredTheme" class="form-label">
+        @SharedLocalizer["Field.Theme"]
+    </label>
+</div>
+
+@if (edit)
+{
+    <div class="row mt-4">
+        <div class="col-md-12 mb-3">
+            <label class="form-label">@Localizer["Field.ActivationStatus"]</label>
+            <input value="@Model.ActivationStatus" class="form-control" readonly />
+        </div>
+        
+        @if (!Model.EmailConfirmed)
+        {
+            <div class="col-md-6">
+                <input value="@Model.ActivationEmailSentOnLabel" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-6">
+                <input value="@Model.ActivationEmailExpiresOnLabel" class="form-control" readonly />
+            </div>
+        }
+    </div>
+}
+
+<partial name="_AuditablePartial" model="Model" />

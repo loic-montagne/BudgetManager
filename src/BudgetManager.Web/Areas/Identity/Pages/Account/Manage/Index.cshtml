@@ -1,0 +1,134 @@
+﻿@page
+@using BudgetManager.Application.Common
+@model IndexModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["ActivePage"] = ManageNavPages.Index;
+
+    var firstInitial = string.IsNullOrWhiteSpace(Model.Input.FirstName) ? string.Empty : Model.Input.FirstName.Trim()[0].ToString();
+    var lastInitial = string.IsNullOrWhiteSpace(Model.Input.LastName) ? string.Empty : Model.Input.LastName.Trim()[0].ToString();
+    var initials = $"{firstInitial}{lastInitial}".ToUpperInvariant();
+    var profilePictureSrc = Model.ProfilePictureContent is { Length: > 0 } && !string.IsNullOrWhiteSpace(Model.ProfilePictureContentType)
+        ? $"data:{Model.ProfilePictureContentType};base64,{Convert.ToBase64String(Model.ProfilePictureContent)}"
+        : null;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<section class="profile-section" aria-labelledby="profile-information-title">
+    <h4 id="profile-information-title" class="profile-section-title">@Localizer["Section.Profile.Title"]</h4>
+    <p class="profile-section-description">@Localizer["Section.Profile.Description"]</p>
+
+    <div class="profile-picture-row">
+        <div class="profile-picture-preview" aria-label="@Localizer["ProfilePicture.Current"]">
+            @if (profilePictureSrc is not null)
+            {
+                <img src="@profilePictureSrc" alt="@Localizer["ProfilePicture.Current"]" />
+            }
+            else
+            {
+                <span aria-hidden="true">@initials</span>
+            }
+        </div>
+
+        <div>
+            <div class="profile-picture-actions">
+                <form method="post" enctype="multipart/form-data" asp-page-handler="UpdatePicture" class="profile-picture-upload">
+                    @if (profilePictureSrc is null)
+                    {
+                        <label class="btn btn-outline-primary" for="profile-picture-input">@Localizer["Action.AddPicture"]</label>
+                    }
+                    else
+                    {
+                        <label class="btn btn-outline-primary" for="profile-picture-input">@Localizer["Action.ChangePicture"]</label>
+                    }
+                    <input id="profile-picture-input"
+                           asp-for="ProfilePicture"
+                           type="file"
+                           accept="image/jpeg,image/png,image/webp" />
+                </form>
+
+                @if (profilePictureSrc is not null)
+                {
+                    <form method="post" asp-page-handler="DeletePicture">
+                        <button type="submit" class="btn btn-outline-danger">@Localizer["Action.DeletePicture"]</button>
+                    </form>
+                }
+            </div>
+            <div class="form-text">@Localizer["ProfilePicture.Help"]</div>
+            <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+        </div>
+    </div>
+
+    <form id="profile-form" method="post" asp-page-handler="Save">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <div class="profile-form-grid">
+            <div class="form-floating">
+                <input asp-for="Input.FirstName" class="form-control" placeholder="@Localizer["Placeholder.FirstName"]" autocomplete="given-name" />
+                <label asp-for="Input.FirstName">@SharedLocalizer["Field.FirstName"]</label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="Input.LastName" class="form-control" placeholder="@Localizer["Placeholder.LastName"]" autocomplete="family-name" />
+                <label asp-for="Input.LastName">@SharedLocalizer["Field.LastName"]</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating profile-field-full">
+                <input asp-for="Input.PhoneNumber"
+                       id="phone-number"
+                       class="form-control"
+                       type="tel"
+                       inputmode="tel"
+                       placeholder="@SharedLocalizer["Placeholder.PhoneNumber"]"
+                       autocomplete="tel" />
+                <label asp-for="Input.PhoneNumber">@SharedLocalizer["Field.PhoneNumber"]</label>
+                <div class="form-text">@SharedLocalizer["PhoneNumber.Help"]</div>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+        <section class="profile-section profile-preferences-section" aria-labelledby="profile-preferences-title">
+            <h4 id="profile-preferences-title" class="profile-section-title">@Localizer["Section.Preferences.Title"]</h4>
+            <p class="profile-section-description">@Localizer["Section.Preferences.Description"]</p>
+
+            <div class="profile-preferences-grid">
+                <div class="form-floating">
+                    <select asp-for="Input.PreferredCulture" asp-items="Model.Input.Cultures" class="form-select">
+                    </select>
+                    <label asp-for="Input.PreferredCulture">@SharedLocalizer["Field.Language"]</label>
+                    <span asp-validation-for="Input.PreferredCulture" class="text-danger"></span>
+                </div>
+
+                <div class="form-floating">
+                    <select asp-for="Input.PreferredTheme" asp-items="Model.Input.Themes" class="form-select">
+                    </select>
+                    <label asp-for="Input.PreferredTheme">@SharedLocalizer["Field.Theme"]</label>
+                    <span asp-validation-for="Input.PreferredTheme" class="text-danger"></span>
+                </div>
+            </div>
+        </section>
+
+        <div class="profile-form-actions">
+            <button id="update-profile-button" type="submit" class="btn btn-primary">@SharedLocalizer["Action.Save"]</button>
+        </div>
+    </form>
+</section>
+
+@if (Model.SynchronizeUiPreferences)
+{
+    <div data-profile-preferences-sync="true"
+         data-preferred-theme="@Model.Input.PreferredTheme"
+         hidden></div>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="@Url.Content("~/js/phone-number.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/manage-profile.js")" type="text/javascript" asp-append-version="true"></script>
+}

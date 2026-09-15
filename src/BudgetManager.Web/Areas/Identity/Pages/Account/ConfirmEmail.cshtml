@@ -1,0 +1,12 @@
+@page
+@model ConfirmEmailModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["IdentityTitle"] = Localizer["Title"].Value;
+    Layout = "/Areas/Identity/Pages/Shared/_AnonymousIdentityLayout.cshtml";
+}
+
+<partial name="_StatusMessage"
+         model="Model.StatusMessage" />

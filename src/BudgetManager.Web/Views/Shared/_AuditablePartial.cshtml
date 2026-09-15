@@ -1,0 +1,33 @@
+﻿@inject BudgetManager.Application.Abstractions.Localization.IDateTimeLocalizer DateTimeLocalizer
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@model BudgetManager.Web.Models.Common.AuditableFormModel
+
+@{
+    var edit = ViewData["Edit"] as bool? ?? false;
+}
+
+@if (edit)
+{
+    <div class="row mt-4">
+        <div class="col-md-6 mb-3">
+            <label class="form-label">@SharedLocalizer["Field.CreatedBy"]</label>
+            <input value="@Model.CreatedBy" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-6 mb-3">
+            <label class="form-label">@SharedLocalizer["Field.CreatedOn"]</label>
+            <input value="@DateTimeLocalizer.ToLocalTime(Model.CreatedOn).ToString("g")" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">@SharedLocalizer["Field.UpdatedBy"]</label>
+            <input value="@Model.UpdatedBy" class="form-control" readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label class="form-label">@SharedLocalizer["Field.UpdatedOn"]</label>
+            <input value="@DateTimeLocalizer.ToLocalTime(Model.UpdatedOn).ToString("g")" class="form-control" readonly />
+        </div>
+    </div>
+}

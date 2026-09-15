@@ -1,0 +1,23 @@
+@page
+@model ShowRecoveryCodesModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="alert alert-warning" role="alert">
+    <p><strong>@Localizer["Warning.Title"]</strong></p>
+    <p>@Localizer["Warning.Body"]</p>
+</div>
+
+<div class="recovery-codes" role="list">
+    @for (var row = 0; row < Model.RecoveryCodes.Length; row += 2)
+    {
+        <code class="recovery-code" role="listitem">@Model.RecoveryCodes[row]</code>
+        <code class="recovery-code" role="listitem">@Model.RecoveryCodes[row + 1]</code>
+    }
+</div>

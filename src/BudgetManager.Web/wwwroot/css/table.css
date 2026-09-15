@@ -1,0 +1,208 @@
+/* === Generic table === */
+table {
+    border-radius: var(--table-border-radius);
+    border: none;
+    background-color: var(--table-border-color);
+}
+
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+    border-color: var(--table-border-color) !important;
+    color: var(--text-color) !important;
+}
+thead tr {
+    background-color: var(--table-header-bg) !important;
+    color: var(--table-header-text) !important;
+}
+
+/* Transitions (for theme) */
+table,
+thead,
+tbody,
+tfoot,
+tr,
+td,
+th {
+    transition: background-color .5s ease, color .5s ease, border-color .5s ease;
+}
+
+/* Rows background colors management */
+.table > tbody > tr:nth-of-type(odd) > * {
+    background-color: var(--table-row-odd-bg);
+}
+.table > tbody > tr:nth-of-type(even) > * {
+    background-color: var(--table-row-even-bg);
+}
+
+/* Border radius management (with responsive column) */
+thead tr:first-child th:first-child {
+    border-top-left-radius: var(--table-border-radius);
+}
+thead tr:first-child th:not(.dtr-hidden) {
+    border-top-left-radius: var(--table-border-radius);
+}
+thead tr:first-child th:not(.dtr-hidden) ~ th:not(.dtr-hidden) {
+    border-top-left-radius: 0; /*reset everything to normal*/
+}
+thead tr:first-child th:last-child {
+    border-top-right-radius: var(--table-border-radius);
+}
+tboby tr:last-child th:first-child {
+    border-bottom-left-radius: var(--table-border-radius);
+}
+
+/* Highlight border color between thead, tbody and tfoot. */
+.table > :not(:last-child) > :last-child > * {
+    border-bottom-color: var(--text-color);
+}
+
+/* Table with fixed header */
+.table-with-fixed-header > thead tr th {
+    position: sticky !important;
+    position: -webkit-sticky !important;
+    z-index: 10;
+}
+.table-with-fixed-header > thead tr:first-child th {
+    top: calc(-1 * var(--main-content-padding));
+}
+.table-with-fixed-header th {
+    background-color: var(--table-header-bg);
+}
+.table-with-fixed-header > tbody th {
+    position: sticky !important;
+    position: -webkit-sticky !important;
+    z-index: 9;
+}
+.table-with-fixed-header > tbody tr th:first-child {
+    left: calc(-1 * var(--main-content-padding));
+}
+
+
+
+
+/* === Datatable === */
+table.dataTable {
+    width: 100% !important;
+}
+table.dataTable_withoutHeaderDiv.dataTable {
+    margin-top: 0px !important;
+}
+
+/* Transitions (for theme) */
+.dataTables_processing.card {
+    transition: background-color .5s ease, color .5s ease;
+}
+table.dataTable.dtr-column > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > td.control:before,
+table.dataTable.dtr-column > tbody > tr > th.control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+    transition: color .5s ease;
+}
+
+/* Rows background colors management */
+table.dataTable > tbody > tr.odd > * {
+    background-color: var(--table-row-odd-bg);
+}
+table.dataTable > tbody > tr.even > * {
+    background-color: var(--table-row-even-bg);
+}
+
+/* Datatable responsive row strip */
+table.table-striped.dataTable > tbody > tr.odd.dt-hasChild + tr:has(.child) {
+    --bs-table-accent-bg: var(--bs-table-striped-bg);
+    color: var(--bs-table-striped-color);
+}
+table.table-striped.dataTable > tbody > tr.odd.dt-hasChild + tr:has(.child) > * {
+    background-color: var(--table-row-odd-bg);
+}
+table.table-striped.dataTable > tbody > tr.even.dt-hasChild + tr:has(.child) > * {
+    background-color: var(--table-row-even-bg);
+}
+.table > :not(caption) > * > *,
+table.dataTable.table-striped > tbody > tr.odd > * {
+    box-shadow: none;
+}
+
+/* TR mouse over */
+table.dataTable.table-hover > tbody > tr:hover > * {
+    box-shadow: inset 0 0 0 9999px var(--table-hover-bg);
+}
+
+/* Border width for border radius management (with responsive column) */
+table.table-bordered.dataTable thead tr:first-child th,
+table.table-bordered.dataTable thead tr:first-child td {
+    border-top-width: 0px;
+}
+table.table-bordered.dataTable th:not(dtr-hidden):first-child,
+table.table-bordered.dataTable td:not(dtr-hidden):first-child {
+    border-left-width: 0px;
+}
+table.dataTable.table-bordered th.dtr-control.dtr-hidden + *,
+table.dataTable.table-bordered td.dtr-control.dtr-hidden + * {
+    border-left-width: 0px;
+}
+table.table-bordered.dataTable th:last-child,
+table.table-bordered.dataTable td:last-child {
+    border-right-width: 0px;
+}
+table.table-bordered.dataTable tr:last-child td {
+    border-bottom-width: 0px;
+}
+
+/* Datatable responsive icon */
+table.dataTable.dtr-column > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > td.control:before,
+table.dataTable.dtr-column > tbody > tr > th.control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+    color: var(--text-color);
+    font-family: var(--fa-style-family, "Font Awesome 6 Free");
+    content: '\f0fe';
+}
+table.dataTable.dtr-column > tbody > tr.parent td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.parent th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.parent td.control:before,
+table.dataTable.dtr-column > tbody > tr.parent th.control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
+    content: '\f146';
+}
+
+/* Datatable processing */
+.dataTables_processing.card {
+    background: var(--color-surface) !important;
+    color: var(--color-text) !important;
+    z-index: 20;
+}
+div.dataTables_processing > div:last-child > div {
+    background-color: var(--primary-color);
+}
+
+/* Datatable infos */
+.dataTables_info {
+    text-align: left;
+}
+@media (min-width: 768px) {
+    .dataTables_info {
+        white-space: nowrap;
+    }
+}
+
+/* Budget Manager branded table headers */
+thead,
+thead th,
+thead td {
+    color: var(--table-header-text) !important;
+}
+
+thead tr,
+.table-with-fixed-header > thead th {
+    background-color: var(--table-header-bg) !important;
+}

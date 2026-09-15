@@ -1,0 +1,50 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@model BudgetManager.Web.Models.BudgetCategory.BudgetCategoryFormModel
+
+@{
+    var edit = ViewData["Edit"] as bool? ?? false;
+}
+
+<input asp-for="Id" type="hidden" />
+
+<div class="form-floating mb-3">
+    <input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Placeholder.Name"]" />
+    <div class="invalid-feedback"></div>
+    <label asp-for="Name" class="form-label">
+        @SharedLocalizer["Field.Name"]
+    </label>
+</div>
+
+@if (edit)
+{
+    <div class="form-floating mb-3">
+        <div class="form-floating">
+            <textarea asp-for="Description" class="form-control" style="height: 100px;" placeholder="@Localizer["Placeholder.Description"]"></textarea>
+            <div class="invalid-feedback"></div>
+            <label asp-for="Description" class="form-label">
+                @Localizer["Field.Description"]
+            </label>
+        </div>
+    </div>
+
+    <div class="form-floating">
+        <input asp-for="BudgetsCount" class="form-control" placeholder="@Localizer["Placeholder.BudgetsCount"]" readonly="@edit" />
+        <div class="invalid-feedback"></div>
+        <label asp-for="BudgetsCount" class="form-label">
+            @Localizer["Field.BudgetsCount"]
+        </label>
+    </div>
+}
+else
+{
+    <div class="form-floating">
+        <textarea asp-for="Description" class="form-control" style="height: 100px;" placeholder="@Localizer["Placeholder.Description"]"></textarea>
+        <div class="invalid-feedback"></div>
+        <label asp-for="Description" class="form-label">
+            @Localizer["Field.Description"]
+        </label>
+    </div>
+}
+
+<partial name="_AuditablePartial" model="Model" />

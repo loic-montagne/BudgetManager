@@ -1,0 +1,178 @@
+/* =====================================================
+   Budget Manager - Brand palette
+   ===================================================== */
+
+$brand-navy-950: #031B35;
+$brand-navy-900: #062B59;
+$brand-navy-800: #073C68;
+$brand-blue-700: #07547A;
+$brand-teal-600: #079D93;
+$brand-teal-500: #08B7A7;
+$brand-mint-500: #31D49C;
+$brand-mint-400: #62E1B4;
+
+$primary-color: $brand-teal-500;
+
+/* ---------- Light ---------- */
+$light-body-color: #F3F7F8;
+$light-sidebar-color: #FFFFFF;
+$light-sidebar-light-color: #EDF5F4;
+$light-toggle-color: #D5E4E4;
+$light-text-color: #17324A;
+$light-text-muted-color: #657A8A;
+$light-text-disabled-color: #A4B1BA;
+$light-table-modal-bg: #FFFFFF;
+$light-table-border-color: #D8E5E7;
+$light-table-row-odd-bg: #F7FAFA;
+$light-table-row-even-bg: #FFFFFF;
+$light-table-hover-bg: rgba(8, 183, 167, .10);
+$light-primary-text-color: #FFFFFF;
+$light-input-bg: #F2F7F8;
+$light-input-disabled-bg: #E2EAEC;
+$light-input-border-color: #D8E5E7;
+$light-checkbox-check: str-slice("#{$light-primary-text-color}", 2);
+$light-checkbox-disabled-check: str-slice("#{$light-text-disabled-color}", 2);
+
+/* ---------- Dark ---------- */
+$dark-body-color: #041F38;
+$dark-sidebar-color: #062B47;
+$dark-sidebar-light-color: #093955;
+$dark-toggle-color: #A8C3C6;
+$dark-text-color: #EEF8F7;
+$dark-text-muted-color: #A8C3C6;
+$dark-text-disabled-color: #68828A;
+$dark-table-modal-bg: #062B47;
+$dark-table-border-color: #164963;
+$dark-table-row-odd-bg: #082F4B;
+$dark-table-row-even-bg: #062B47;
+$dark-table-hover-bg: rgba(49, 212, 156, .12);
+$dark-primary-text-color: #031B35;
+$dark-input-bg: #0A3A56;
+$dark-input-disabled-bg: #061F33;
+$dark-input-border-color: #164963;
+$dark-checkbox-check: str-slice("#{$dark-primary-text-color}", 2);
+$dark-checkbox-disabled-check: str-slice("#{$dark-text-disabled-color}", 2);
+
+/* =====================================================
+   Semantic tokens - light theme
+   ===================================================== */
+:root {
+    --brand-navy: #{$brand-navy-900};
+    --brand-navy-deep: #{$brand-navy-950};
+    --brand-blue: #{$brand-blue-700};
+    --brand-teal: #{$brand-teal-500};
+    --brand-mint: #{$brand-mint-500};
+
+    --color-primary: #{$brand-teal-500};
+    --color-primary-hover: #{$brand-mint-500};
+    --color-primary-text: #{$light-primary-text-color};
+    --color-focus-ring: rgba(8, 183, 167, .22);
+
+    --color-background: #{$light-body-color};
+    --color-surface: #{$light-sidebar-color};
+    --color-surface-secondary: #{$light-sidebar-light-color};
+
+    --color-navigation: #{$brand-navy-900};
+    --color-navigation-hover: #{$brand-navy-800};
+    --color-navigation-text: #FFFFFF;
+    --color-navigation-muted: #C5D8E2;
+
+    --color-text: #{$light-text-color};
+    --color-text-muted: #{$light-text-muted-color};
+    --color-text-disabled: #{$light-text-disabled-color};
+    --color-border: #{$light-table-border-color};
+    --color-hover: #{$light-table-hover-bg};
+
+    --color-input-bg: #{$light-input-bg};
+    --color-input-disabled-bg: #{$light-input-disabled-bg};
+
+    --color-toast-bg: var(--color-surface);
+    --color-toast-text: var(--color-text);
+    --color-toast-border: var(--color-border);
+
+    --radius-sm: .5rem;
+    --radius-md: .75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+
+    --shadow-sm: 0 .125rem .5rem rgba(3, 27, 53, .08);
+    --shadow-md: 0 .5rem 1.5rem rgba(3, 27, 53, .12);
+    --shadow-lg: 0 1rem 3rem rgba(3, 27, 53, .16);
+
+    /* Legacy aliases kept while existing components are migrated. */
+    --primary-color: var(--color-primary);
+    --body-color: var(--color-background);
+    --sidebar-color: var(--color-surface);
+    --sidebar-light-color: var(--color-surface-secondary);
+    --toggle-color: #{$light-toggle-color};
+    --text-color: var(--color-text);
+    --text-muted-color: var(--color-text-muted);
+    --text-disabled-color: var(--color-text-disabled);
+    --table-modal-bg: var(--color-surface);
+    --table-row-odd-bg: #{$light-table-row-odd-bg};
+    --table-row-even-bg: #{$light-table-row-even-bg};
+    --table-border-color: var(--color-border);
+    --table-hover-bg: var(--color-hover);
+    --table-header-bg: var(--color-navigation);
+    --table-header-text: var(--color-navigation-text);
+    --primary-text-color: var(--color-primary-text);
+    --input-bg: var(--color-input-bg);
+    --input-disabled-bg: var(--color-input-disabled-bg);
+    --input-border-color: var(--color-border);
+    --bs-modal-bg: var(--table-modal-bg);
+}
+
+/* =====================================================
+   Semantic tokens - dark theme
+   ===================================================== */
+body.dark {
+    --color-primary: #{$brand-mint-500};
+    --color-primary-hover: #{$brand-mint-400};
+    --color-primary-text: #{$dark-primary-text-color};
+    --color-focus-ring: rgba(49, 212, 156, .24);
+
+    --color-background: #{$dark-body-color};
+    --color-surface: #{$dark-sidebar-color};
+    --color-surface-secondary: #{$dark-sidebar-light-color};
+
+    --color-navigation: #{$brand-navy-950};
+    --color-navigation-hover: #{$brand-navy-800};
+    --color-navigation-text: #{$dark-text-color};
+    --color-navigation-muted: #{$dark-text-muted-color};
+
+    --color-text: #{$dark-text-color};
+    --color-text-muted: #{$dark-text-muted-color};
+    --color-text-disabled: #{$dark-text-disabled-color};
+    --color-border: #{$dark-table-border-color};
+    --color-hover: #{$dark-table-hover-bg};
+
+    --color-input-bg: #{$dark-input-bg};
+    --color-input-disabled-bg: #{$dark-input-disabled-bg};
+
+    --color-toast-bg: var(--color-surface-secondary);
+    --color-toast-text: var(--color-text);
+    --color-toast-border: var(--color-border);
+
+    /* Legacy aliases */
+    --primary-color: var(--color-primary);
+    --body-color: var(--color-background);
+    --sidebar-color: var(--color-surface);
+    --sidebar-light-color: var(--color-surface-secondary);
+    --toggle-color: #{$dark-toggle-color};
+    --text-color: var(--color-text);
+    --text-muted-color: var(--color-text-muted);
+    --text-disabled-color: var(--color-text-disabled);
+    --table-modal-bg: var(--color-surface);
+    --table-row-odd-bg: #{$dark-table-row-odd-bg};
+    --table-row-even-bg: #{$dark-table-row-even-bg};
+    --table-border-color: var(--color-border);
+    --table-hover-bg: var(--color-hover);
+    --table-header-bg: var(--color-navigation);
+    --table-header-text: var(--color-navigation-text);
+    --primary-text-color: var(--color-primary-text);
+    --input-bg: var(--color-input-bg);
+    --input-disabled-bg: var(--color-input-disabled-bg);
+    --input-border-color: var(--color-border);
+    --dt-row-stripe: 255,255,255;
+    --bs-modal-bg: var(--table-modal-bg);
+}

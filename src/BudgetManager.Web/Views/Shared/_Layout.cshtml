@@ -1,0 +1,223 @@
+﻿@using BudgetManager.Application.Common
+@using BudgetManager.Application.Features.User.GetCurrent
+@using MediatR
+@using System.Globalization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@inject ISender Sender
+@{
+    var isAuthenticated = User.Identity?.IsAuthenticated == true;
+    CurrentUserDto? currentUser = null;
+
+    if (isAuthenticated)
+    {
+        currentUser = await Sender.Send(new GetCurrentUserQuery(), Context.RequestAborted);
+    }
+
+    var currentCulture = CultureInfo.CurrentUICulture.Name;
+    var preferredCulture = currentUser?.PreferredCulture ?? SupportedCultures.Default;
+    var preferredTheme = currentUser?.PreferredTheme;
+    var returnUrl = $"{Context.Request.PathBase}{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<!DOCTYPE html>
+<html lang="@currentCulture" dir="ltr">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Budget Manager</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Quicksand&display=swap" rel="stylesheet">
+
+    <script src="@Url.Content("~/lib/jquery/dist/jquery.min.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/lib/bootstrap/dist/js/bootstrap.bundle.min.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/lib/bootstrap-multiselect/dist/js/bootstrap-multiselect.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/lib/sweetalert/sweetalert2.min.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/lib/axios/dist/axios.min.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.5/r-2.5.0/datatables.min.js"></script>
+
+
+    <link href="@Url.Content("~/lib/bootstrap-multiselect/dist/css/bootstrap-multiselect.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="https://cdn.datatables.net/v/bs5/dt-1.13.5/r-2.5.0/datatables.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/lib/fontawesome/css/fontawesome.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/lib/fontawesome/css/brands.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/lib/fontawesome/css/solid.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/lib/fontawesome/css/regular.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/css/bootstrap.min.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/css/colors.min.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/css/main.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/css/table.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/css/sidebar.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+
+    @await RenderSectionAsync("styles", required: false)
+</head>
+<body class="@(isAuthenticated ? "authenticated" : "anonymous")">
+    <script>
+        (() => {
+            const storedTheme = localStorage.getItem("theme");
+            const isDark = storedTheme
+                ? storedTheme === "dark"
+                : window.matchMedia
+                    && window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+            if (isDark) {
+                document.body.classList.add("dark");
+            }
+
+            document.body.classList.add("theme-initializing");
+        })();
+    </script>
+
+    @Html.AntiForgeryToken()
+
+    @* Side bar *@
+    @if (isAuthenticated)
+    {
+        <div class="sidebar close"
+             data-user-id="@currentUser?.Id"
+             data-current-culture="@currentCulture"
+             data-preferred-culture="@preferredCulture"
+             data-preferred-theme="@preferredTheme"
+             data-preferred-theme-null="@(preferredTheme is null ? "true" : "false")"
+             data-update-preferences-url="@Url.Action("Update", "UiPreferences")">
+            <div class="logo">
+                <img class="brand-logo" src="~/images/budget-manager-logo.png" alt="Budget Manager" />
+                <span class="logo-name">Budget Manager</span>
+                <i class="fa-solid fa-chevron-right toggle"></i>
+            </div>
+
+            <ul class="nav-list">
+                <partial name="_MainMenu" />
+
+                <li class="culture-selector-row">
+                    <i class="fa-solid fa-language icon culture-icon"></i>
+                    <span class="culture-label text">@Localizer["Culture.Language"]</span>
+
+                    <div class="culture-selector" aria-label="@SharedLocalizer["Culture.Select"]">
+                        <form asp-controller="Culture"
+                              asp-action="SetCulture"
+                              method="post">
+                            <input type="hidden" name="culture" value="@SupportedCultures.French" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit"
+                                    class="culture-button @(currentCulture.Equals(SupportedCultures.French, StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+                                    title="@SharedLocalizer["Culture.SwitchToFrench"]"
+                                    aria-label="@SharedLocalizer["Culture.SwitchToFrench"]"
+                                    aria-current="@(currentCulture.Equals(SupportedCultures.French, StringComparison.OrdinalIgnoreCase) ? "true" : null)">
+                                FR
+                            </button>
+                        </form>
+
+                        <span class="culture-separator" aria-hidden="true">|</span>
+
+                        <form asp-controller="Culture"
+                              asp-action="SetCulture"
+                              method="post">
+                            <input type="hidden" name="culture" value="@SupportedCultures.English" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit"
+                                    class="culture-button @(currentCulture.Equals(SupportedCultures.English, StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+                                    title="@SharedLocalizer["Culture.SwitchToEnglish"]"
+                                    aria-label="@SharedLocalizer["Culture.SwitchToEnglish"]"
+                                    aria-current="@(currentCulture.Equals(SupportedCultures.English, StringComparison.OrdinalIgnoreCase) ? "true" : null)">
+                                EN
+                            </button>
+                        </form>
+                    </div>
+                </li>
+
+                <li class="mode">
+                    <div class="sun-moon">
+                        <i class="fa-solid fa-moon icon moon"></i>
+                        <i class="fa-solid fa-sun icon sun"></i>
+                    </div>
+                    <span class="mode-text text">@Localizer["Theme.DarkMode"]</span>
+                    <div class="toggle-switch"
+                         data-dark-text="@Localizer["Theme.DarkMode"]"
+                         data-light-text="@Localizer["Theme.LightMode"]">
+                        <span class="switch"></span>
+                    </div>
+
+                    <ul class="sub-menu blank">
+                        <li>
+                            <a href="#"
+                               class="link-name mode-text text">
+                                @Localizer["Theme.DarkMode"]
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="preferences-save" hidden>
+                    <div class="preferences-save-content">
+                        <button type="button"
+                                class="preferences-save-close"
+                                aria-label="@Localizer["Preferences.Dismiss"]"
+                                title="@Localizer["Preferences.Dismiss"]">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <span class="preferences-save-text">@Localizer["Preferences.SavePrompt"]</span>
+                        <button type="button" class="preferences-save-button">@Localizer["Preferences.Save"]</button>
+                        <span class="preferences-save-error" hidden>@Localizer["Preferences.SaveError"]</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    }
+
+    <section class="content">
+
+        @* Header *@
+        @if (isAuthenticated)
+        {
+            <header>
+                <nav class="navbar">
+                    <div class="navbar-title-content">
+                        <i class="fas fa-bars sidebar-open-btn btn-visible"></i>
+                        <i class="fa-solid fa-xmark sidebar-close-btn"></i>
+                        <span class="title">@(ViewData["HeaderTitle"] ?? ViewData["Title"])</span>
+                    </div>
+
+                    <div class="navbar-title-actions gap-2">
+                        @await RenderSectionAsync("left_actions", required: false)
+                        <div class="search-zone"></div>
+                        <div class="length-zone"></div>
+                        @await RenderSectionAsync("right_actions", required: false)
+                    </div>
+
+                    @if (currentUser is not null)
+                    {
+                        <partial name="_UserProfileMenu" model="currentUser" />
+                    }
+                </nav>
+            </header>
+        }
+
+        <div class="main-content">
+            <main role="main">
+                @RenderBody()
+            </main>
+        </div>
+
+        <footer class="footer">
+            <div class="main-content">
+                &copy; @DateTime.Now.Year - Loïc Montagne
+            </div>
+        </footer>
+    </section>
+
+    <script src="@Url.Content("~/js/site.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/password-requirements.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/sidebar.js")" type="text/javascript" asp-append-version="true"></script>
+    @if (isAuthenticated)
+    {
+        <script src="@Url.Content("~/js/user-profile-menu.js")" type="text/javascript" asp-append-version="true"></script>
+    }
+
+    @await RenderSectionAsync("scripts", required: false)
+    @* @Html.PageScripts() *@
+</body>
+</html>

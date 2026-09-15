@@ -1,0 +1,66 @@
+@page
+@model LoginWith2faModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["IdentityTitle"] = Localizer["Title"].Value;
+    ViewData["IdentitySubtitle"] = Localizer["Subtitle"].Value;
+    Layout = "/Areas/Identity/Pages/Shared/_AnonymousIdentityLayout.cshtml";
+}
+
+<form method="post"
+      asp-route-returnUrl="@Model.ReturnUrl">
+
+    <input asp-for="RememberMe"
+           type="hidden" />
+
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger"
+         role="alert">
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Input.TwoFactorCode"
+               class="form-control"
+               autocomplete="off"
+               placeholder="code" />
+
+        <label asp-for="Input.TwoFactorCode"
+               class="form-label">
+            @SharedLocalizer["Field.AuthenticatorCode"]
+        </label>
+
+        <span asp-validation-for="Input.TwoFactorCode"
+              class="text-danger">
+        </span>
+    </div>
+
+    <div class="anonymous-remember mb-3">
+        <input class="form-check-input"
+               asp-for="Input.RememberMachine" />
+
+        <label class="form-check-label"
+               asp-for="Input.RememberMachine">
+            @SharedLocalizer["Field.RememberMachine"]
+        </label>
+    </div>
+
+    <button type="submit"
+            class="w-100 btn btn-lg btn-primary">
+        @Localizer["Action.Login"]
+    </button>
+</form>
+
+<div class="anonymous-links">
+    <span>
+        @Localizer["Recovery.BeforeLink"]<a id="recovery-code-login"
+                                           asp-page="./LoginWithRecoveryCode"
+                                           asp-route-returnUrl="@Model.ReturnUrl">@Localizer["Recovery.Link"]</a>@Localizer["Recovery.AfterLink"]
+    </span>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

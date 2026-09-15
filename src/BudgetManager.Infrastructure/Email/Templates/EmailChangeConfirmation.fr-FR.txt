@@ -1,0 +1,11 @@
+Bonjour {{FirstName}},
+
+Vous avez demandé à modifier l'adresse mail associée à votre compte Budget Manager.
+
+Pour finaliser votre demande, vous devez confirmer votre nouvelle adresse mail en ouvrant le lien suivant : 
+
+{{ConfirmationUrl}}
+
+Si vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer ce mail.
+
+Budget Manager · Message automatique, merci de ne pas répondre.

@@ -1,0 +1,27 @@
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+<ul class="manage-nav">
+    <li class="manage-nav-item">
+        <a class="manage-nav-link @ManageNavPages.IndexNavClass(ViewContext)" id="profile" asp-page="./Index">
+            <i class="fa-regular fa-user" aria-hidden="true"></i>
+            <span>@Localizer["Profile"]</span>
+        </a>
+    </li>
+    <li class="manage-nav-item">
+        <a class="manage-nav-link @ManageNavPages.EmailNavClass(ViewContext)" id="email" asp-page="./Email">
+            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+            <span>@Localizer["Email"]</span>
+        </a>
+    </li>
+    <li class="manage-nav-item">
+        <a class="manage-nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" id="change-password" asp-page="./ChangePassword">
+            <i class="fa-solid fa-key" aria-hidden="true"></i>
+            <span>@Localizer["Password"]</span>
+        </a>
+    </li>
+    <li class="manage-nav-item">
+        <a class="manage-nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" id="two-factor" asp-page="./TwoFactorAuthentication">
+            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+            <span>@Localizer["TwoFactor"]</span>
+        </a>
+    </li>
+</ul>

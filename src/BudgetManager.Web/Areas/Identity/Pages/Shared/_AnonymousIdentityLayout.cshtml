@@ -1,0 +1,108 @@
+@using BudgetManager.Application.Common
+@using System.Globalization
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+
+@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+
+    var identityTitle = ViewData["IdentityTitle"]?.ToString() ?? ViewData["Title"]?.ToString();
+    var identitySubtitle = ViewData["IdentitySubtitle"]?.ToString();
+    var returnUrl = $"{Context.Request.PathBase}{Context.Request.Path}{Context.Request.QueryString}";
+    var currentCulture = CultureInfo.CurrentUICulture.Name;
+}
+
+@section Styles {
+    <link rel="stylesheet"
+          href="~/css/identity/anonymous.css"
+          asp-append-version="true" />
+
+    @await RenderSectionAsync("Styles", required: false)
+}
+
+<div class="anonymous-container">
+    <div class="anonymous-box">
+        <div class="anonymous-card">
+            <div class="anonymous-brand">
+                @if (ViewContext.RouteData.Values["page"]?.ToString() != "/Account/Login")
+                {
+                    <a class="anonymous-back-link"
+                       asp-area="Identity"
+                       asp-page="/Account/Login"
+                       title="@SharedLocalizer["Link.BackToLogin"]"
+                       aria-label="@SharedLocalizer["Link.BackToLogin"]">
+                        <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+                    </a>
+                }
+
+                <img class="anonymous-brand-logo"
+                     src="~/images/budget-manager-login-banner.png"
+                     alt="Budget Manager" />
+            </div>
+
+            <div class="anonymous-card-header">
+                <div>
+                    @if (!string.IsNullOrWhiteSpace(identityTitle))
+                    {
+                        <h1 class="anonymous-title">@identityTitle</h1>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(identitySubtitle))
+                    {
+                        <p class="anonymous-subtitle">@identitySubtitle</p>
+                    }
+                </div>
+
+                <div class="anonymous-preferences">
+                    <div class="anonymous-preferences-controls">
+                        <div class="anonymous-culture" aria-label="@SharedLocalizer["Culture.Select"]">
+                            <form asp-controller="Culture"
+                                  asp-action="SetCulture"
+                                  method="post">
+                                <input type="hidden" name="culture" value="@SupportedCultures.French" />
+                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                <button type="submit"
+                                        class="anonymous-culture-button @(currentCulture.Equals(SupportedCultures.French, StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+                                        title="@SharedLocalizer["Culture.SwitchToFrench"]"
+                                        aria-label="@SharedLocalizer["Culture.SwitchToFrench"]"
+                                        aria-current="@(currentCulture.Equals(SupportedCultures.French, StringComparison.OrdinalIgnoreCase) ? "true" : null)">
+                                    FR
+                                </button>
+                            </form>
+
+                            <span class="anonymous-culture-separator" aria-hidden="true">|</span>
+
+                            <form asp-controller="Culture"
+                                  asp-action="SetCulture"
+                                  method="post">
+                                <input type="hidden" name="culture" value="@SupportedCultures.English" />
+                                <input type="hidden" name="returnUrl" value="@returnUrl" />
+                                <button type="submit"
+                                        class="anonymous-culture-button @(currentCulture.Equals(SupportedCultures.English, StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+                                        title="@SharedLocalizer["Culture.SwitchToEnglish"]"
+                                        aria-label="@SharedLocalizer["Culture.SwitchToEnglish"]"
+                                        aria-current="@(currentCulture.Equals(SupportedCultures.English, StringComparison.OrdinalIgnoreCase) ? "true" : null)">
+                                    EN
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="anonymous-theme">
+                            <div class="toggle-switch"
+                                 title="@SharedLocalizer["Theme.Toggle"]">
+                                <span class="switch"></span>
+                            </div>
+                            <i class="fa-solid fa-sun theme-icon theme-sun"></i>
+                            <i class="fa-solid fa-moon theme-icon theme-moon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @RenderBody()
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

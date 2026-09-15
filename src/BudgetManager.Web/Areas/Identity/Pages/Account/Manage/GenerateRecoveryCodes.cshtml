@@ -1,0 +1,22 @@
+@page
+@model GenerateRecoveryCodesModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["ActivePage"] = ManageNavPages.TwoFactorAuthentication;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<div class="alert alert-warning" role="alert">
+    <p><strong>@Localizer["Warning.Title"]</strong></p>
+    <p>@Localizer["Warning.LostDevice"]</p>
+    <p>@Localizer["Warning.BeforeLink"]<a asp-page="./ResetAuthenticator">@Localizer["Warning.Link"]</a>@Localizer["Warning.AfterLink"]</p>
+</div>
+
+<div class="manage-form-actions manage-form-actions-start">
+    <form method="post">
+        <button class="btn btn-danger" type="submit">@Localizer["Action.Generate"]</button>
+    </form>
+</div>

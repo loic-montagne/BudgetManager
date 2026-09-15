@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Culture.NotSupported" xml:space="preserve">
+    <value>La langue sélectionnée n’est pas prise en charge.</value>
+  </data>
+  <data name="Theme.NotSupported" xml:space="preserve">
+    <value>Le thème sélectionné n’est pas pris en charge.</value>
+  </data>
+  <data name="Token.Required" xml:space="preserve">
+    <value>Un jeton est obligatoire.</value>
+  </data>
+  <data name="Search.Pagination.Invalid" xml:space="preserve">
+    <value>Les paramètres de pagination sont invalides.</value>
+  </data>
+  <data name="Search.Offset.Invalid" xml:space="preserve">
+    <value>Le décalage de recherche est invalide.</value>
+  </data>
+  <data name="Search.Limit.Invalid" xml:space="preserve">
+    <value>La limite de recherche est invalide.</value>
+  </data>
+  <data name="Search.SortDirection.Invalid" xml:space="preserve">
+    <value>Le sens de tri est invalide.</value>
+  </data>
+  <data name="Search.SortField.Invalid" xml:space="preserve">
+    <value>Le champ de tri est invalide.</value>
+  </data>
+  <data name="Bank.NotExists" xml:space="preserve">
+    <value>La banque n’existe pas.</value>
+  </data>
+  <data name="Bank.IsUsed" xml:space="preserve">
+    <value>La banque est actuellement utilisée.</value>
+  </data>
+  <data name="Bank.Id.Required" xml:space="preserve">
+    <value>L’identifiant de la banque est obligatoire.</value>
+  </data>
+  <data name="Bank.Name.Required" xml:space="preserve">
+    <value>Le nom de la banque est obligatoire.</value>
+  </data>
+  <data name="Bank.Name.TooLong" xml:space="preserve">
+    <value>Le nom de la banque est trop long.</value>
+  </data>
+  <data name="Bank.Name.AlreadyUsed" xml:space="preserve">
+    <value>Ce nom de banque est déjà utilisé.</value>
+  </data>
+  <data name="Bank.Bic.Required" xml:space="preserve">
+    <value>Le BIC est obligatoire.</value>
+  </data>
+  <data name="Bank.Bic.InvalidChars" xml:space="preserve">
+    <value>Le BIC contient des caractères invalides.</value>
+  </data>
+  <data name="Bank.BicInvalidCharsCount" xml:space="preserve">
+    <value>Le BIC comporte un nombre de caractères invalide.</value>
+  </data>
+  <data name="Bank.Bic.BankCodeInvalidChars" xml:space="preserve">
+    <value>Le code banque du BIC contient des caractères invalides.</value>
+  </data>
+  <data name="Bank.Bic.FrenchOnly" xml:space="preserve">
+    <value>Seuls les BIC français sont pris en charge.</value>
+  </data>
+  <data name="Bank.Bic.AlreadyUsed" xml:space="preserve">
+    <value>Ce BIC est déjà utilisé.</value>
+  </data>
+  <data name="Account.NotExists" xml:space="preserve">
+    <value>Le compte n’existe pas.</value>
+  </data>
+  <data name="Account.IsUsed" xml:space="preserve">
+    <value>Le compte est actuellement utilisé.</value>
+  </data>
+  <data name="Account.IsAlreadyClosed" xml:space="preserve">
+    <value>Le compte est déjà clôturé.</value>
+  </data>
+  <data name="Account.Id.Required" xml:space="preserve">
+    <value>L’identifiant du compte est obligatoire.</value>
+  </data>
+  <data name="Account.Name.Required" xml:space="preserve">
+    <value>Le nom du compte est obligatoire.</value>
+  </data>
+  <data name="Account.Name.TooLong" xml:space="preserve">
+    <value>Le nom du compte est trop long.</value>
+  </data>
+  <data name="Account.Name.AlreadyUsed" xml:space="preserve">
+    <value>Ce nom de compte est déjà utilisé.</value>
+  </data>
+  <data name="Account.Bank.Required" xml:space="preserve">
+    <value>Une banque est obligatoire pour le compte.</value>
+  </data>
+  <data name="Account.Bank.NotExists" xml:space="preserve">
+    <value>La banque sélectionnée n’existe pas.</value>
+  </data>
+  <data name="Account.Iban.Required" xml:space="preserve">
+    <value>L’IBAN est obligatoire.</value>
+  </data>
+  <data name="Account.Iban.InvalidChars" xml:space="preserve">
+    <value>L’IBAN contient des caractères invalides.</value>
+  </data>
+  <data name="Account.Iban.FrenchOnly" xml:space="preserve">
+    <value>Seuls les IBAN français sont pris en charge.</value>
+  </data>
+  <data name="Account.Iban.InvalidCharsCount" xml:space="preserve">
+    <value>L’IBAN comporte un nombre de caractères invalide.</value>
+  </data>
+  <data name="Account.Iban.InvalidChecksum" xml:space="preserve">
+    <value>La clé de contrôle de l’IBAN est invalide.</value>
+  </data>
+  <data name="Account.Iban.AlreadyUsed" xml:space="preserve">
+    <value>Cet IBAN est déjà utilisé.</value>
+  </data>
+  <data name="BudgetCategory.NotExists" xml:space="preserve">
+    <value>La catégorie de budget n’existe pas.</value>
+  </data>
+  <data name="BudgetCategory.IsUsed" xml:space="preserve">
+    <value>La catégorie de budget est actuellement utilisée.</value>
+  </data>
+  <data name="BudgetCategory.Id.Required" xml:space="preserve">
+    <value>L’identifiant de la catégorie de budget est obligatoire.</value>
+  </data>
+  <data name="BudgetCategory.Name.Required" xml:space="preserve">
+    <value>Le nom de la catégorie de budget est obligatoire.</value>
+  </data>
+  <data name="BudgetCategory.Name.TooLong" xml:space="preserve">
+    <value>Le nom de la catégorie de budget est trop long.</value>
+  </data>
+  <data name="BudgetCategory.Name.AlreadyUsed" xml:space="preserve">
+    <value>Ce nom de catégorie de budget est déjà utilisé.</value>
+  </data>
+  <data name="BudgetCategory.Description.TooLong" xml:space="preserve">
+    <value>La description de la catégorie de budget est trop longue.</value>
+  </data>
+  <data name="BudgetAccess.NotExists" xml:space="preserve">
+    <value>L’accès au budget n’existe pas.</value>
+  </data>
+  <data name="BudgetAccess.BudgetId.Required" xml:space="preserve">
+    <value>L’identifiant du budget est obligatoire.</value>
+  </data>
+  <data name="BudgetAccess.UserId.Required" xml:space="preserve">
+    <value>L’identifiant de l’utilisateur est obligatoire.</value>
+  </data>
+  <data name="BudgetAccess.UserId.NotExists" xml:space="preserve">
+    <value>L’utilisateur sélectionné n’existe pas.</value>
+  </data>
+  <data name="Budget.NotExists" xml:space="preserve">
+    <value>Le budget n’existe pas.</value>
+  </data>
+  <data name="Budget.Permission.Invalid" xml:space="preserve">
+    <value>La permission du budget est invalide.</value>
+  </data>
+  <data name="Budget.IsLocked" xml:space="preserve">
+    <value>Le budget est verrouillé.</value>
+  </data>
+  <data name="Budget.IsUnlocked" xml:space="preserve">
+    <value>Le budget est déjà déverrouillé.</value>
+  </data>
+  <data name="Budget.Id.Required" xml:space="preserve">
+    <value>L’identifiant du budget est obligatoire.</value>
+  </data>
+  <data name="Budget.Name.Required" xml:space="preserve">
+    <value>Le nom du budget est obligatoire.</value>
+  </data>
+  <data name="Budget.Name.TooLong" xml:space="preserve">
+    <value>Le nom du budget est trop long.</value>
+  </data>
+  <data name="Budget.Name.AlreadyUsed" xml:space="preserve">
+    <value>Ce nom de budget est déjà utilisé.</value>
+  </data>
+  <data name="Budget.User.Required" xml:space="preserve">
+    <value>Un utilisateur est obligatoire.</value>
+  </data>
+  <data name="Budget.User.NotExists" xml:space="preserve">
+    <value>L’utilisateur sélectionné n’existe pas.</value>
+  </data>
+  <data name="Budget.User.IsCurrent" xml:space="preserve">
+    <value>L’utilisateur sélectionné est l’utilisateur courant.</value>
+  </data>
+  <data name="Budget.User.IsOwner" xml:space="preserve">
+    <value>L’utilisateur sélectionné est propriétaire du budget.</value>
+  </data>
+  <data name="Budget.User.IsNotOwner" xml:space="preserve">
+    <value>L’utilisateur sélectionné n’est pas propriétaire du budget.</value>
+  </data>
+  <data name="Budget.Permissions.Invalid" xml:space="preserve">
+    <value>Les permissions du budget sont invalides.</value>
+  </data>
+  <data name="Budget.Category.Required" xml:space="preserve">
+    <value>Une catégorie de budget est obligatoire.</value>
+  </data>
+  <data name="Budget.Category.NotExists" xml:space="preserve">
+    <value>La catégorie de budget sélectionnée n’existe pas.</value>
+  </data>
+  <data name="Budget.Category.Associated" xml:space="preserve">
+    <value>La catégorie de budget est déjà associée à ce budget.</value>
+  </data>
+  <data name="Budget.Category.NotAssociated" xml:space="preserve">
+    <value>La catégorie de budget n’est pas associée à ce budget.</value>
+  </data>
+  <data name="Budget.Category.IsUsed" xml:space="preserve">
+    <value>La catégorie de budget est utilisée par ce budget.</value>
+  </data>
+  <data name="Transaction.NotExists" xml:space="preserve">
+    <value>La transaction n’existe pas.</value>
+  </data>
+  <data name="Transaction.NotExistsInBudget" xml:space="preserve">
+    <value>La transaction n’existe pas dans ce budget.</value>
+  </data>
+  <data name="Transaction.Id.Required" xml:space="preserve">
+    <value>L’identifiant de la transaction est obligatoire.</value>
+  </data>
+  <data name="Transaction.Category.Required" xml:space="preserve">
+    <value>Une catégorie de transaction est obligatoire.</value>
+  </data>
+  <data name="Transaction.Category.NotExists" xml:space="preserve">
+    <value>La catégorie de transaction sélectionnée n’existe pas.</value>
+  </data>
+  <data name="Transaction.Category.NotAssociatedWithBudget" xml:space="preserve">
+    <value>La catégorie de transaction sélectionnée n’est pas associée au budget.</value>
+  </data>
+  <data name="Transaction.Name.Required" xml:space="preserve">
+    <value>Le nom de la transaction est obligatoire.</value>
+  </data>
+  <data name="Transaction.Name.TooLong" xml:space="preserve">
+    <value>Le nom de la transaction est trop long.</value>
+  </data>
+  <data name="Transaction.Name.AlreadyUsed" xml:space="preserve">
+    <value>Ce nom de transaction est déjà utilisé.</value>
+  </data>
+  <data name="Transaction.Type.Invalid" xml:space="preserve">
+    <value>Le type de transaction est invalide.</value>
+  </data>
+  <data name="Transaction.Method.Invalid" xml:space="preserve">
+    <value>Le moyen de transaction est invalide.</value>
+  </data>
+  <data name="Transaction.Account.Required" xml:space="preserve">
+    <value>Un compte est obligatoire pour la transaction.</value>
+  </data>
+  <data name="Transaction.Account.NotExists" xml:space="preserve">
+    <value>Le compte sélectionné n’existe pas.</value>
+  </data>
+  <data name="Transaction.Account.IsClosed" xml:space="preserve">
+    <value>Le compte sélectionné est clôturé.</value>
+  </data>
+  <data name="Transaction.TransferAccount.Required" xml:space="preserve">
+    <value>Un compte de transfert est obligatoire.</value>
+  </data>
+  <data name="Transaction.TransferAccount.NotExists" xml:space="preserve">
+    <value>Le compte de transfert sélectionné n’existe pas.</value>
+  </data>
+  <data name="Transaction.TransferAccount.IsClosed" xml:space="preserve">
+    <value>Le compte de transfert sélectionné est clôturé.</value>
+  </data>
+  <data name="Transaction.TransferAccount.EqualToAccount" xml:space="preserve">
+    <value>Le compte de transfert doit être différent du compte source.</value>
+  </data>
+  <data name="Transaction.Amount.Invalid" xml:space="preserve">
+    <value>Le montant de la transaction est invalide.</value>
+  </data>
+  <data name="User.IsCurrentUser" xml:space="preserve">
+    <value>L’utilisateur sélectionné est l’utilisateur courant.</value>
+  </data>
+  <data name="User.IsBudgetOwner" xml:space="preserve">
+    <value>L’utilisateur possède au moins un budget.</value>
+  </data>
+  <data name="User.NotExists" xml:space="preserve">
+    <value>L’utilisateur n’existe pas.</value>
+  </data>
+  <data name="User.NotCurrent" xml:space="preserve">
+    <value>L’utilisateur n’est pas l’utilisateur courant.</value>
+  </data>
+  <data name="User.Id.Required" xml:space="preserve">
+    <value>L’identifiant de l’utilisateur est obligatoire.</value>
+  </data>
+  <data name="User.Email.Required" xml:space="preserve">
+    <value>L’adresse mail est obligatoire.</value>
+  </data>
+  <data name="User.Email.TooLong" xml:space="preserve">
+    <value>L’adresse mail est trop longue.</value>
+  </data>
+  <data name="User.Email.Invalid" xml:space="preserve">
+    <value>L’adresse mail est invalide.</value>
+  </data>
+  <data name="User.Email.InvalidCharacters" xml:space="preserve">
+    <value>L’adresse mail contient des caractères non pris en charge.</value>
+  </data>
+  <data name="User.Email.AlreadyUsed" xml:space="preserve">
+    <value>Cette adresse mail est déjà utilisée.</value>
+  </data>
+  <data name="User.OldEmail.Required" xml:space="preserve">
+    <value>L’adresse mail actuelle est obligatoire.</value>
+  </data>
+  <data name="User.OldEmail.NotCurrent" xml:space="preserve">
+    <value>L’adresse mail actuelle ne correspond pas à votre compte.</value>
+  </data>
+  <data name="User.NewEmail.Required" xml:space="preserve">
+    <value>La nouvelle adresse mail est obligatoire.</value>
+  </data>
+  <data name="User.NewEmail.EqualsToOldEmail" xml:space="preserve">
+    <value>La nouvelle adresse mail doit être différente de l’adresse mail actuelle.</value>
+  </data>
+  <data name="User.NewEmail.TooLong" xml:space="preserve">
+    <value>La nouvelle adresse mail est trop longue.</value>
+  </data>
+  <data name="User.NewEmail.Invalid" xml:space="preserve">
+    <value>La nouvelle adresse mail est invalide.</value>
+  </data>
+  <data name="User.NewEmail.InvalidCharacters" xml:space="preserve">
+    <value>La nouvelle adresse mail contient des caractères non pris en charge.</value>
+  </data>
+  <data name="User.NewEmail.AlreadyUsed" xml:space="preserve">
+    <value>Cette adresse mail est déjà utilisée.</value>
+  </data>
+  <data name="User.LastName.Required" xml:space="preserve">
+    <value>Le nom est obligatoire.</value>
+  </data>
+  <data name="User.LastName.TooLong" xml:space="preserve">
+    <value>Le nom est trop long.</value>
+  </data>
+  <data name="User.FirstName.Required" xml:space="preserve">
+    <value>Le prénom est obligatoire.</value>
+  </data>
+  <data name="User.FirstName.TooLong" xml:space="preserve">
+    <value>Le prénom est trop long.</value>
+  </data>
+  <data name="User.PhoneNumber.TooLong" xml:space="preserve">
+    <value>Le numéro de téléphone est trop long.</value>
+  </data>
+  <data name="User.PhoneNumber.Invalid" xml:space="preserve">
+    <value>Le numéro de téléphone est invalide.</value>
+  </data>
+  <data name="User.Password.Required" xml:space="preserve">
+    <value>Le mot de passe est obligatoire.</value>
+  </data>
+  <data name="User.Password.Invalid" xml:space="preserve">
+    <value>Le mot de passe est invalide.</value>
+  </data>
+  <data name="User.Role.Required" xml:space="preserve">
+    <value>Un rôle est obligatoire.</value>
+  </data>
+  <data name="User.Role.Duplicated" xml:space="preserve">
+    <value>Le rôle est dupliqué.</value>
+  </data>
+  <data name="User.Role.NotExists" xml:space="preserve">
+    <value>Le rôle sélectionné n’existe pas.</value>
+  </data>
+  <data name="User.ProfilePicture.Required" xml:space="preserve">
+    <value>Une photo de profil est obligatoire.</value>
+  </data>
+  <data name="User.ProfilePicture.Content.Required" xml:space="preserve">
+    <value>Le contenu de la photo de profil est obligatoire.</value>
+  </data>
+  <data name="User.ProfilePicture.ContentType.Required" xml:space="preserve">
+    <value>Le type de contenu de la photo de profil est obligatoire.</value>
+  </data>
+  <data name="User.ProfilePicture.NotExists" xml:space="preserve">
+    <value>La photo de profil n’existe pas.</value>
+  </data>
+  <data name="User.ProfilePicture.TooLarge" xml:space="preserve">
+    <value>La photo de profil est trop volumineuse.</value>
+  </data>
+  <data name="User.ProfilePicture.FormatUnsupported" xml:space="preserve">
+    <value>Le format de la photo de profil n’est pas pris en charge.</value>
+  </data>
+  <data name="User.ProfilePicture.Invalid" xml:space="preserve">
+    <value>La photo de profil est invalide.</value>
+  </data>
+  <data name="User.ProfilePicture.DimensionTooLarge" xml:space="preserve">
+    <value>Les dimensions de la photo de profil sont trop grandes.</value>
+  </data>
+  <data name="User.ProfilePicture.DimensionTooSmall" xml:space="preserve">
+    <value>Les dimensions de la photo de profil sont trop petites.</value>
+  </data>
+  <data name="User.ActivationToken.Required" xml:space="preserve">
+    <value>Le jeton d'activation du compte est obligatoire.</value>
+  </data>
+  <data name="User.Email.AlreadyConfirmed" xml:space="preserve">
+    <value>L'adresse mail est déjà confirmée.</value>
+  </data>
+  <data name="User.Password.NotEqualToConfirm" xml:space="preserve">
+    <value>Le mot de passe et sa confirmation ne correspondent pas.</value>
+  </data>
+  <data name="User.ActivationMail.Subject.Required" xml:space="preserve">
+    <value>L’objet du mail d’activation est obligatoire.</value>
+  </data>
+  <data name="User.Email.NotConfirmed" xml:space="preserve">
+    <value>L'adresse mail n'est pas confirmée.</value>
+  </data>
+  <data name="User.ActivationPageName.Required" xml:space="preserve">
+    <value>Le nom de la page d'activation du compte est obligatoire.</value>
+  </data>
+  <data name="User.ActivationToken.Lifetime.Invalid" xml:space="preserve">
+    <value>La durée de validité du lien d’activation doit être supérieure à zéro.</value>
+  </data>
+  <data name="User.IsLastActivatedAdministrator" xml:space="preserve">
+    <value>Au moins un administrateur activé doit être conservé.</value>
+  </data>
+</root>

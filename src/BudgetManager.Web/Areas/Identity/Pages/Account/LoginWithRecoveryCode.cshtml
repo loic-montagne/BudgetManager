@@ -1,0 +1,43 @@
+@page
+@model LoginWithRecoveryCodeModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+
+@{
+    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["IdentityTitle"] = Localizer["Title"].Value;
+    ViewData["IdentitySubtitle"] = Localizer["Subtitle"].Value;
+    Layout = "/Areas/Identity/Pages/Shared/_AnonymousIdentityLayout.cshtml";
+}
+
+<form method="post">
+    <div asp-validation-summary="ModelOnly"
+         class="text-danger"
+         role="alert">
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Input.RecoveryCode"
+               class="form-control"
+               autocomplete="off"
+               placeholder="RecoveryCode" />
+
+        <label asp-for="Input.RecoveryCode"
+               class="form-label">
+            @SharedLocalizer["Field.RecoveryCode"]
+        </label>
+
+        <span asp-validation-for="Input.RecoveryCode"
+              class="text-danger">
+        </span>
+    </div>
+
+    <button type="submit"
+            class="w-100 btn btn-lg btn-primary">
+        @Localizer["Action.Login"]
+    </button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

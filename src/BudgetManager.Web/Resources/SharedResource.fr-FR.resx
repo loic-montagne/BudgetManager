@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Theme.Toggle" xml:space="preserve">
+    <value>Changer de thème</value>
+  </data>
+  <data name="Culture.Select" xml:space="preserve">
+    <value>Sélectionner la langue</value>
+  </data>
+  <data name="Culture.SwitchToFrench" xml:space="preserve">
+    <value>Passer en français</value>
+  </data>
+  <data name="Culture.SwitchToEnglish" xml:space="preserve">
+    <value>Passer en anglais</value>
+  </data>
+  <data name="Field.Email" xml:space="preserve">
+    <value>Adresse mail</value>
+  </data>
+  <data name="Field.Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="Field.RememberMe" xml:space="preserve">
+    <value>Se souvenir de moi</value>
+  </data>
+  <data name="Field.AuthenticatorCode" xml:space="preserve">
+    <value>Code d'authentification</value>
+  </data>
+  <data name="Field.RememberMachine" xml:space="preserve">
+    <value>Se souvenir de cette machine</value>
+  </data>
+  <data name="Field.RecoveryCode" xml:space="preserve">
+    <value>Code de récupération</value>
+  </data>
+  <data name="Field.ConfirmPassword" xml:space="preserve">
+    <value>Confirmation du mot de passe</value>
+  </data>
+  <data name="Validation.Required" xml:space="preserve">
+    <value>Le champ {0} est obligatoire.</value>
+  </data>
+  <data name="Validation.Email" xml:space="preserve">
+    <value>Le champ {0} n'est pas une adresse mail valide.</value>
+  </data>
+  <data name="Validation.StringLength" xml:space="preserve">
+    <value>Le champ {0} doit comporter entre {2} et {1} caractères.</value>
+  </data>
+  <data name="Validation.PasswordMismatch" xml:space="preserve">
+    <value>Le mot de passe et la confirmation du mot de passe ne correspondent pas.</value>
+  </data>
+  <data name="Error.InvalidLogin" xml:space="preserve">
+    <value>Tentative de connexion invalide.</value>
+  </data>
+  <data name="Error.InvalidAuthenticatorCode" xml:space="preserve">
+    <value>Le code d'authentification est invalide.</value>
+  </data>
+  <data name="Error.InvalidRecoveryCode" xml:space="preserve">
+    <value>Le code de récupération saisi est invalide.</value>
+  </data>
+  <data name="Error.PasswordResetCodeRequired" xml:space="preserve">
+    <value>Un code doit être fourni pour réinitialiser le mot de passe.</value>
+  </data>
+  <data name="Error.UserNotFound" xml:space="preserve">
+    <value>Impossible de charger l'utilisateur avec l'identifiant '{0}'.</value>
+  </data>
+  <data name="Message.EmailConfirmed" xml:space="preserve">
+    <value>Merci d'avoir confirmé votre adresse mail.</value>
+  </data>
+  <data name="Message.EmailConfirmationError" xml:space="preserve">
+    <value>Erreur lors de la confirmation de votre adresse mail.</value>
+  </data>
+  <data name="Email.PasswordReset.Subject" xml:space="preserve">
+    <value>Réinitialisez votre mot de passe</value>
+  </data>
+  <data name="Email.ConfirmEmail.Subject" xml:space="preserve">
+    <value>Confirmez votre adresse mail</value>
+  </data>
+  <data name="Error.InvalidLoginRemainingAttempts" xml:space="preserve">
+    <value>Tentative de connexion invalide. Il vous reste {0} tentative(s) avant le verrouillage du compte.</value>
+  </data>
+  <data name="Email.ChangeEmail.Subject" xml:space="preserve">
+    <value>Confirmez votre nouvelle adresse mail</value>
+  </data>
+  <data name="Message.EmailChangeConfirmed" xml:space="preserve">
+    <value>Votre nouvelle adresse mail a bien été confirmée.</value>
+  </data>
+  <data name="Message.EmailChangeConfirmationError" xml:space="preserve">
+    <value>Une erreur est survenue lors de la confirmation de votre nouvelle adresse mail.</value>
+  </data>
+  <data name="Field.PhoneNumber" xml:space="preserve">
+    <value>Numéro de téléphone</value>
+  </data>
+  <data name="Field.CurrentPassword" xml:space="preserve">
+    <value>Mot de passe actuel</value>
+  </data>
+  <data name="Field.NewPassword" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="Field.ConfirmNewPassword" xml:space="preserve">
+    <value>Confirmation du nouveau mot de passe</value>
+  </data>
+  <data name="Field.NewEmail" xml:space="preserve">
+    <value>Nouvelle adresse mail</value>
+  </data>
+  <data name="Field.VerificationCode" xml:space="preserve">
+    <value>Code de vérification</value>
+  </data>
+  <data name="Validation.NewPasswordMismatch" xml:space="preserve">
+    <value>Le nouveau mot de passe et sa confirmation ne correspondent pas.</value>
+  </data>
+  <data name="Validation.VerificationCodeLength" xml:space="preserve">
+    <value>Le champ {0} doit comporter entre {2} et {1} caractères.</value>
+  </data>
+  <data name="Error.InvalidVerificationCode" xml:space="preserve">
+    <value>Le code de vérification est invalide.</value>
+  </data>
+  <data name="Message.PasswordChanged" xml:space="preserve">
+    <value>Votre mot de passe a été modifié.</value>
+  </data>
+  <data name="Message.TwoFactorDisabled" xml:space="preserve">
+    <value>L’authentification à deux facteurs a été désactivée. Vous pourrez la réactiver après avoir configuré une application d’authentification.</value>
+  </data>
+  <data name="Message.EmailChangeVerificationSent" xml:space="preserve">
+    <value>Le lien de confirmation du changement d’adresse mail a été envoyé à votre nouvelle adresse mail. Veuillez consulter votre messagerie. Votre adresse actuelle restera inchangée jusqu'à ce que vous confirmiez la nouvelle adresse.</value>
+  </data>
+  <data name="Message.ProfileUpdated" xml:space="preserve">
+    <value>Votre profil a été mis à jour.</value>
+  </data>
+  <data name="Message.AuthenticatorVerified" xml:space="preserve">
+    <value>Votre application d’authentification a été vérifiée.</value>
+  </data>
+  <data name="Message.RecoveryCodesGenerated" xml:space="preserve">
+    <value>De nouveaux codes de récupération ont été générés.</value>
+  </data>
+  <data name="Message.AuthenticatorReset" xml:space="preserve">
+    <value>La clé de votre application d’authentification a été réinitialisée. Vous devez configurer l’application avec la nouvelle clé.</value>
+  </data>
+  <data name="Message.BrowserForgotten" xml:space="preserve">
+    <value>Ce navigateur a été oublié. Lors de votre prochaine connexion depuis ce navigateur, votre code d’authentification à deux facteurs vous sera demandé.</value>
+  </data>
+  <data name="Validation.ProfilePictureRequired" xml:space="preserve">
+    <value>Sélectionnez une image à utiliser comme photo de profil.</value>
+  </data>
+  <data name="Message.ProfilePictureUpdated" xml:space="preserve">
+    <value>Votre photo de profil a été mise à jour.</value>
+  </data>
+  <data name="Message.ProfilePictureDeleted" xml:space="preserve">
+    <value>Votre photo de profil a été supprimée.</value>
+  </data>
+  <data name="Navigation.Profile" xml:space="preserve">
+    <value>Mon profil</value>
+  </data>
+  <data name="ColumnTitle.Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Action.Add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Action.Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="Action.Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Action.Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="Action.No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="Action.Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Action.Delete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="Datatable.Next" xml:space="preserve">
+    <value>Suivant</value>
+  </data>
+  <data name="Datatable.Previous" xml:space="preserve">
+    <value>Précédent</value>
+  </data>
+  <data name="Datatable.First" xml:space="preserve">
+    <value>Premier</value>
+  </data>
+  <data name="Datatable.Last" xml:space="preserve">
+    <value>Dernier</value>
+  </data>
+  <data name="Datatable.Processing" xml:space="preserve">
+    <value>Chargement...</value>
+  </data>
+  <data name="Error.Generic" xml:space="preserve">
+    <value>Une erreur est survenue</value>
+  </data>
+  <data name="Placeholder.Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Error.NotManagedGeneric" xml:space="preserve">
+    <value>Une erreur non gérée s'est produite !\n{0}</value>
+  </data>
+  <data name="Field.Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Value.User.System" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="Field.CreatedBy" xml:space="preserve">
+    <value>Créé(e) par</value>
+  </data>
+  <data name="Field.CreatedOn" xml:space="preserve">
+    <value>Créé(e) le</value>
+  </data>
+  <data name="Field.UpdatedBy" xml:space="preserve">
+    <value>Modifié(e) par</value>
+  </data>
+  <data name="Field.UpdatedOn" xml:space="preserve">
+    <value>Modifié(e) le</value>
+  </data>
+  <data name="Value.All.Masculine" xml:space="preserve">
+    <value>Tous</value>
+  </data>
+  <data name="Value.Active.Masculine.Plurial" xml:space="preserve">
+    <value>Actifs</value>
+  </data>
+  <data name="Value.NonActive.Masculine.Plurial" xml:space="preserve">
+    <value>En attente d'activation</value>
+  </data>
+  <data name="Value.Closed.Masculine.Plurial" xml:space="preserve">
+    <value>Fermés</value>
+  </data>
+  <data name="Value.SelectAll" xml:space="preserve">
+    <value>Sélectionner tout</value>
+  </data>
+  <data name="Email.ActivateAccount.Subject" xml:space="preserve">
+    <value>Activez votre compte Budget Manager</value>
+  </data>
+  <data name="Error.AccountNotActivated" xml:space="preserve">
+    <value>Votre compte n'a pas encore été activé. Consultez le mail d'activation qui vous a été envoyé.</value>
+  </data>
+  <data name="Error.ActivationCodeRequired" xml:space="preserve">
+    <value>Un code doit être fourni pour activer votre compte.</value>
+  </data>
+  <data name="Role.Administrator" xml:space="preserve">
+    <value>Administrateur</value>
+  </data>
+  <data name="Role.User" xml:space="preserve">
+    <value>Utilisateur</value>
+  </data>
+  <data name="Culture.French" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="Culture.English" xml:space="preserve">
+    <value>Anglais</value>
+  </data>
+  <data name="Field.Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Theme.Dark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="Theme.Light" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="Theme.System" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="Field.Theme" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="Message.EmailActivationSentOn" xml:space="preserve">
+    <value>Mail d'activation envoyé le {0}</value>
+  </data>
+  <data name="Message.EmailActivationExpiresOn" xml:space="preserve">
+    <value>Valide jusqu'au {0}</value>
+  </data>
+  <data name="Field.LastName" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="Field.FirstName" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="Placeholder.PhoneNumber" xml:space="preserve">
+    <value>06 12 34 56 78</value>
+  </data>
+  <data name="PhoneNumber.Help" xml:space="preserve">
+    <value>Formats acceptés : 06 12 34 56 78 ou +33 6 12 34 56 78.</value>
+  </data>
+  <data name="Message.UserAccountActivated" xml:space="preserve">
+    <value>Compte utilisateur activé</value>
+  </data>
+  <data name="Message.UserAccountNotActivated" xml:space="preserve">
+    <value>Compte utilisateur non activé</value>
+  </data>
+  <data name="Message.AccountActivationEmailSent" xml:space="preserve">
+    <value>Un mail d'activation de compte a été envoyé. Veuillez consulter votre boîte mail.</value>
+  </data>
+  <data name="Link.BackToLogin" xml:space="preserve">
+    <value>Retour à la connexion</value>
+  </data>
+  <data name="PasswordRequirements.Title" xml:space="preserve">
+    <value>Le mot de passe doit contenir :</value>
+  </data>
+  <data name="PasswordRequirements.Length" xml:space="preserve">
+    <value>Au moins {0} caractères</value>
+  </data>
+  <data name="PasswordRequirements.Uppercase" xml:space="preserve">
+    <value>Au moins une lettre majuscule</value>
+  </data>
+  <data name="PasswordRequirements.Lowercase" xml:space="preserve">
+    <value>Au moins une lettre minuscule</value>
+  </data>
+  <data name="PasswordRequirements.Digit" xml:space="preserve">
+    <value>Au moins un chiffre</value>
+  </data>
+  <data name="PasswordRequirements.NonAlphanumeric" xml:space="preserve">
+    <value>Au moins un caractère spécial</value>
+  </data>
+  <data name="PasswordRequirements.UniqueChars" xml:space="preserve">
+    <value>Au moins {0} caractères différents</value>
+  </data>
+</root>

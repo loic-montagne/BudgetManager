@@ -1,0 +1,372 @@
+/* ------- customize form-control placeholder color -------- */
+$input-placeholder-color: #D8D8D8;
+
+/* import the Bootstrap */
+@import "../lib/bootstrap/scss/bootstrap";
+/* import the colors */
+@import "colors";
+
+
+
+/* ------- customize modal color -------- */
+
+.modal-content {
+    background-color: var(--table-modal-bg);
+    color: var(--text-color);
+    overflow: hidden;
+}
+
+
+/* ------- customize form-control -------- */
+
+.form-control,
+.form-select,
+.form-check-input,
+.form-control:disabled,
+.form-select:disabled,
+.form-check-input:disabled,
+.form-check-input:checked {
+    border-color: var(--input-border-color);
+}
+
+.form-control,
+.form-select,
+.form-check-input,
+.form-check-input:checked {
+    background-color: var(--input-bg);
+    color: var(--text-color);
+
+    &:focus {
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 .25rem var(--color-focus-ring);
+    }
+}
+
+.form-control:disabled,
+.form-select:disabled,
+.form-check-input:disabled {
+    background-color: var(--input-disabled-bg);
+    color: var(--text-disabled-color);
+
+    &:focus {
+    background-color: var(--input-disabled-bg);
+        color: var(--text-disabled-color);
+    }
+}
+
+.form-control::placeholder {
+    color: var(--text-disabled-color);
+    opacity: 1;
+}
+
+.form-check-input {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin-top: 0.35rem;
+    background-color: var(--color-input-bg);
+    border-color: var(--color-border);
+
+    &:focus {
+        background-color: var(--color-input-bg);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 .25rem var(--color-focus-ring);
+    }
+
+    &:checked {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    &:checked:focus {
+        background-color: var(--color-primary);
+        border-color: var(--color-primary);
+    }
+
+    &:disabled {
+        background-color: var(--color-input-disabled-bg);
+        border-color: var(--color-border);
+    }
+}
+
+.form-check-input:checked[type=checkbox] {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23#{$light-checkbox-check}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+.form-check-input:checked[type=checkbox]:disabled {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23#{$light-checkbox-disabled-check}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+body.dark .form-check-input:checked[type=checkbox] {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23#{$dark-checkbox-check}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+body.dark .form-check-input:checked[type=checkbox]:disabled {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23#{$dark-checkbox-disabled-check}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
+}
+
+.form-check-input:checked[type=radio] {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23#{$light-checkbox-check}'/%3e%3c/svg%3e");
+}
+.form-check-input:checked[type=radio]:disabled {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23#{$light-checkbox-disabled-check}'/%3e%3c/svg%3e");
+}
+body.dark .form-check-input:checked[type=radio] {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23#{$dark-checkbox-check}'/%3e%3c/svg%3e");
+}
+body.dark .form-check-input:checked[type=radio]:disabled {
+    --bs-form-check-bg-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23#{$dark-checkbox-disabled-check}'/%3e%3c/svg%3e");
+}
+
+
+/* ------- customize floating controls -------- */
+
+/*
+ * Keep Bootstrap's native stacking order, but remove the opaque
+ * pseudo-element drawn behind floating labels. This prevents the
+ * label background from covering selected input text.
+ */
+.form-floating > label {
+    height: auto;
+}
+
+.form-floating > label::after {
+    display: none;
+}
+
+
+/* ------- customize browser autofill -------- */
+
+.form-control:-webkit-autofill,
+.form-control:-webkit-autofill:hover,
+.form-control:-webkit-autofill:focus,
+.form-control:-webkit-autofill:active {
+    color: var(--color-text) !important;
+    background-color: var(--color-input-bg) !important;
+    -webkit-text-fill-color: var(--color-text) !important;
+    -webkit-box-shadow: 0 0 0 1000px var(--color-input-bg) inset !important;
+    box-shadow: 0 0 0 1000px var(--color-input-bg) inset !important;
+    caret-color: var(--color-text);
+    transition: none;
+}
+
+
+
+/* ------- customize floating controls -------- */
+
+/*
+ * Keep Bootstrap's native stacking order.
+ * Restrict the label box to its visible content so it does not cover
+ * the input text selection area.
+ */
+.form-floating > label {
+    height: auto;
+}
+
+
+/* ------- customize dark form controls -------- */
+
+body.dark {
+    .form-select {
+        --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23EEF8F7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    }
+
+    .form-control,
+    .form-select {
+        color: var(--color-text);
+        background-color: var(--color-input-bg);
+        border-color: var(--color-border);
+
+        &:focus {
+            color: var(--color-text);
+            background-color: var(--color-input-bg);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 .25rem var(--color-focus-ring);
+        }
+
+        &::placeholder {
+            color: var(--color-text-muted);
+            opacity: 1;
+        }
+
+        &:disabled {
+            color: var(--color-text-disabled);
+            background-color: var(--color-input-disabled-bg);
+            border-color: var(--color-border);
+            opacity: 1;
+        }
+
+        &[readonly] {
+            color: var(--color-text);
+            background-color: var(--color-input-bg);
+            border-color: var(--color-border);
+            opacity: 1;
+        }
+    }
+    /*
+     * Floating controls need a more specific rule than the generic
+     * form-control styling used by the Login page.
+     */
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+        color: var(--color-text);
+        background-color: var(--color-input-bg);
+        border-color: var(--color-border);
+    }
+
+        .form-floating > .form-control:focus,
+        .form-floating > .form-select:focus {
+            color: var(--color-text);
+            background-color: var(--color-input-bg);
+            border-color: var(--color-primary);
+        }
+        /*
+     * Bootstrap requires the real placeholder to stay invisible
+     * inside a floating control. The label is what the user sees.
+     */
+        .form-floating > .form-control::placeholder {
+            color: transparent;
+            opacity: 1;
+        }
+
+    .form-floating > label {
+        color: var(--color-text-muted);
+    }
+
+    .form-floating > .form-control:focus ~ label,
+    .form-floating > .form-control:not(:placeholder-shown) ~ label,
+    .form-floating > .form-control:-webkit-autofill ~ label,
+    .form-floating > .form-select ~ label {
+        color: var(--color-primary-hover);
+    }
+    /*
+     * Checkbox / radio.
+     */
+    .form-check-input {
+        background-color: var(--color-input-bg);
+        border-color: var(--color-border);
+
+        &:focus {
+            background-color: var(--color-input-bg);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 .25rem var(--color-focus-ring);
+        }
+
+        &:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+            &:checked:focus {
+                background-color: var(--color-primary);
+                border-color: var(--color-primary);
+            }
+
+        &:disabled {
+            background-color: var(--color-input-disabled-bg);
+            border-color: var(--color-border);
+        }
+    }
+}
+
+
+/* ------- customize primary button color -------- */
+
+.btn-primary {
+    @include button-variant($primary-color, $primary-color, $light-primary-text-color, $brand-mint-500, $brand-mint-500, $light-primary-text-color);
+}
+
+.btn-outline-primary {
+    @include button-outline-variant($primary-color, $light-primary-text-color, $brand-mint-500, $primary-color);
+}
+
+body.dark .btn-primary {
+    @include button-variant($brand-mint-500, $brand-mint-500, $dark-primary-text-color, $brand-mint-400, $brand-mint-400, $dark-primary-text-color);
+}
+
+body.dark .btn-outline-primary {
+    @include button-outline-variant($brand-mint-500, $dark-primary-text-color, $brand-mint-400, $brand-mint-500);
+}
+
+
+/* ------- customize modal header colors -------- */
+
+.modal-header.primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--primary-text-color);
+    border-radius: 0;
+}
+
+.modal-header.primary .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+body.dark .modal-header.primary .btn-close {
+    filter: none;
+}
+
+/* ------- customize modal footer -------- */
+
+.modal-footer {
+    border-top: 0;
+}
+
+/* ------- customize required indicator -------- */
+
+.required-indicator {
+    margin-left: .2rem;
+    color: var(--bs-danger);
+}
+
+/* ------- customize disabled and readonly form controls -------- */
+
+/*
+ * Disabled controls are deliberately muted and cannot receive focus.
+ */
+.form-control:disabled,
+.form-select:disabled {
+    color: var(--color-text-disabled);
+    background-color: var(--color-input-disabled-bg);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: 1;
+}
+
+.form-floating > .form-control:disabled,
+.form-floating > .form-select:disabled {
+    color: var(--color-text-disabled);
+    background-color: var(--color-input-disabled-bg);
+    border-color: var(--color-border);
+}
+
+.form-check-input:disabled {
+    background-color: var(--color-input-disabled-bg);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+    opacity: .7;
+}
+
+/*
+ * Readonly controls remain focusable, selectable and copyable.
+ * They keep the normal input surface and focus treatment.
+ */
+.form-control[readonly] {
+    color: var(--color-text);
+    background-color: var(--color-input-bg);
+    border-color: var(--color-border);
+    cursor: text;
+    opacity: 1;
+}
+
+.form-control[readonly]:focus {
+    color: var(--color-text);
+    background-color: var(--color-input-bg);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 .25rem var(--color-focus-ring);
+}
+
+.form-floating > .form-control[readonly] {
+    color: var(--color-text);
+    background-color: var(--color-input-bg);
+    border-color: var(--color-border);
+}
+
