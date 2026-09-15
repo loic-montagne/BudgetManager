@@ -23,6 +23,14 @@ Chaque projet de tests est responsable d'une seule couche.
 
 `BudgetManager.Web.IntegrationTests` sera ajouté avec la couche Web.
 
+## Plateforme de tests
+
+La solution utilise Microsoft.Testing.Platform comme runner de tests .NET.
+
+Les projets de tests utilisent xUnit v3. La couverture de code est collectée avec `coverlet.MTP` et peut être générée au format Cobertura. Les résultats de tests au format TRX sont produits par l'intégration xUnit pour Microsoft.Testing.Platform.
+
+La sélection de Microsoft.Testing.Platform comme runner est définie dans le fichier `global.json` à la racine de la solution.
+
 ---
 
 # Philosophie

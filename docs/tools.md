@@ -1,4 +1,4 @@
-# Outils et commandes
+﻿# Outils et commandes
 
 ## Objectif
 
@@ -170,11 +170,13 @@ tests_results\coverage_report\index.html
 
 Les tests Infrastructure utilisent Testcontainers et nécessitent donc un moteur Docker opérationnel.
 
-Pour exécuter les tests directement, sans passer par le script `tools/test_solution.bat`, la commande à utiliser peut être celle-ci :
-```PowerShell
-dotnet test --logger "trx;LogFileName=TestResults.trx" --results-directory .\tmp
+Pour exécuter les tests directement, sans passer par le script `tools/test_solution.bat`, avec génération des résultats TRX et de la couverture Cobertura :
+
+```powershell
+dotnet test --solution BudgetManager.sln --results-directory .\tmp -- --report-xunit-trx --coverlet --coverlet-output-format cobertura --coverlet-include "[BudgetManager.*]*"
 ```
-Cette commande génère le fichier de logs `tmp/TestResults.trx`
+
+Cette commande utilise Microsoft.Testing.Platform et génère, pour chaque projet de tests, un fichier TRX et un rapport de couverture Cobertura dans `tmp`.
 
 ---
 

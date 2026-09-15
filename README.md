@@ -1,4 +1,4 @@
-# BudgetManager
+﻿# BudgetManager
 
 Projet personnel de gestion de budget.  
   
@@ -45,7 +45,7 @@ Le poste de développement peut être préparé automatiquement avec `tools\conf
 ```bash
 dotnet restore BudgetManager.sln
 dotnet build BudgetManager.sln --configuration Release --no-restore
-dotnet test BudgetManager.sln --configuration Release --no-build
+dotnet test --solution BudgetManager.sln --configuration Release --no-build
 ```
 
 Les tests du domaine se trouvent dans `tests/BudgetManager.Domain.Tests`.  
