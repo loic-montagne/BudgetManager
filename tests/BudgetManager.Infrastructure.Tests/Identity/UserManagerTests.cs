@@ -1290,7 +1290,7 @@ public sealed class UserManagerTests(SqlServerFixture fixture) : InfrastructureT
         await using var verifyScope = provider.CreateAsyncScope();
         var verifyIdentity = verifyScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var activatedAdministrators = await verifyIdentity.GetUsersInRoleAsync(ApplicationRoles.Administrator);
-        Assert.Single(activatedAdministrators.Where(x => x.EmailConfirmed));
+        Assert.Single(activatedAdministrators, x => x.EmailConfirmed);
     }
 
     [Fact]

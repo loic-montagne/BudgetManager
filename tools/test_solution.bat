@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
-rem Force les outils .NET, MSBuild, NuGet et VSTest a afficher leurs messages
+rem Force les outils .NET, MSBuild, NuGet et Microsoft.Testing.Platform a afficher leurs messages
 rem en anglais afin d'eviter les problemes d'encodage dans cmd.exe.
 set "DOTNET_CLI_UI_LANGUAGE=en-US"
 set "VSLANG=1033"
@@ -30,7 +30,7 @@ set "SOLUTION_FILE=%ROOT_DIR%\BudgetManager.sln"
 set "RESULTS_ROOT=%ROOT_DIR%\tests_results"
 set "TEST_RESULTS_DIR=%RESULTS_ROOT%\test_runs"
 set "COVERAGE_REPORT_DIR=%RESULTS_ROOT%\coverage_report"
-set "COVERAGE_PATTERN=%TEST_RESULTS_DIR%\**\coverage.cobertura.xml"
+set "COVERAGE_PATTERN=%TEST_RESULTS_DIR%\coverage.cobertura.*.xml"
 
 set "CONFIGURATION=Debug"
 set "OPEN_REPORT=1"
@@ -135,12 +135,16 @@ rem ----------------------------------------------------------------------------
 echo.
 echo [2/4] Execution des tests et collecte de la couverture...
 
-dotnet test "%SOLUTION_FILE%" ^
+dotnet test ^
+    --solution "%SOLUTION_FILE%" ^
     --configuration "%CONFIGURATION%" ^
     --no-restore ^
-    --collect:"XPlat Code Coverage" ^
-    --logger:"trx;LogFilePrefix=BudgetManager" ^
-    --results-directory "%TEST_RESULTS_DIR%"
+    --results-directory "%TEST_RESULTS_DIR%" ^
+    -- ^
+    --report-xunit-trx ^
+    --coverlet ^
+    --coverlet-output-format cobertura ^
+    --coverlet-include "[BudgetManager.*]*"
 
 if errorlevel 1 (
     echo.
@@ -158,7 +162,7 @@ rem ----------------------------------------------------------------------------
 set "COVERAGE_FOUND=0"
 set /a COVERAGE_COUNT=0
 
-for /r "%TEST_RESULTS_DIR%" %%F in (coverage.cobertura.xml) do (
+for %%F in ("%TEST_RESULTS_DIR%\coverage.cobertura.*.xml") do (
     set "COVERAGE_FOUND=1"
     set /a COVERAGE_COUNT+=1
     echo [INFO] Couverture trouvee : %%F
@@ -166,13 +170,13 @@ for /r "%TEST_RESULTS_DIR%" %%F in (coverage.cobertura.xml) do (
 
 if "!COVERAGE_FOUND!"=="0" (
     echo.
-    echo [ERREUR] Aucun fichier coverage.cobertura.xml n'a ete genere.
+    echo [ERREUR] Aucun rapport de couverture Cobertura n'a ete genere.
     echo.
     echo Verifiez que chaque projet de tests reference :
-    echo   coverlet.collector
+    echo   coverlet.MTP
     echo.
     echo Exemple :
-    echo   ^<PackageReference Include="coverlet.collector" /^>
+    echo   ^<PackageReference Include="coverlet.MTP" /^>
     exit /b 1
 )
 
