@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Data.SqlClient" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
 	<PackageReference Include="NSubstitute" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux.NoDependencies" />
 	<PackageReference Include="Testcontainers.MsSql" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
