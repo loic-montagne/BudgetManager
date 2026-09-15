@@ -50,7 +50,8 @@ dotnet test --solution BudgetManager.sln --configuration Release --no-build
 
 Les tests du domaine se trouvent dans `tests/BudgetManager.Domain.Tests`.  
 Les tests de l'application se trouvent dans `tests/BudgetManager.Application.Tests`.  
-Les tests de l'infrastructure se trouvent dans `tests/BudgetManager.Infrastructure.Tests` et nécessitent Docker.
+Les tests de l'infrastructure se trouvent dans `tests/BudgetManager.Infrastructure.Tests` et nécessitent Docker.  
+Les tests de la couche Web se trouvent dans `tests/BudgetManager.Web.Tests` et ne nécessitent pas Docker.
 
 ## Intégration continue
 

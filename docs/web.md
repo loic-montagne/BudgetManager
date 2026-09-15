@@ -1,4 +1,4 @@
-# Web
+﻿# Web
 
 ## Objectif
 
@@ -143,3 +143,12 @@ Le changement d'adresse e-mail est séparé en deux cas d'utilisation.
 `ChangeEmailUserCommand` est réservé à l'utilisateur authentifié. Il vérifie que l'utilisateur cible est l'utilisateur courant, que l'ancienne adresse correspond bien à l'adresse actuelle et que la nouvelle adresse est valide et disponible. Il génère ensuite le token Identity utilisé pour la confirmation.
 
 `ConfirmEmailChangeUserCommand` est utilisé par la page de confirmation accessible via le lien envoyé par e-mail. Il valide l'identifiant utilisateur, la nouvelle adresse et le token Identity, puis confirme le changement de manière atomique côté Infrastructure afin de conserver l'invariant entre l'adresse e-mail et le nom d'utilisateur.
+
+
+---
+
+# Tests de la couche Web
+
+Le projet `BudgetManager.Web.Tests` vérifie les comportements C# spécifiques à la présentation : contrôleurs MVC, adaptation DataTables, extensions, localisation, utilisateur courant, TagHelpers et éléments testables des PageModels Identity.
+
+Les règles métier restent testées dans Domain/Application et les mécanismes techniques Identity/persistence dans Infrastructure. Les vues Razor, feuilles de style et scripts JavaScript ne sont pas considérés comme couverts par les tests xUnit Web ; un éventuel niveau navigateur/end-to-end sera ajouté uniquement pour des scénarios qui le justifient.

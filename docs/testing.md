@@ -16,12 +16,13 @@ Les tests sont répartis selon les différentes couches de l'application.
 tests
 ├── BudgetManager.Domain.Tests
 ├── BudgetManager.Application.Tests
-└── BudgetManager.Infrastructure.Tests
+├── BudgetManager.Infrastructure.Tests
+└── BudgetManager.Web.Tests
 ```
 
 Chaque projet de tests est responsable d'une seule couche.
 
-`BudgetManager.Web.IntegrationTests` sera ajouté avec la couche Web.
+`BudgetManager.Web.Tests` couvre la couche de présentation ASP.NET Core avec des tests unitaires ciblés sur les comportements Web.
 
 ## Plateforme de tests
 
@@ -262,6 +263,17 @@ La suite de tests constitue une protection contre les régressions fonctionnelle
 
 # Tests Web
 
-Aucun projet de tests Web n'est encore ajouté à la solution. Les tests actuels restent limités aux couches Domain, Application et Infrastructure.
+Le projet `BudgetManager.Web.Tests` couvre les comportements C# propres à la couche de présentation sans dupliquer les règles métier déjà vérifiées dans Domain, Application et Infrastructure.
 
-Les comportements Web spécifiques (pages Identity, génération des URLs publiques, rate limiting et gestion des forwarded headers) sont documentés dans `docs/web.md` et feront l'objet de tests d'intégration dédiés lorsqu'un projet `BudgetManager.Web.IntegrationTests` sera introduit.
+La suite couvre notamment :
+
+- le protocole DataTables historique accepté par `DataTablesModelBinder` ;
+- les extensions Web et la gestion du cookie de culture ;
+- l'adaptation de l'utilisateur courant à partir des claims HTTP ;
+- les modèles Web et contrats de binding significatifs ;
+- la localisation des erreurs métier ;
+- le `RequiredLabelTagHelper` ;
+- les contrôleurs MVC, leurs résultats, la propagation des paramètres vers MediatR et le contrat JSON DataTables ;
+- les conventions et comportements simples des Razor PageModels Identity.
+
+Les fichiers Razor `.cshtml`, CSS et JavaScript ne sont pas testés directement par xUnit. Les scénarios nécessitant un navigateur ou le pipeline HTTP complet relèvent de futurs tests end-to-end/intégration dédiés si leur valeur justifie leur coût.

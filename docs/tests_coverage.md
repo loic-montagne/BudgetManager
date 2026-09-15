@@ -1,4 +1,4 @@
-﻿# Couverture des tests
+# Couverture des tests
 
 Ce document décrit la couverture fonctionnelle actuelle de la solution.
 
@@ -169,9 +169,25 @@ Les tests vérifient :
 
 ---
 
+# Couche Web
+
+Les tests Web sécurisent les comportements C# de la couche de présentation :
+
+- binding du protocole DataTables historique (`sEcho`, recherche, pagination et tris multiples) ;
+- structure de réponse DataTables historique et mapping de critères sur les endpoints couverts ;
+- extensions de présentation et cookie de culture ;
+- utilisateur courant et claims HTTP ;
+- modèles de formulaire et métadonnées de binding significatives ;
+- localisation des erreurs métier ;
+- TagHelper des champs obligatoires ;
+- résultats et gardes des contrôleurs MVC ;
+- conventions de validation et navigation des pages Identity.
+
+Cette couverture vise les responsabilités de présentation. Elle ne duplique pas les règles métier de l'Application et ne prétend pas valider le rendu navigateur des vues Razor, CSS ou JavaScript.
+
 # Limites
 
-Les tests existants ne remplacent pas les futurs tests de bout en bout de la présentation Web.
+Les tests Web C# ne remplacent pas de futurs tests de bout en bout exécutés dans un navigateur.
 
 Les tests Infrastructure couvrent la persistence et les interactions avec SQL Server, mais ne valident pas encore le comportement HTTP de l'application.
 
