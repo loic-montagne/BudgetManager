@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
 rem ============================================================================
@@ -13,6 +13,8 @@ rem   - SDK .NET 10
 rem   - dotnet-ef (outil global, branche 10.x)
 rem   - LibMan (outil global)
 rem   - ReportGenerator (outil global)
+rem   - Node.js LTS et npm
+rem   - Dependances du projet de tests JavaScript
 rem   - WSL 2
 rem   - Docker Desktop
 rem
@@ -33,11 +35,16 @@ set "DOCKER_DIR=C:\Program Files\Docker\Docker"
 set "DOCKER_BIN_DIR=%DOCKER_DIR%\resources\bin"
 set "DOCKER_EXE=%DOCKER_BIN_DIR%\docker.exe"
 set "DOCKER_DESKTOP_EXE=%DOCKER_DIR%\Docker Desktop.exe"
+set "NODE_DIR=C:\Program Files\nodejs"
+set "NODE_EXE=%NODE_DIR%\node.exe"
+set "NPM_CMD=%NODE_DIR%\npm.cmd"
+set "JS_TEST_PROJECT=%~dp0..\tests\BudgetManager.Web.JsTests"
 
 set "DOTNET_SDK_PACKAGE=Microsoft.DotNet.SDK.10"
 set "DOTNET_EF_VERSION=10.*"
 set "GIT_PACKAGE=Git.Git"
 set "DOCKER_PACKAGE=Docker.DockerDesktop"
+set "NODE_PACKAGE=OpenJS.NodeJS.LTS"
 
 set "REBOOT_REQUIRED=0"
 set "FAILED=0"
@@ -78,7 +85,7 @@ rem ---------------------------------------------------------------------------
 rem WinGet
 rem ---------------------------------------------------------------------------
 
-echo [1/9] Verification de WinGet...
+echo [1/11] Verification de WinGet...
 
 where winget.exe >nul 2>&1
 if errorlevel 1 (
@@ -95,7 +102,7 @@ rem ---------------------------------------------------------------------------
 rem Git
 rem ---------------------------------------------------------------------------
 
-echo [2/9] Verification de Git...
+echo [2/11] Verification de Git...
 
 where git.exe >nul 2>&1
 if not errorlevel 1 (
@@ -131,7 +138,7 @@ rem ---------------------------------------------------------------------------
 rem SDK .NET 10
 rem ---------------------------------------------------------------------------
 
-echo [3/9] Verification du SDK .NET 10...
+echo [3/11] Verification du SDK .NET 10...
 
 set "HAS_DOTNET10=0"
 
@@ -188,7 +195,7 @@ rem ---------------------------------------------------------------------------
 rem dotnet-ef
 rem ---------------------------------------------------------------------------
 
-echo [4/9] Verification de dotnet-ef...
+echo [4/11] Verification de dotnet-ef...
 
 set "HAS_DOTNET_EF=0"
 "%DOTNET_EXE%" tool list --global 2>nul | findstr /I /B "dotnet-ef " >nul
@@ -222,7 +229,7 @@ rem ---------------------------------------------------------------------------
 rem LibMan
 rem ---------------------------------------------------------------------------
 
-echo [5/9] Verification de LibMan...
+echo [5/11] Verification de LibMan...
 
 set "HAS_LIBMAN=0"
 "%DOTNET_EXE%" tool list --global 2>nul | findstr /I /B "microsoft.web.librarymanager.cli " >nul
@@ -255,7 +262,7 @@ rem ---------------------------------------------------------------------------
 rem ReportGenerator
 rem ---------------------------------------------------------------------------
 
-echo [6/9] Verification de ReportGenerator...
+echo [6/11] Verification de ReportGenerator...
 
 set "HAS_REPORTGENERATOR=0"
 "%DOTNET_EXE%" tool list --global 2>nul | findstr /I /B "dotnet-reportgenerator-globaltool " >nul
@@ -284,11 +291,102 @@ if errorlevel 1 (
 
 echo.
 
+
+rem ---------------------------------------------------------------------------
+rem Node.js LTS / npm
+rem ---------------------------------------------------------------------------
+
+echo [7/11] Verification de Node.js LTS et npm...
+
+set "HAS_NODE=0"
+
+where node.exe >nul 2>&1
+if not errorlevel 1 (
+    for /f "delims=" %%I in ('where node.exe 2^>nul') do (
+        if not defined FOUND_NODE set "FOUND_NODE=%%I"
+    )
+    if defined FOUND_NODE (
+        set "NODE_EXE=!FOUND_NODE!"
+        for %%I in ("!NODE_EXE!") do set "NODE_DIR=%%~dpI"
+        set "NPM_CMD=!NODE_DIR!npm.cmd"
+        set "HAS_NODE=1"
+    )
+) else if exist "%NODE_EXE%" (
+    set "HAS_NODE=1"
+)
+
+if "%HAS_NODE%"=="1" (
+    echo [OK] Node.js est deja installe.
+) else (
+    echo [INFO] Installation de Node.js LTS...
+    call :WingetInstall "%NODE_PACKAGE%" "Node.js LTS"
+    if errorlevel 1 (
+        set "FAILED=1"
+        goto :summary
+    )
+)
+
+if not exist "%NODE_EXE%" (
+    echo [ERREUR] node.exe reste introuvable apres installation.
+    set "FAILED=1"
+    goto :summary
+)
+
+if not exist "%NPM_CMD%" (
+    echo [ERREUR] npm.cmd reste introuvable apres installation.
+    set "FAILED=1"
+    goto :summary
+)
+
+"%NODE_EXE%" --version
+"%NPM_CMD%" --version
+if errorlevel 1 (
+    echo [ERREUR] npm est installe mais ne peut pas etre execute.
+    set "FAILED=1"
+    goto :summary
+)
+
+echo.
+
+rem ---------------------------------------------------------------------------
+rem Dependances des tests JavaScript
+rem ---------------------------------------------------------------------------
+
+echo [8/11] Restauration des dependances des tests JavaScript...
+
+if not exist "%JS_TEST_PROJECT%\package.json" (
+    echo [ERREUR] Le projet de tests JavaScript est introuvable :
+    echo          %JS_TEST_PROJECT%
+    set "FAILED=1"
+    goto :summary
+)
+
+if not exist "%JS_TEST_PROJECT%\package-lock.json" (
+    echo [ERREUR] package-lock.json est introuvable :
+    echo          %JS_TEST_PROJECT%\package-lock.json
+    set "FAILED=1"
+    goto :summary
+)
+
+pushd "%JS_TEST_PROJECT%"
+call "%NPM_CMD%" ci
+set "NPM_CI_EXIT=!ERRORLEVEL!"
+popd
+
+if not "!NPM_CI_EXIT!"=="0" (
+    echo [ERREUR] La restauration des dependances JavaScript a echoue.
+    set "FAILED=1"
+    goto :summary
+)
+
+echo [OK] Dependances JavaScript restaurees.
+echo.
+
 rem ---------------------------------------------------------------------------
 rem WSL 2
 rem ---------------------------------------------------------------------------
 
-echo [7/9] Verification de WSL 2...
+echo [9/11] Verification de WSL 2...
 
 where wsl.exe >nul 2>&1
 if errorlevel 1 (
@@ -331,7 +429,7 @@ rem ---------------------------------------------------------------------------
 rem Docker Desktop
 rem ---------------------------------------------------------------------------
 
-echo [8/9] Verification de Docker Desktop...
+echo [10/11] Verification de Docker Desktop...
 
 set "HAS_DOCKER=0"
 
@@ -398,7 +496,7 @@ rem ---------------------------------------------------------------------------
 rem Visual Studio : detection seulement
 rem ---------------------------------------------------------------------------
 
-echo [9/9] Verification de Visual Studio...
+echo [11/11] Verification de Visual Studio...
 
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 
@@ -429,9 +527,10 @@ set "PATH_DOTNET=%DOTNET_DIR%"
 set "PATH_DOTNET_TOOLS=%DOTNET_TOOLS_DIR%"
 set "PATH_GIT=%GIT_CMD_DIR%"
 set "PATH_DOCKER=%DOCKER_BIN_DIR%"
+set "PATH_NODE=%NODE_DIR%"
 
 powershell.exe -NoProfile -ExecutionPolicy Bypass -Command ^
-    "$paths = @($env:PATH_DOTNET, $env:PATH_DOTNET_TOOLS, $env:PATH_GIT, $env:PATH_DOCKER) | Where-Object { $_ -and (Test-Path $_) };" ^
+    "$paths = @($env:PATH_DOTNET, $env:PATH_DOTNET_TOOLS, $env:PATH_GIT, $env:PATH_DOCKER, $env:PATH_NODE) | Where-Object { $_ -and (Test-Path $_) };" ^
     "$current = [Environment]::GetEnvironmentVariable('Path', 'User');" ^
     "$entries = @($current -split ';' | Where-Object { $_ });" ^
     "foreach ($path in $paths) {" ^
@@ -447,7 +546,7 @@ if errorlevel 1 (
 )
 
 rem Mise a jour de la session batch actuelle.
-set "PATH=%DOTNET_DIR%;%DOTNET_TOOLS_DIR%;%GIT_CMD_DIR%;%DOCKER_BIN_DIR%;%PATH%"
+set "PATH=%DOTNET_DIR%;%DOTNET_TOOLS_DIR%;%GIT_CMD_DIR%;%DOCKER_BIN_DIR%;%NODE_DIR%;%PATH%"
 
 :summary
 echo.
@@ -470,6 +569,8 @@ echo [OK] SDK .NET 10
 echo [OK] dotnet-ef
 echo [OK] LibMan
 echo [OK] ReportGenerator
+echo [OK] Node.js LTS / npm
+echo [OK] Dependances des tests JavaScript
 echo [OK] WSL 2 / activation demandee
 echo [OK] Docker Desktop / installation demandee
 echo [OK] PATH utilisateur configure
@@ -489,7 +590,12 @@ if "%REBOOT_REQUIRED%"=="1" (
     echo   dotnet format --version
     echo   libman --version
     echo   reportgenerator --version
+    echo   node --version
+    echo   npm --version
     echo   docker version
+    echo.
+    echo Test JavaScript :
+    echo   tools\test_solution.bat --js --no-open
     echo.
     echo Test Infrastructure :
     echo   dotnet test tests\BudgetManager.Infrastructure.Tests

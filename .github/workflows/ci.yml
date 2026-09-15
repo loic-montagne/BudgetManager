@@ -23,13 +23,24 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
-      - name: Restore
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: tests/BudgetManager.Web.JsTests/package-lock.json
+
+      - name: Restore .NET
         run: dotnet restore BudgetManager.sln
+
+      - name: Restore JavaScript tests
+        working-directory: tests/BudgetManager.Web.JsTests
+        run: npm ci
 
       - name: Build
         run: dotnet build BudgetManager.sln --configuration Release --no-restore
 
-      - name: Test
+      - name: Test .NET
         run: >-
           dotnet test
           --solution BudgetManager.sln
@@ -42,11 +53,24 @@ jobs:
           --coverlet-output-format cobertura
           --coverlet-include "[BudgetManager.*]*"
 
-      - name: Publish test results
+      - name: Test JavaScript
+        working-directory: tests/BudgetManager.Web.JsTests
+        run: npm run test:coverage
+
+      - name: Publish .NET test results
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: TestResults
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Publish JavaScript coverage
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: javascript-coverage
+          path: tests/BudgetManager.Web.JsTests/coverage
           if-no-files-found: warn
           retention-days: 14

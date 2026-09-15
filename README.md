@@ -1,4 +1,4 @@
-﻿# BudgetManager
+# BudgetManager
 
 Projet personnel de gestion de budget.  
   
@@ -34,7 +34,8 @@ La couche Web utilise ASP.NET Core Identity pour l'authentification, la gestion 
 ## Prérequis
 
 - SDK .NET 10 ;
-- Docker pour l'exécution de `BudgetManager.Infrastructure.Tests`.
+- Docker pour l'exécution de `BudgetManager.Infrastructure.Tests` ;
+- Node.js LTS et npm pour `BudgetManager.Web.JsTests`.
 
 Sous Windows, Docker Desktop avec le backend WSL 2 est recommandé. Les instructions d'installation et de vérification sont détaillées dans [Tests](docs/testing.md).
 
@@ -51,10 +52,25 @@ dotnet test --solution BudgetManager.sln --configuration Release --no-build
 Les tests du domaine se trouvent dans `tests/BudgetManager.Domain.Tests`.  
 Les tests de l'application se trouvent dans `tests/BudgetManager.Application.Tests`.  
 Les tests de l'infrastructure se trouvent dans `tests/BudgetManager.Infrastructure.Tests` et nécessitent Docker.  
-Les tests de la couche Web se trouvent dans `tests/BudgetManager.Web.Tests` et ne nécessitent pas Docker.
+Les tests C# de la couche Web se trouvent dans `tests/BudgetManager.Web.Tests` et ne nécessitent pas Docker.  
+Les tests JavaScript se trouvent dans `tests/BudgetManager.Web.JsTests` et utilisent Vitest avec jsdom.
 
 ## Intégration continue
 
-Le workflow `.github/workflows/ci.yml` restaure les dépendances, compile la solution et exécute les tests à chaque push sur les branches `main` ou `master`, ainsi que pour chaque pull request.  
+Le workflow `.github/workflows/ci.yml` restaure les dépendances .NET et npm, compile la solution et exécute les tests .NET **et JavaScript** à chaque push sur les branches `main` ou `master`, ainsi que pour chaque pull request.  
   
-Les résultats des tests et les fichiers de couverture générés dans `TestResults` sont publiés comme artefact GitHub Actions.
+Les résultats .NET générés dans `TestResults` et le rapport de couverture JavaScript généré par Vitest sont publiés comme artefacts GitHub Actions.
+
+
+### Tests ciblés
+
+`tools\test_solution.bat` permet d'exécuter uniquement les groupes utiles avec
+`--domain`, `--application`, `--infrastructure`, `--web` et `--js`. Les
+sélecteurs sont combinables. Par exemple :
+
+```bat
+tools\test_solution.bat --js
+tools\test_solution.bat --web --js --no-open
+```
+
+Sans sélecteur, tous les tests sont exécutés.

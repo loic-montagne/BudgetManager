@@ -1,4 +1,4 @@
-﻿# Outils et commandes
+# Outils et commandes
 
 ## Objectif
 
@@ -33,6 +33,7 @@ Il vérifie et installe si nécessaire :
 - l'outil global `dotnet-ef` compatible .NET 10 ;
 - LibMan (`Microsoft.Web.LibraryManager.Cli`) ;
 - ReportGenerator (`dotnet-reportgenerator-globaltool`) ;
+- Node.js LTS et npm ;
 - WSL 2 ;
 - Docker Desktop.
 
@@ -174,12 +175,13 @@ Le script `tools/test_solution.bat` exécute la chaîne complète de tests et de
 Il :
 
 1. restaure les dépendances NuGet et LibMan via `restore_solution.bat` ;
-2. compile et exécute tous les tests de la solution ;
-3. génère les résultats au format TRX ;
-4. collecte la couverture de code au format Cobertura ;
-5. installe `ReportGenerator` s'il n'est pas disponible ;
-6. génère un rapport HTML consolidé ;
-7. ouvre le rapport dans le navigateur.
+2. restaure les dépendances de `BudgetManager.Web.JsTests` avec `npm ci` ;
+3. compile et exécute tous les tests .NET de la solution ;
+4. exécute les tests JavaScript avec Vitest, collecte leur couverture V8 et vérifie que des lignes de production ont réellement été instrumentées ;
+5. génère les résultats .NET au format TRX et la couverture Cobertura ;
+6. installe `ReportGenerator` s'il n'est pas disponible ;
+7. génère le rapport HTML consolidé de couverture .NET ;
+8. ouvre le rapport .NET dans le navigateur.
 
 Utilisation :
 
@@ -201,11 +203,19 @@ tests_results
 └── coverage_report
 ```
 
-Le rapport HTML principal est :
+Le rapport HTML principal de couverture .NET est :
 
 ```text
 tests_results\coverage_report\index.html
 ```
+
+Le rapport de couverture JavaScript généré par Vitest est :
+
+```text
+tests\BudgetManager.Web.JsTests\coverage\index.html
+```
+
+Les deux couvertures restent séparées : ReportGenerator consolide les rapports .NET, tandis que Vitest/V8 produit le rapport JavaScript. Le script contrôle `coverage-summary.json` et échoue si aucune ligne JavaScript de production n'a été instrumentée.
 
 Les tests Infrastructure utilisent Testcontainers et nécessitent donc un moteur Docker opérationnel.
 

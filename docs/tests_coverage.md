@@ -186,7 +186,7 @@ Les tests Web sécurisent les comportements C# de la couche de présentation :
 - adaptation commune des commandes par `SenderController`, y compris succès, erreurs de validation, erreurs Application et erreurs non gérées ;
 - conventions de validation et navigation des pages Identity.
 
-Cette couverture vise les responsabilités de présentation. Elle ne duplique pas les règles métier de l'Application et ne prétend pas valider le rendu navigateur des vues Razor, CSS ou JavaScript.
+Cette couverture vise les responsabilités de présentation. Elle ne duplique pas les règles métier de l'Application. Les scripts JavaScript applicatifs disposent désormais d'une suite Vitest/jsdom séparée ; celle-ci ne prétend pas valider le rendu navigateur complet des vues Razor et CSS.
 
 # Limites
 
@@ -316,3 +316,45 @@ La suite couvre explicitement les bornes introduites par `MaximumLength` :
 
 Les tests asynchrones utilisent `TestContext.Current.CancellationToken` pour rester cohérents avec le cycle de vie xUnit et permettre l'annulation correcte des tests.
 
+
+## Tests JavaScript Web
+
+`BudgetManager.Web.JsTests` couvre désormais les 12 scripts applicatifs de `wwwroot/js` :
+
+- les scripts de profil, mot de passe et téléphone ;
+- `sidebar.js` et `site.js` ;
+- `entity-manager.js` ;
+- les managers Bank, BudgetCategory, Account et User.
+
+Les tests des scripts fortement couplés à jQuery utilisent réellement jQuery 3.7.1. DataTables, Bootstrap Multiselect et les modales Bootstrap restent simulés de façon ciblée afin de vérifier les interactions, le rendu des colonnes, les filtres, les confirmations, les préférences et les principaux flux AJAX sans tester ces bibliothèques tierces elles-mêmes.
+
+Les tests utilisent Vitest avec jsdom et chargent les scripts de production depuis `src/BudgetManager.Web/wwwroot/js` via le pipeline Vite, afin que les fichiers exécutés soient instrumentés par le provider V8.
+
+La couverture JavaScript est produite séparément de la couverture .NET avec `npm run test:coverage`. Vitest valide directement que la couverture n’est pas vide grâce aux seuils minimaux configurés.
+
+La même commande de couverture JavaScript est exécutée par GitHub Actions lors
+des push sur `main` ou `master` et des pull requests. Le rapport produit est
+conservé dans l'artefact `javascript-coverage`.
+
+### Chemin des sources JavaScript
+
+`vitest.config.mjs` se trouve dans `tests/BudgetManager.Web.JsTests`, alors que les
+scripts de production se trouvent dans `src/BudgetManager.Web/wwwroot/js`.
+
+La configuration construit donc le motif de couverture à partir d'un chemin
+absolu normalisé :
+
+```javascript
+const productionJavaScript = path
+    .resolve(projectDirectory, '../../src/BudgetManager.Web/wwwroot/js/**/*.js')
+    .replaceAll('\\', '/');
+```
+
+`coverage.allowExternal: true` autorise la collecte hors de la racine Vitest et
+`coverage.include: [productionJavaScript]` fait correspondre le filtre de
+couverture aux chemins absolus des modules réellement exécutés.
+
+
+La couverture JavaScript est validée directement par Vitest avec des seuils minimaux de `0.01` pour les instructions, branches, fonctions et lignes. Le but n'est pas d'imposer encore un objectif de couverture, mais de faire échouer l'exécution si aucun code de production n'est réellement couvert.
+
+Les scénarios couvrent également les branches de comportement significatives des managers génériques et spécialisés, de la sidebar et de `site.js` : succès/erreurs AJAX, validations, confirmations, saisie clavier, préférences système, changements de barres de défilement et positionnement des en-têtes fixes. Les fonctions globales de `site.js` utilisées par les managers (`textToHtml`, `validateForm` et `applyMultiSelectWidth`) sont exercées au travers des scénarios des managers concernés ; elles ne sont pas rechargées séparément avec un import Vite `?raw`, car les sources de production se trouvent hors de la racine du projet Vitest.

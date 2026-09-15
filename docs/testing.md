@@ -1,4 +1,4 @@
-﻿# Tests
+# Tests
 
 ## Objectif
 
@@ -17,7 +17,8 @@ tests
 ├── BudgetManager.Domain.Tests
 ├── BudgetManager.Application.Tests
 ├── BudgetManager.Infrastructure.Tests
-└── BudgetManager.Web.Tests
+├── BudgetManager.Web.Tests
+└── BudgetManager.Web.JsTests
 ```
 
 Chaque projet de tests est responsable d'une seule couche.
@@ -276,4 +277,47 @@ La suite couvre notamment :
 - les contrôleurs MVC, leurs résultats, la propagation des paramètres vers MediatR et le contrat JSON DataTables ;
 - les conventions et comportements simples des Razor PageModels Identity.
 
-Les fichiers Razor `.cshtml`, CSS et JavaScript ne sont pas testés directement par xUnit. Les scénarios nécessitant un navigateur ou le pipeline HTTP complet relèvent de futurs tests end-to-end/intégration dédiés si leur valeur justifie leur coût.
+Les fichiers Razor `.cshtml` et CSS ne sont pas testés directement par xUnit. Le JavaScript applicatif dispose désormais de tests unitaires dédiés dans `BudgetManager.Web.JsTests`. Les scénarios nécessitant un navigateur ou le pipeline HTTP complet relèvent de futurs tests end-to-end/intégration dédiés si leur valeur justifie leur coût.
+
+## Tests JavaScript
+
+Les tests unitaires du JavaScript applicatif se trouvent dans
+`tests/BudgetManager.Web.JsTests`.
+
+Ils utilisent Vitest avec jsdom. Les scripts de production sont chargés comme modules par Vite depuis `src/BudgetManager.Web/wwwroot/js`, sans copie du code applicatif. Ce chargement permet à Vitest/V8 d'instrumenter réellement les fichiers de production et de mesurer leur couverture.
+
+Installation des dépendances :
+
+```bat
+cd tests\BudgetManager.Web.JsTests
+npm ci
+```
+
+Exécution :
+
+```bat
+npm test
+```
+
+Exécution avec couverture JavaScript :
+
+```bat
+npm run test:coverage
+```
+
+La première suite couvre `phone-number.js`, `password-requirements.js`,
+`password-visibility.js`, `user-profile-menu.js` et `manage-profile.js`.
+Les scripts plus fortement couplés à jQuery/DataTables (`sidebar.js`,
+`entity-manager.js` et les managers d'entités) feront l'objet des passes
+suivantes.
+
+### Exécution globale
+
+`tools\test_solution.bat` restaure également les dépendances npm avec `npm ci`,
+exécute `npm run test:coverage` et produit le rapport HTML JavaScript dans :
+
+```text
+tests\BudgetManager.Web.JsTests\coverage\index.html
+```
+
+Le rapport HTML consolidé généré par ReportGenerator reste celui de la couverture .NET ; la couverture JavaScript est produite séparément par Vitest/V8. `test_solution.bat` vérifie également que le résumé Vitest contient bien des lignes instrumentées afin d'éviter qu'une exécution à 0 % due à un problème d'instrumentation soit considérée comme valide.

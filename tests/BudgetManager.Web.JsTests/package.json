@@ -1,0 +1,16 @@
+{
+  "name": "budgetmanager-web-jstests",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.0.1",
+    "jsdom": "^30.0.1",
+    "vitest": "^5.0.1",
+    "jquery": "3.7.1"
+  }
+}

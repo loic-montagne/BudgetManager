@@ -43,3 +43,6 @@ Thumbs.db
 # Temp dir
 tmp/
 
+# JavaScript tests
+node_modules/
+coverage/
