@@ -24,7 +24,7 @@
       ]
     },
     {
-      "library": "bootstrap@5.3.3",
+      "library": "bootstrap@5.3.8",
       "destination": "wwwroot/lib/bootstrap/"
     },
     {
@@ -77,7 +77,7 @@
       ]
     },
     {
-      "library": "axios@1.6.7",
+      "library": "axios@1.20.0",
       "destination": "wwwroot/lib/axios/"
     },
 	{
