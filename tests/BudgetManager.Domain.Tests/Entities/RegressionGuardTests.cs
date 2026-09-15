@@ -29,7 +29,7 @@ public sealed class RegressionGuardTests
 
         Assert.Contains(Permission.View, permissions);
         Assert.Contains(Permission.Edit, permissions);
-        Assert.DoesNotContain(Permission.Delete, permissions);
+        Assert.DoesNotContain(Permission.Lock, permissions);
     }
 
     [Fact]
@@ -139,7 +139,7 @@ public sealed class RegressionGuardTests
 
         var result = budget.HasAnyPermission(
             userId,
-            Permission.Edit | Permission.Delete,
+            Permission.Edit | Permission.Lock,
             ownerId);
 
         // Assert

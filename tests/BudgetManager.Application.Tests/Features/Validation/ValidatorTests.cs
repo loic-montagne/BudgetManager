@@ -713,7 +713,7 @@ public sealed class ValidatorTests
         // Arrange
 
         var budgetContext = Substitute.For<IBudgetContext>();
-        var validator = new GetBudgetAccessesQueryValidator(budgetContext);
+        var validator = new GetBudgetAccessesQueryValidator();
         var query = new GetBudgetAccessesQuery(Guid.Empty);
         var cancellationToken = TestContext.Current.CancellationToken;
 

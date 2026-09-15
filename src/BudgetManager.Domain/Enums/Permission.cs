@@ -15,15 +15,12 @@ public enum Permission
     /// <summary>Allows the budget and its contents to be modified.</summary>
     Edit = 1 << 1,
 
-    /// <summary>Allows the budget to be deleted.</summary>
-    Delete = 1 << 2,
-
     /// <summary>Allows budget access to be managed.</summary>
-    Share = 1 << 3,
+    Share = 1 << 2,
 
     /// <summary>Allows the budget to be locked and unlocked.</summary>
-    Lock = 1 << 4,
+    Lock = 1 << 3,
 
     /// <summary>Includes every available budget permission.</summary>
-    All = View | Edit | Delete | Share | Lock
+    All = View | Edit | Share | Lock
 }

@@ -43,7 +43,7 @@ public static class ErrorEnumExtensions
         switch (status)
         {
             case BudgetLockableStatus.NotAuthorized:
-                return ($"{(currentUser ? "Current user" : "User")} does not have permission '{Permission.Edit}' on budget.",
+                return ($"{(currentUser ? "Current user" : "User")} does not have permission '{Permission.Lock}' on budget.",
                         ErrorCodes.BudgetPermissionInvalid);
             case BudgetLockableStatus.AlreadyLocked:
                 return ($"Budget is already locked.",
@@ -62,7 +62,7 @@ public static class ErrorEnumExtensions
         switch (status)
         {
             case BudgetUnlockableStatus.NotAuthorized:
-                return ($"{(currentUser ? "Current user" : "User")} does not have permission '{Permission.Edit}' on budget.",
+                return ($"{(currentUser ? "Current user" : "User")} does not have permission '{Permission.Lock}' on budget.",
                         ErrorCodes.BudgetPermissionInvalid);
             case BudgetUnlockableStatus.AlreadyUnlocked:
                 return ($"Budget is already unlocked.",
