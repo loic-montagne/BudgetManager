@@ -29,6 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{02EA681E
 		tools\clean_solution.bat = tools\clean_solution.bat
 		tools\compress_solution.bat = tools\compress_solution.bat
 		tools\configure_desktop.bat = tools\configure_desktop.bat
+		tools\restore_solution.bat = tools\restore_solution.bat
 		tools\test_solution.bat = tools\test_solution.bat
 	EndProjectSection
 EndProject

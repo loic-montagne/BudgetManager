@@ -1,4 +1,4 @@
-@echo off
+﻿@echo off
 setlocal EnableExtensions EnableDelayedExpansion
 
 rem ============================================================================
@@ -11,6 +11,8 @@ rem   - WinGet (requis pour les installations automatisees)
 rem   - Git
 rem   - SDK .NET 10
 rem   - dotnet-ef (outil global, branche 10.x)
+rem   - LibMan (outil global)
+rem   - ReportGenerator (outil global)
 rem   - WSL 2
 rem   - Docker Desktop
 rem
@@ -76,7 +78,7 @@ rem ---------------------------------------------------------------------------
 rem WinGet
 rem ---------------------------------------------------------------------------
 
-echo [1/7] Verification de WinGet...
+echo [1/9] Verification de WinGet...
 
 where winget.exe >nul 2>&1
 if errorlevel 1 (
@@ -93,7 +95,7 @@ rem ---------------------------------------------------------------------------
 rem Git
 rem ---------------------------------------------------------------------------
 
-echo [2/7] Verification de Git...
+echo [2/9] Verification de Git...
 
 where git.exe >nul 2>&1
 if not errorlevel 1 (
@@ -129,7 +131,7 @@ rem ---------------------------------------------------------------------------
 rem SDK .NET 10
 rem ---------------------------------------------------------------------------
 
-echo [3/7] Verification du SDK .NET 10...
+echo [3/9] Verification du SDK .NET 10...
 
 set "HAS_DOTNET10=0"
 
@@ -186,7 +188,7 @@ rem ---------------------------------------------------------------------------
 rem dotnet-ef
 rem ---------------------------------------------------------------------------
 
-echo [4/7] Verification de dotnet-ef...
+echo [4/9] Verification de dotnet-ef...
 
 set "HAS_DOTNET_EF=0"
 "%DOTNET_EXE%" tool list --global 2>nul | findstr /I /B "dotnet-ef " >nul
@@ -217,10 +219,76 @@ if errorlevel 1 (
 echo.
 
 rem ---------------------------------------------------------------------------
+rem LibMan
+rem ---------------------------------------------------------------------------
+
+echo [5/9] Verification de LibMan...
+
+set "HAS_LIBMAN=0"
+"%DOTNET_EXE%" tool list --global 2>nul | findstr /I /B "microsoft.web.librarymanager.cli " >nul
+if not errorlevel 1 set "HAS_LIBMAN=1"
+
+if "%HAS_LIBMAN%"=="1" (
+    echo [OK] LibMan est deja installe.
+) else (
+    echo [INFO] Installation de LibMan...
+    "%DOTNET_EXE%" tool install --global Microsoft.Web.LibraryManager.Cli
+    if errorlevel 1 (
+        echo [ERREUR] L'installation de LibMan a echoue.
+        set "FAILED=1"
+        goto :summary
+    )
+)
+
+set "PATH=%DOTNET_TOOLS_DIR%;%PATH%"
+
+libman --version
+if errorlevel 1 (
+    echo [ERREUR] LibMan est installe mais ne peut pas etre execute.
+    set "FAILED=1"
+    goto :summary
+)
+
+echo.
+
+rem ---------------------------------------------------------------------------
+rem ReportGenerator
+rem ---------------------------------------------------------------------------
+
+echo [6/9] Verification de ReportGenerator...
+
+set "HAS_REPORTGENERATOR=0"
+"%DOTNET_EXE%" tool list --global 2>nul | findstr /I /B "dotnet-reportgenerator-globaltool " >nul
+if not errorlevel 1 set "HAS_REPORTGENERATOR=1"
+
+if "%HAS_REPORTGENERATOR%"=="1" (
+    echo [OK] ReportGenerator est deja installe.
+) else (
+    echo [INFO] Installation de ReportGenerator...
+    "%DOTNET_EXE%" tool install --global dotnet-reportgenerator-globaltool
+    if errorlevel 1 (
+        echo [ERREUR] L'installation de ReportGenerator a echoue.
+        set "FAILED=1"
+        goto :summary
+    )
+)
+
+set "PATH=%DOTNET_TOOLS_DIR%;%PATH%"
+
+reportgenerator --version
+if errorlevel 1 (
+    echo [ERREUR] ReportGenerator est installe mais ne peut pas etre execute.
+    set "FAILED=1"
+    goto :summary
+)
+
+echo.
+
+rem ---------------------------------------------------------------------------
 rem WSL 2
 rem ---------------------------------------------------------------------------
 
-echo [5/7] Verification de WSL 2...
+echo [7/9] Verification de WSL 2...
 
 where wsl.exe >nul 2>&1
 if errorlevel 1 (
@@ -263,7 +331,7 @@ rem ---------------------------------------------------------------------------
 rem Docker Desktop
 rem ---------------------------------------------------------------------------
 
-echo [6/7] Verification de Docker Desktop...
+echo [8/9] Verification de Docker Desktop...
 
 set "HAS_DOCKER=0"
 
@@ -330,7 +398,7 @@ rem ---------------------------------------------------------------------------
 rem Visual Studio : detection seulement
 rem ---------------------------------------------------------------------------
 
-echo [7/7] Verification de Visual Studio...
+echo [9/9] Verification de Visual Studio...
 
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 
@@ -400,6 +468,8 @@ if "%FAILED%"=="1" (
 echo [OK] Git
 echo [OK] SDK .NET 10
 echo [OK] dotnet-ef
+echo [OK] LibMan
+echo [OK] ReportGenerator
 echo [OK] WSL 2 / activation demandee
 echo [OK] Docker Desktop / installation demandee
 echo [OK] PATH utilisateur configure
@@ -416,6 +486,9 @@ if "%REBOOT_REQUIRED%"=="1" (
     echo   git --version
     echo   dotnet --version
     echo   dotnet ef --version
+    echo   dotnet format --version
+    echo   libman --version
+    echo   reportgenerator --version
     echo   docker version
     echo.
     echo Test Infrastructure :

@@ -1,14 +1,91 @@
 {
   "version": "1.0",
-  "defaultProvider": "unpkg",
+  "defaultProvider": "jsdelivr",
   "libraries": [
+    {
+      "library": "jquery@3.7.1",
+      "destination": "wwwroot/lib/jquery/",
+      "files": [
+        "dist/jquery.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation@1.22.1",
+      "destination": "wwwroot/lib/jquery-validation/",
+      "files": [
+        "dist/jquery.validate.min.js"
+      ]
+    },
+    {
+      "library": "jquery-validation-unobtrusive@4.0.0",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/",
+      "files": [
+        "dist/jquery.validate.unobtrusive.min.js"
+      ]
+    },
     {
       "library": "bootstrap@5.3.3",
       "destination": "wwwroot/lib/bootstrap/"
     },
     {
+      "library": "bootstrap-multiselect@2.0.0",
+      "destination": "wwwroot/lib/bootstrap-multiselect/",
+      "files": [
+        "dist/css/bootstrap-multiselect.css",
+        "dist/js/bootstrap-multiselect.js"
+      ]
+    },
+    {
+      "library": "datatables.net@1.13.5",
+      "destination": "wwwroot/lib/datatables/",
+      "files": [
+        "js/jquery.dataTables.min.js"
+      ]
+    },
+    {
+      "library": "datatables.net-bs5@1.13.5",
+      "destination": "wwwroot/lib/datatables-bs5/",
+      "files": [
+        "css/dataTables.bootstrap5.min.css",
+        "js/dataTables.bootstrap5.min.js"
+      ]
+    },
+    {
+      "library": "datatables.net-responsive@2.5.0",
+      "destination": "wwwroot/lib/datatables-responsive/",
+      "files": [
+        "js/dataTables.responsive.min.js"
+      ]
+    },
+    {
+      "library": "datatables.net-responsive-bs5@2.5.0",
+      "destination": "wwwroot/lib/datatables-responsive-bs5/",
+      "files": [
+        "css/responsive.bootstrap5.min.css",
+        "js/responsive.bootstrap5.min.js"
+      ]
+    },
+    {
+      "library": "@fortawesome/fontawesome-free@7.3.1",
+      "destination": "wwwroot/lib/fontawesome/",
+      "files": [
+        "css/fontawesome.css",
+        "css/brands.css",
+        "css/regular.css",
+        "css/solid.css",
+        "webfonts/**"
+      ]
+    },
+    {
       "library": "axios@1.6.7",
       "destination": "wwwroot/lib/axios/"
+    },
+	{
+      "library": "sweetalert2@11.26.25",
+      "destination": "wwwroot/lib/sweetalert/",
+      "files": [
+        "dist/sweetalert2.min.js"
+      ]
     },
     {
       "library": "qrcodejs@1.0.0",

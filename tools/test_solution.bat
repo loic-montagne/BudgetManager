@@ -8,7 +8,7 @@ set "VSLANG=1033"
 
 rem ============================================================================
 rem Execute tous les tests de la solution BudgetManager :
-rem   1. restaure les packages NuGet ;
+rem   1. restaure les dependances NuGet et LibMan ;
 rem   2. execute les tests ;
 rem   3. genere les fichiers TRX ;
 rem   4. collecte la couverture Cobertura ;
@@ -118,13 +118,13 @@ rem 1. Restauration
 rem ----------------------------------------------------------------------------
 
 echo.
-echo [1/4] Restauration des packages NuGet...
+echo [1/4] Restauration des dependances...
 
-dotnet restore "%SOLUTION_FILE%"
+call "%SCRIPT_DIR%restore_solution.bat"
 
 if errorlevel 1 (
     echo.
-    echo [ERREUR] La restauration NuGet a echoue.
+    echo [ERREUR] La restauration des dependances a echoue.
     exit /b 1
 )
 

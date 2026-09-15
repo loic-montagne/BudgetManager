@@ -12,6 +12,7 @@ tools
 ├── commands.txt
 ├── compress_solution.bat
 ├── configure_desktop.bat
+├── restore_solution.bat
 └── test_solution.bat
 ```
 
@@ -30,6 +31,8 @@ Il vérifie et installe si nécessaire :
 - Git ;
 - le SDK .NET 10 ;
 - l'outil global `dotnet-ef` compatible .NET 10 ;
+- LibMan (`Microsoft.Web.LibraryManager.Cli`) ;
+- ReportGenerator (`dotnet-reportgenerator-globaltool`) ;
 - WSL 2 ;
 - Docker Desktop.
 
@@ -38,6 +41,8 @@ WinGet est utilisé pour les installations automatiques.
 Visual Studio est détecté et signalé, mais n'est pas installé automatiquement.
 
 Le script configure également le `PATH` utilisateur pour les outils détectés ou installés.
+
+Le SDK .NET fournit directement les commandes usuelles de la solution, notamment `dotnet restore`, `dotnet build`, `dotnet test`, `dotnet run`, `dotnet clean`, `dotnet publish`, `dotnet watch` et `dotnet format`. Aucun outil global supplémentaire n'est nécessaire pour ces commandes.
 
 Lorsqu'une élévation de privilèges est nécessaire, le script se relance en mode administrateur. La console élevée reste ouverte à la fin afin de permettre la lecture du résultat.
 
@@ -52,6 +57,40 @@ tools\configure_desktop.bat
 Après installation ou modification du `PATH`, les consoles déjà ouvertes et Visual Studio doivent être redémarrés.
 
 Si WSL vient d'être activé, un redémarrage de Windows peut être nécessaire avant de pouvoir utiliser Docker.
+
+---
+
+# Restauration des dépendances
+
+## `restore_solution.bat`
+
+Le script `tools/restore_solution.bat` restaure l'ensemble des dépendances nécessaires à la solution.
+
+Il :
+
+1. restaure les packages NuGet de `BudgetManager.sln` ;
+2. restaure les bibliothèques clientes déclarées dans `src/BudgetManager.Web/libman.json`.
+
+Utilisation :
+
+```bat
+tools\restore_solution.bat
+```
+
+Le script nécessite :
+
+- le SDK .NET ;
+- l'outil global LibMan (`Microsoft.Web.LibraryManager.Cli`).
+
+Ces outils sont installés ou vérifiés par `tools/configure_desktop.bat`.
+
+Les bibliothèques clientes sont restaurées dans :
+
+```text
+src\BudgetManager.Web\wwwroot\lib
+```
+
+Ce script peut notamment être utilisé après un clonage du dépôt ou après un nettoyage des dépendances locales.
 
 ---
 
@@ -134,7 +173,7 @@ Le script `tools/test_solution.bat` exécute la chaîne complète de tests et de
 
 Il :
 
-1. restaure les packages NuGet ;
+1. restaure les dépendances NuGet et LibMan via `restore_solution.bat` ;
 2. compile et exécute tous les tests de la solution ;
 3. génère les résultats au format TRX ;
 4. collecte la couverture de code au format Cobertura ;
