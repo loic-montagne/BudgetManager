@@ -132,6 +132,44 @@ body.dark .form-check-input:checked[type=radio]:disabled {
     display: none;
 }
 
+.form-floating > .password-control {
+    padding-right: 3.25rem;
+}
+
+.password-visibility-toggle {
+    position: absolute;
+    top: 50%;
+    right: .75rem;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    color: var(--text-disabled-color);
+    background: transparent;
+    border: 0;
+    border-radius: .25rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        color: var(--text-color);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+
 
 /* ------- customize browser autofill -------- */
 
@@ -212,20 +250,20 @@ body.dark {
         border-color: var(--color-border);
     }
 
-        .form-floating > .form-control:focus,
-        .form-floating > .form-select:focus {
-            color: var(--color-text);
-            background-color: var(--color-input-bg);
-            border-color: var(--color-primary);
-        }
-        /*
+    .form-floating > .form-control:focus,
+    .form-floating > .form-select:focus {
+        color: var(--color-text);
+        background-color: var(--color-input-bg);
+        border-color: var(--color-primary);
+    }
+    /*
      * Bootstrap requires the real placeholder to stay invisible
      * inside a floating control. The label is what the user sees.
      */
-        .form-floating > .form-control::placeholder {
-            color: transparent;
-            opacity: 1;
-        }
+    .form-floating > .form-control::placeholder {
+        color: transparent;
+        opacity: 1;
+    }
 
     .form-floating > label {
         color: var(--color-text-muted);
@@ -255,10 +293,10 @@ body.dark {
             border-color: var(--color-primary);
         }
 
-            &:checked:focus {
-                background-color: var(--color-primary);
-                border-color: var(--color-primary);
-            }
+        &:checked:focus {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
 
         &:disabled {
             background-color: var(--color-input-disabled-bg);

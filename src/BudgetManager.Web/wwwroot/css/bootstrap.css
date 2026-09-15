@@ -12100,6 +12100,41 @@ body.dark .form-check-input:checked[type=radio]:disabled {
   display: none;
 }
 
+.form-floating > .password-control {
+  padding-right: 3.25rem;
+}
+
+.password-visibility-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.75rem;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  color: var(--text-disabled-color);
+  background: transparent;
+  border: 0;
+  border-radius: 0.25rem;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.password-visibility-toggle:hover, .password-visibility-toggle:focus {
+  color: var(--text-color);
+}
+.password-visibility-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+input[type=password]::-ms-reveal,
+input[type=password]::-ms-clear {
+  display: none;
+}
+
 /* ------- customize browser autofill -------- */
 .form-control:-webkit-autofill,
 .form-control:-webkit-autofill:hover,
@@ -12131,9 +12166,9 @@ body.dark {
    * form-control styling used by the Login page.
    */
   /*
-  * Bootstrap requires the real placeholder to stay invisible
-  * inside a floating control. The label is what the user sees.
-  */
+   * Bootstrap requires the real placeholder to stay invisible
+   * inside a floating control. The label is what the user sees.
+   */
   /*
    * Checkbox / radio.
    */

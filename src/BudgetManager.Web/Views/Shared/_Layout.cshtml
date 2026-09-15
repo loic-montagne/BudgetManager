@@ -58,7 +58,9 @@
 
     @await RenderSectionAsync("styles", required: false)
 </head>
-<body class="@(isAuthenticated ? "authenticated" : "anonymous")">
+<body class="@(isAuthenticated ? "authenticated" : "anonymous")"
+      data-password-show="@SharedLocalizer["Password.Show"]"
+      data-password-hide="@SharedLocalizer["Password.Hide"]">
     <script>
         (() => {
             const storedTheme = localStorage.getItem("theme");
@@ -215,6 +217,7 @@
 
     <script src="@Url.Content("~/js/site.js")" type="text/javascript" asp-append-version="true"></script>
     <script src="@Url.Content("~/js/password-requirements.js")" type="text/javascript" asp-append-version="true"></script>
+    <script src="@Url.Content("~/js/password-visibility.js")" type="text/javascript" asp-append-version="true"></script>
     <script src="@Url.Content("~/js/sidebar.js")" type="text/javascript" asp-append-version="true"></script>
     @if (isAuthenticated)
     {

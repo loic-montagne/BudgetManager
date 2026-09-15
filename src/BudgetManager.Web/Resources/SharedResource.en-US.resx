@@ -432,4 +432,10 @@
   <data name="PasswordRequirements.UniqueChars" xml:space="preserve">
     <value>At least {0} different characters</value>
   </data>
+  <data name="Password.Show" xml:space="preserve">
+    <value>Show password</value>
+  </data>
+  <data name="Password.Hide" xml:space="preserve">
+    <value>Hide password</value>
+  </data>
 </root>
