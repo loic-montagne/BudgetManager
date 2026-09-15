@@ -120,8 +120,8 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
-  <data name="Budget" xml:space="preserve">
-    <value>Budget</value>
+  <data name="Budgets" xml:space="preserve">
+    <value>Budgets</value>
   </data>
   <data name="CurrentBudget" xml:space="preserve">
     <value>Current budget</value>
