@@ -40,4 +40,31 @@ public sealed class CurrentUserTests
         Assert.Null(currentUser.GetClaim("custom"));
         Assert.False(currentUser.HasClaim("custom"));
     }
+
+    [Fact]
+    public void CurrentUser_WithInvalidIdentifier_ReturnsNullUserId()
+    {
+        var principal = new ClaimsPrincipal(new ClaimsIdentity([
+            new Claim(ClaimTypes.NameIdentifier, "not-a-guid")], "test"));
+        var accessor = new HttpContextAccessor { HttpContext = new DefaultHttpContext { User = principal } };
+
+        var currentUser = new CurrentUser(accessor);
+
+        Assert.Null(currentUser.UserId);
+    }
+
+    [Fact]
+    public void CurrentUser_WithMissingRoleAndClaim_ReturnsFalseAndNull()
+    {
+        var principal = new ClaimsPrincipal(new ClaimsIdentity([
+            new Claim(ClaimTypes.Name, "alice")], "test"));
+        var accessor = new HttpContextAccessor { HttpContext = new DefaultHttpContext { User = principal } };
+
+        var currentUser = new CurrentUser(accessor);
+
+        Assert.False(currentUser.IsInRole("Administrator"));
+        Assert.False(currentUser.HasClaim("custom"));
+        Assert.Null(currentUser.GetClaim("custom"));
+        Assert.Empty(currentUser.RolesNames);
+    }
 }

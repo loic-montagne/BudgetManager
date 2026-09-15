@@ -181,6 +181,9 @@ Les tests Web sécurisent les comportements C# de la couche de présentation :
 - localisation des erreurs métier ;
 - TagHelper des champs obligatoires ;
 - résultats et gardes des contrôleurs MVC ;
+- mapping des commandes de création, modification, suppression et clôture des contrôleurs métier ;
+- mapping des modèles d’édition Bank, BudgetCategory et Account, y compris les données d’audit et les listes associées ;
+- adaptation commune des commandes par `SenderController`, y compris succès, erreurs de validation, erreurs Application et erreurs non gérées ;
 - conventions de validation et navigation des pages Identity.
 
 Cette couverture vise les responsabilités de présentation. Elle ne duplique pas les règles métier de l'Application et ne prétend pas valider le rendu navigateur des vues Razor, CSS ou JavaScript.

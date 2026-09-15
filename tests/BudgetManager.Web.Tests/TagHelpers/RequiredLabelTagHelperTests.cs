@@ -46,6 +46,26 @@ public sealed class RequiredLabelTagHelperTests
         Assert.Equal(string.Empty, output.PostContent.GetContent());
     }
 
+    [Fact]
+    public void Order_IsAfterDefaultLabelTagHelper()
+    {
+        var helper = Create(nameof(Model.Required));
+
+        Assert.Equal(1000, helper.Order);
+    }
+
+    [Fact]
+    public void Process_WithRequiredPropertyAndUnrelatedClasses_AppendsIndicator()
+    {
+        var helper = Create(nameof(Model.Required));
+        var output = CreateOutput();
+        output.Attributes.SetAttribute("class", "form-label other");
+
+        helper.Process(CreateContext(), output);
+
+        Assert.Contains("required-indicator", output.PostContent.GetContent());
+    }
+
     private static RequiredLabelTagHelper Create(string property)
     {
         var services = new ServiceCollection();

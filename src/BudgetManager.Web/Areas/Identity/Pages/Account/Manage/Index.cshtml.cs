@@ -223,8 +223,6 @@ public class IndexModel(
         }
 
         PopulateInputLists();
-
-        PopulateInputLists();
     }
 
     private static string? NormalizePreferredTheme(string? preferredTheme)

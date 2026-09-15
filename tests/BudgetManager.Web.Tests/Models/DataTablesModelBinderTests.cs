@@ -46,6 +46,26 @@ public sealed class DataTablesModelBinderTests
     }
 
     [Fact]
+    public async Task BindModelAsync_WithoutResponsiveColumn_DoesNotShiftSortColumn()
+    {
+        var values = new Dictionary<string, StringValues>
+        {
+            ["iSortingCols"] = "1",
+            ["sColumns"] = "Name,Bic",
+            ["iSortCol_0"] = "1",
+            ["sSortDir_0"] = "desc"
+        };
+        var context = CreateContext(values);
+
+        await new DataTablesModelBinder().BindModelAsync(context);
+
+        var model = Assert.IsType<DataTablesParameters>(context.Result.Model);
+        var sort = Assert.Single(model.SortingCols!);
+        Assert.Equal(1, sort.Column);
+        Assert.Equal("desc", sort.Dir);
+    }
+
+    [Fact]
     public async Task BindModelAsync_WithNullContext_Throws()
         => await Assert.ThrowsAsync<ArgumentNullException>(() => new DataTablesModelBinder().BindModelAsync(null!));
 
