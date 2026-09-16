@@ -289,16 +289,16 @@
     <value>Delete</value>
   </data>
   <data name="Datatable.Next" xml:space="preserve">
-    <value>Next</value>
+    <value>&gt;</value>
   </data>
   <data name="Datatable.Previous" xml:space="preserve">
-    <value>Previous</value>
+    <value>&lt;</value>
   </data>
   <data name="Datatable.First" xml:space="preserve">
-    <value>First</value>
+    <value>&lt;&lt;</value>
   </data>
   <data name="Datatable.Last" xml:space="preserve">
-    <value>Last</value>
+    <value>&gt;&gt;</value>
   </data>
   <data name="Datatable.Processing" xml:space="preserve">
     <value>Loading...</value>

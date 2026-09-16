@@ -173,8 +173,8 @@ Les tests vérifient :
 
 Les tests Web sécurisent les comportements C# de la couche de présentation :
 
-- binding du protocole DataTables historique (`sEcho`, recherche, pagination et tris multiples) ;
-- structure de réponse DataTables historique et mapping de critères sur les endpoints couverts ;
+- binding du protocole DataTables moderne (`draw`, `search[value]`, `start`, `length` et tris multiples) ;
+- structure de réponse DataTables moderne et mapping de critères sur les endpoints couverts ;
 - extensions de présentation et cookie de culture ;
 - utilisateur courant et claims HTTP ;
 - modèles de formulaire et métadonnées de binding significatives ;

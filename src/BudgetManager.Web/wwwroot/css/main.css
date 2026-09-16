@@ -287,6 +287,30 @@ ul.pagination li:last-child .page-link {
     margin: 0;
 }
 
+.multiselect-container .multiselect-option:hover,
+.multiselect-container .multiselect-group:hover,
+.multiselect-container .multiselect-all:hover,
+.multiselect-container .multiselect-option:active:hover,
+.multiselect-container .multiselect-group:active:hover,
+.multiselect-container .multiselect-all:active:hover {
+    background-color: var(--color-surface-secondary) !important;
+    color: var(--color-text);
+}
+
+    .multiselect-container .multiselect-option.active:not(.multiselect-active-item-fallback):not(:hover),
+    .multiselect-container .multiselect-group.active:not(.multiselect-active-item-fallback):not(:hover),
+    .multiselect-container .multiselect-all.active:not(.multiselect-active-item-fallback):not(:hover),
+    .multiselect-container .multiselect-option:not(.multiselect-active-item-fallback):active:not(:hover),
+    .multiselect-container .multiselect-group:not(.multiselect-active-item-fallback):active:not(:hover),
+    .multiselect-container .multiselect-all:not(.multiselect-active-item-fallback):active:not(:hover),
+    .multiselect-container .multiselect-option:focus:not(:hover),
+    .multiselect-container .multiselect-group:focus:not(:hover),
+    .multiselect-container .multiselect-all:focus:not(:hover) {
+        background-color: var(--color-surface) !important;
+        color: var(--color-text);
+    }
+
+
 
 /* ===== Budget Manager visual language ===== */
 body.anonymous {

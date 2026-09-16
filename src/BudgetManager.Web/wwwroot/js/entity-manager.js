@@ -1,4 +1,4 @@
-﻿(function (window, $) {
+(function (window, $) {
     'use strict';
 
     function initialize(options) {
@@ -47,9 +47,13 @@
                 if (!column.hidden || column.data == null || column.data === '')
                     return '';
 
+                var title = column.title
+                    ? '<strong>' + column.title + ' : </strong>'
+                    : '';
+
                 return '<div class="text-start" style="margin-bottom:0;padding-top:7.5px;padding-bottom:7.5px;padding-right:8px;" ' +
                     'data-dt-row="' + column.rowIndex + '" data-dt-column="' + column.columnIndex + '">' +
-                    '<strong>' + column.title + ' : </strong><p>' + column.data + '</p></div>';
+                    title + '<p>' + column.data + '</p></div>';
             });
 
             var content = data.join('');
@@ -69,15 +73,17 @@
         }
 
         var table = tableElement.DataTable({
-            "aaSorting": options.defaultSorting,
-            "bProcessing": true,
-            "bServerSide": true,
-            "sAjaxSource": page.data('list-url'),
-            "fnServerParams": function (aoData) {
-                if (options.ajaxData)
-                    options.ajaxData(aoData);
+            "order": options.defaultSorting,
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": page.data('list-url'),
+                "data": function (data) {
+                    if (options.ajaxData)
+                        options.ajaxData(data);
+                }
             },
-            "bSortable": true,
+            "ordering": true,
             "responsive": {
                 details: {
                     display: $.fn.dataTable.Responsive.display.childRow,
@@ -87,45 +93,56 @@
                     }
                 }
             },
-            "aoColumns": options.columns,
-            "columnDefs": options.columnDefs,
-            "oLanguage": {
-                "sInfo": page.data('datatable-info'),
-                "sInfoFiltered": page.data('datatable-info-filtered'),
-                "sInfoEmpty": page.data('datatable-empty'),
-                "sLengthMenu": page.data('datatable-lengthmenu-show') + ' <select>' +
-                    '<option value="10">10</option>' +
-                    '<option value="20">20</option>' +
-                    '<option value="30">30</option>' +
-                    '<option value="40">40</option>' +
-                    '<option value="50">50</option>' +
-                    '<option value="60">60</option>' +
-                    '<option value="70">70</option>' +
-                    '<option value="80">80</option>' +
-                    '<option value="90">90</option>' +
-                    '<option value="100">100</option>' +
-                    '</select> ' + page.data('datatable-lengthmenu-label'),
-                "sSearch": '',
-                "sEmptyTable": page.data('datatable-empty'),
-                "sZeroRecords": page.data('datatable-zerorecord'),
-                "oPaginate": {
-                    "sPrevious": page.data('datatable-previous'),
-                    "sNext": page.data('datatable-next'),
-                    "sFirst": page.data('datatable-first'),
-                    "sLast": page.data('datatable-last')
+            "columns": options.columns,
+            "columnDefs": [
+                ...(options.columnDefs || []),
+                {
+                    "targets": "_all",
+                    "orderSequence": ["asc", "desc"]
+                }
+            ],
+            "lengthMenu": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            "language": {
+                "info": page.data('datatable-info'),
+                "infoFiltered": page.data('datatable-info-filtered'),
+                "infoEmpty": page.data('datatable-empty'),
+                "lengthMenu": page.data('datatable-lengthmenu-show') +
+                    ' _MENU_ ' +
+                    page.data('datatable-lengthmenu-label'),
+                "search": '',
+                "emptyTable": page.data('datatable-empty'),
+                "zeroRecords": page.data('datatable-zerorecord'),
+                "paginate": {
+                    "previous": page.data('datatable-previous'),
+                    "next": page.data('datatable-next'),
+                    "first": page.data('datatable-first'),
+                    "last": page.data('datatable-last')
                 },
-                "sProcessing": page.data('datatable-processing')
+                "processing": page.data('datatable-processing')
             }
         });
 
-        var tableWrapper = tableElement.closest('.dataTables_wrapper');
-        var filter = tableWrapper.find('.dataTables_filter');
-        var length = tableWrapper.find('.dataTables_length');
+        var tableWrapper = tableElement.closest('.dt-container');
+        var filter = tableWrapper.find('.dt-search');
+        var length = tableWrapper.find('.dt-length');
 
         $('.search-zone').append(filter);
         filter.find('input').attr('placeholder', page.data('datatable-search-placeholder'));
         length.find('select').addClass('form-select form-select-sm input-inline');
         $('.length-zone').append(length);
+
+        tableWrapper
+            .children('.row.mt-2.justify-content-between')
+            .not('.dt-layout-table')
+            .filter(function () {
+                return $(this).find('.dt-layout-start, .dt-layout-end')
+                    .filter(function () {
+                        return $(this).children().length > 0;
+                    })
+                    .length === 0;
+            })
+            .first()
+            .remove();
 
         addButton.on('click', function (e) {
             e.preventDefault();

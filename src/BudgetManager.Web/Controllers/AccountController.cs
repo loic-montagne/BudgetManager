@@ -1,4 +1,4 @@
-﻿using BudgetManager.Application.Common;
+using BudgetManager.Application.Common;
 using BudgetManager.Application.Common.Pagination;
 using BudgetManager.Application.Enums;
 using BudgetManager.Application.Features.Account.Close;
@@ -101,7 +101,7 @@ public class AccountController(ISender sender, IStringLocalizer<SharedResource> 
     [HttpGet]
     public async Task<IActionResult> GetDatatable(DataTablesParameters param, bool? isClosed = null, string? banksIds = null)
     {
-        var sorts = param.SortingCols?
+        var sorts = param.Orders?
             .Where(x => x.Column is >= 0 and <= 4)
             .Select(x => new SortCriterion<AccountSortField>(
                 x.Column switch
@@ -134,8 +134,8 @@ public class AccountController(ISender sender, IStringLocalizer<SharedResource> 
                     isAllBanksSelected,
                     banks,
                     param.Search,
-                    param.DisplayStart,
-                    param.DisplayLength,
+                    param.Start,
+                    param.Length,
                     sorts)),
             HttpContext.RequestAborted);
 
@@ -154,10 +154,10 @@ public class AccountController(ISender sender, IStringLocalizer<SharedResource> 
 
         return Json(new
         {
-            sEcho = param.Echo,
-            iTotalRecords = accounts.TotalCount,
-            iTotalDisplayRecords = accounts.FilteredCount,
-            aaData = data
+            draw = param.Draw,
+            recordsTotal = accounts.TotalCount,
+            recordsFiltered = accounts.FilteredCount,
+            data
         });
     }
 

@@ -1,25 +1,25 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
     var page = $('.js-entity-manager');
 
     EntityManager.initialize({
         defaultSorting: [[1, 'asc']],
         columns: [
             {
-                "sName": "Responsive",
+                "name": "Responsive",
                 "className": "dtr-control align-middle",
-                "bSearchable": false,
-                "bSortable": false
+                "searchable": false,
+                "orderable": false
             },
-            { "sName": "Name", "className": "align-middle text-start" },
-            { "sName": "Bic", "className": "align-middle text-center" },
-            { "sName": "AccountsCount", "className": "align-middle text-center" },
+            { "name": "Name", "className": "align-middle text-start" },
+            { "name": "Bic", "className": "align-middle text-center" },
+            { "name": "AccountsCount", "className": "align-middle text-center" },
             {
-                "sName": "Buttons",
+                "name": "Buttons",
                 "className": "align-middle text-end text-nowrap",
-                "bSearchable": false,
-                "bSortable": false,
-                "sWidth": "0",
-                "mRender": function (data) {
+                "searchable": false,
+                "orderable": false,
+                "width": "0",
+                "render": function (data) {
                     if (!data)
                         return '';
 

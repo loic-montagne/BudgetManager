@@ -39,22 +39,22 @@ describe('account-manager.js', () => {
 
     it('adds all-bank and selected-bank ajax filters', () => {
         $('.js-account-bank-filter').val(['1','2','3']);
-        let data=[]; options.ajaxData(data);
-        expect(data).toEqual([{name:'isClosed',value:'open'},{name:'banksIds',value:'*'}]);
+        let data={}; options.ajaxData(data);
+        expect(data).toEqual({isClosed:'open',banksIds:'*'});
 
         $('.js-account-bank-filter').val(['1','3']);
-        data=[]; options.ajaxData(data);
-        expect(data[1]).toEqual({name:'banksIds',value:'1,3'});
+        data={}; options.ajaxData(data);
+        expect(data.banksIds).toBe('1,3');
 
         $('.js-account-bank-filter').val([]);
-        data=[]; options.ajaxData(data);
-        expect(data[1]).toEqual({name:'banksIds',value:''});
+        data={}; options.ajaxData(data);
+        expect(data.banksIds).toBe('');
     });
 
     it('renders account state and every button state', () => {
-        expect(options.columns[1].mRender('1')).toContain('fa-check');
-        expect(options.columns[1].mRender('0')).toBe('');
-        const render=options.columns[6].mRender;
+        expect(options.columns[1].render('1')).toContain('fa-check');
+        expect(options.columns[1].render('0')).toBe('');
+        const render=options.columns[6].render;
         expect(render('')).toBe('');
         expect(render(null)).toBe('');
         expect(render('bad')).toBe('');

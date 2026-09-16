@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     /* ===== Widths ===== */
     --open-width: 300px;
     --close-width: 78px;
@@ -525,7 +525,11 @@ body.dark .switch::before {
 
 .content .navbar-title-content,
 .content .navbar-title-actions,
-.content .navbar-title-actions .length-zone .dataTables_length label {
+.content .navbar-title-actions .search-zone,
+.content .navbar-title-actions .search-zone .dt-search,
+.content .navbar-title-actions .length-zone,
+.content .navbar-title-actions .length-zone .dt-length,
+.content .navbar-title-actions .length-zone .dt-length label {
     display: flex;
     align-items: center;
 }
@@ -534,7 +538,7 @@ body.dark .switch::before {
     justify-content: flex-end;
     flex-wrap: wrap;
 }
-.content .navbar-title-actions .length-zone .dataTables_length label select {
+.content .navbar-title-actions .length-zone .dt-length label select {
     margin: 0px 5px;
 }
 
@@ -612,11 +616,25 @@ body.dark .switch::before {
         border-right: 0;
     }
 
-    .content .navbar-title-actions .search-zone .dataTables_filter label,
+    .content .navbar-title-actions .search-zone,
+    .content .navbar-title-actions .search-zone .dt-search,
+    .content .navbar-title-actions .search-zone .dt-search input,
     .content .navbar-title-actions span.multiselect-native-select,
     .content .navbar-title-actions span.multiselect-native-select div.btn-group {
         width: 100%;
     }
+
+    .content .navbar-title-actions .length-zone,
+    .content .navbar-title-actions .length-zone .dt-length,
+    .content .navbar-title-actions .length-zone .dt-length label {
+        width: 100%;
+    }
+
+    .content .navbar-title-actions .length-zone .dt-length label select {
+        flex: 1;
+        width: auto;
+    }
+
     .content .navbar-title-actions span.multiselect-native-select div.btn-group button.multiselect {
         width: 100% !important;
     }

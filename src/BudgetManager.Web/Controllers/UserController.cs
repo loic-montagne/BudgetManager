@@ -1,4 +1,4 @@
-﻿using BudgetManager.Application.Abstractions.Localization;
+using BudgetManager.Application.Abstractions.Localization;
 using BudgetManager.Application.Common;
 using BudgetManager.Application.Common.Pagination;
 using BudgetManager.Application.Enums;
@@ -112,7 +112,7 @@ public class UserController(IOptions<IdentityTokenOptions> options, IDateTimeLoc
     [HttpGet]
     public async Task<IActionResult> GetDatatable(DataTablesParameters param, bool? isActivated = null)
     {
-        var sorts = param.SortingCols?
+        var sorts = param.Orders?
             .Where(x => x.Column is >= 0 and <= 2 || x.Column == 4)
             .Select(x => new SortCriterion<UserSortField>(
                 x.Column switch
@@ -133,8 +133,8 @@ public class UserController(IOptions<IdentityTokenOptions> options, IDateTimeLoc
                 new PagedSearchCriteria(
                     isActivated,
                     param.Search,
-                    param.DisplayStart,
-                    param.DisplayLength,
+                    param.Start,
+                    param.Length,
                     sorts)),
             HttpContext.RequestAborted);
 
@@ -154,10 +154,10 @@ public class UserController(IOptions<IdentityTokenOptions> options, IDateTimeLoc
 
         return Json(new
         {
-            sEcho = param.Echo,
-            iTotalRecords = users.TotalCount,
-            iTotalDisplayRecords = users.FilteredCount,
-            aaData = data
+            draw = param.Draw,
+            recordsTotal = users.TotalCount,
+            recordsFiltered = users.FilteredCount,
+            data
         });
     }
 

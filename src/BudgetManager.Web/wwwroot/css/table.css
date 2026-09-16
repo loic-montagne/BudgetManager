@@ -51,7 +51,7 @@ thead tr:first-child th:not(.dtr-hidden) ~ th:not(.dtr-hidden) {
 thead tr:first-child th:last-child {
     border-top-right-radius: var(--table-border-radius);
 }
-tboby tr:last-child th:first-child {
+tbody tr:last-child th:first-child {
     border-bottom-left-radius: var(--table-border-radius);
 }
 
@@ -88,12 +88,12 @@ tboby tr:last-child th:first-child {
 table.dataTable {
     width: 100% !important;
 }
-table.dataTable_withoutHeaderDiv.dataTable {
-    margin-top: 0px !important;
+div.dt-container div.dt-layout-table {
+    margin-top: 0 !important;
 }
 
 /* Transitions (for theme) */
-.dataTables_processing.card {
+.dt-processing {
     transition: background-color .5s ease, color .5s ease;
 }
 table.dataTable.dtr-column > tbody > tr > td.dtr-control:before,
@@ -139,20 +139,26 @@ table.table-bordered.dataTable thead tr:first-child th,
 table.table-bordered.dataTable thead tr:first-child td {
     border-top-width: 0px;
 }
-table.table-bordered.dataTable th:not(dtr-hidden):first-child,
-table.table-bordered.dataTable td:not(dtr-hidden):first-child {
-    border-left-width: 0px;
-}
+
+table.table-bordered.dataTable th:first-child,
+table.table-bordered.dataTable td:first-child,
 table.dataTable.table-bordered th.dtr-control.dtr-hidden + *,
 table.dataTable.table-bordered td.dtr-control.dtr-hidden + * {
     border-left-width: 0px;
 }
+
 table.table-bordered.dataTable th:last-child,
 table.table-bordered.dataTable td:last-child {
     border-right-width: 0px;
 }
+
 table.table-bordered.dataTable tr:last-child td {
     border-bottom-width: 0px;
+}
+
+table.table-bordered.dataTable > thead,
+table.table-bordered.dataTable > thead > tr {
+    border-top-width: 0;
 }
 
 /* Datatable responsive icon */
@@ -165,32 +171,34 @@ table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
     color: var(--text-color);
     font-family: var(--fa-style-family, "Font Awesome 6 Free");
     content: '\f0fe';
+    border: 0;
 }
-table.dataTable.dtr-column > tbody > tr.parent td.dtr-control:before,
-table.dataTable.dtr-column > tbody > tr.parent th.dtr-control:before,
-table.dataTable.dtr-column > tbody > tr.parent td.control:before,
-table.dataTable.dtr-column > tbody > tr.parent th.control:before,
-table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before,
-table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
+table.dataTable.dtr-column > tbody > tr.dtr-expanded td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.dtr-expanded th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.dtr-expanded td.control:before,
+table.dataTable.dtr-column > tbody > tr.dtr-expanded th.control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.dtr-expanded > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.dtr-expanded > th.dtr-control:before {
+    border: 0;
     content: '\f146';
 }
 
 /* Datatable processing */
-.dataTables_processing.card {
+.dt-processing {
     background: var(--color-surface) !important;
     color: var(--color-text) !important;
     z-index: 20;
 }
-div.dataTables_processing > div:last-child > div {
+div.dt-processing > div:last-child > div {
     background-color: var(--primary-color);
 }
 
 /* Datatable infos */
-.dataTables_info {
+.dt-info {
     text-align: left;
 }
 @media (min-width: 768px) {
-    .dataTables_info {
+    .dt-info {
         white-space: nowrap;
     }
 }
@@ -205,4 +213,42 @@ thead td {
 thead tr,
 .table-with-fixed-header > thead th {
     background-color: var(--table-header-bg) !important;
+}
+
+/* DataTables ordering indicators */
+table.dataTable thead > tr > th.dt-orderable-asc,
+table.dataTable thead > tr > th.dt-orderable-desc,
+table.dataTable thead > tr > th.dt-ordering-asc,
+table.dataTable thead > tr > th.dt-ordering-desc {
+    position: relative;
+    padding-right: 2rem;
+}
+
+table.dataTable thead > tr > th.dt-orderable-asc .dt-column-order,
+table.dataTable thead > tr > th.dt-orderable-desc .dt-column-order,
+table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order,
+table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order {
+    position: absolute;
+    top: 50%;
+    right: .5rem;
+    transform: translateY(-50%);
+    opacity: 1;
+}
+
+/* Indicateurs disponibles */
+table.dataTable thead > tr > th .dt-column-order::before,
+table.dataTable thead > tr > th .dt-column-order::after {
+    border-top-color: var(--table-header-text) !important;
+    border-bottom-color: var(--table-header-text) !important;
+    opacity: .25 !important;
+}
+
+/* Tri ascendant actif */
+table.dataTable thead > tr > th.dt-ordering-asc .dt-column-order::before {
+    opacity: 1 !important;
+}
+
+/* Tri descendant actif */
+table.dataTable thead > tr > th.dt-ordering-desc .dt-column-order::after {
+    opacity: 1 !important;
 }

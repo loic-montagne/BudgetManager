@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
 
     function enableMultiSelect(page, select) {
         var multiselectOptions = {
@@ -50,45 +50,38 @@
             var selectedBanks = bankFilter.val() ?? [];
             var totalBanks = bankFilter.find('option').length;
 
-            data.push({
-                name: 'isClosed',
-                value: stateFilter.val()
-            });
-
-            data.push({
-                name: 'banksIds',
-                value: selectedBanks.length === totalBanks && totalBanks > 0
-                    ? bankMultiselectOptions.selectAllValue
-                    : selectedBanks.join(page.data('separator-char'))
-            });
+            data.isClosed = stateFilter.val();
+            data.banksIds = selectedBanks.length === totalBanks && totalBanks > 0
+                ? bankMultiselectOptions.selectAllValue
+                : selectedBanks.join(page.data('separator-char'));
         },
         columns: [
             {
-                "sName": "Responsive",
+                "name": "Responsive",
                 "className": "dtr-control align-middle",
-                "bSearchable": false,
-                "bSortable": false
+                "searchable": false,
+                "orderable": false
             },
             {
-                "sName": "Active",
+                "name": "Active",
                 "className": "align-middle text-center",
-                "mRender": function (data) {
+                "render": function (data) {
                     if (data == '1')
                         return '<i class="fa-solid fa-check"></i>';
                     return '';
                 }
             },
-            { "sName": "Name", "className": "align-middle text-start" },
-            { "sName": "Bank", "className": "align-middle text-start" },
-            { "sName": "Iban", "className": "align-middle text-start" },
-            { "sName": "Bic", "className": "align-middle text-center" },
+            { "name": "Name", "className": "align-middle text-start" },
+            { "name": "Bank", "className": "align-middle text-start" },
+            { "name": "Iban", "className": "align-middle text-start" },
+            { "name": "Bic", "className": "align-middle text-center" },
             {
-                "sName": "Buttons",
+                "name": "Buttons",
                 "className": "align-middle text-end text-nowrap",
-                "bSearchable": false,
-                "bSortable": false,
-                "sWidth": "0",
-                "mRender": function (data) {
+                "searchable": false,
+                "orderable": false,
+                "width": "0",
+                "render": function (data) {
                     if (data == '' || data == null || !data.includes('¤'))
                         return "";
 

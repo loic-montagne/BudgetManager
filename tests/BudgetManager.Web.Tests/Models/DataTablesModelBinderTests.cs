@@ -9,60 +9,60 @@ namespace BudgetManager.Web.Tests.Models;
 public sealed class DataTablesModelBinderTests
 {
     [Fact]
-    public async Task BindModelAsync_WithLegacyProtocol_BindsAllValuesAndMultipleSorts()
+    public async Task BindModelAsync_WithModernProtocol_BindsAllValuesAndMultipleOrders()
     {
         var values = new Dictionary<string, StringValues>
         {
-            ["sEcho"] = "9", ["sSearch"] = "needle", ["iDisplayLength"] = "25", ["iDisplayStart"] = "50",
-            ["iColumns"] = "5", ["iSortingCols"] = "2", ["sColumns"] = "Responsive,Name,Bic",
-            ["iSortCol_0"] = "2", ["sSortDir_0"] = "asc", ["iSortCol_1"] = "3", ["sSortDir_1"] = "desc"
+            ["draw"] = "9", ["search[value]"] = "needle", ["length"] = "25", ["start"] = "50",
+            ["columns[0][name]"] = "Responsive",
+            ["order[0][column]"] = "2", ["order[0][dir]"] = "asc",
+            ["order[1][column]"] = "3", ["order[1][dir]"] = "desc"
         };
+
         var context = CreateContext(values);
         await new DataTablesModelBinder().BindModelAsync(context);
+
         var model = Assert.IsType<DataTablesParameters>(context.Result.Model);
-        Assert.Equal("9", model.Echo);
+        Assert.Equal(9, model.Draw);
         Assert.Equal("needle", model.Search);
-        Assert.Equal(25, model.DisplayLength);
-        Assert.Equal(50, model.DisplayStart);
-        Assert.Equal(5, model.ColumnsCount);
-        Assert.Equal(2, model.SortingColsCount);
-        Assert.Equal("Responsive,Name,Bic", model.ColumnNames);
-        var sorts = model.SortingCols!.ToArray();
-        Assert.Equal(1, sorts[0].Column);
-        Assert.Equal("asc", sorts[0].Dir);
-        Assert.Equal(2, sorts[1].Column);
-        Assert.Equal("desc", sorts[1].Dir);
+        Assert.Equal(25, model.Length);
+        Assert.Equal(50, model.Start);
+        var orders = model.Orders.ToArray();
+        Assert.Equal(1, orders[0].Column);
+        Assert.Equal("asc", orders[0].Dir);
+        Assert.Equal(2, orders[1].Column);
+        Assert.Equal("desc", orders[1].Dir);
     }
 
     [Fact]
     public async Task BindModelAsync_WithMissingOrInvalidNumbers_UsesZero()
     {
-        var context = CreateContext(new Dictionary<string, StringValues> { ["iDisplayLength"] = "invalid" });
+        var context = CreateContext(new Dictionary<string, StringValues> { ["length"] = "invalid" });
         await new DataTablesModelBinder().BindModelAsync(context);
         var model = Assert.IsType<DataTablesParameters>(context.Result.Model);
-        Assert.Equal(0, model.DisplayLength);
-        Assert.Equal(0, model.DisplayStart);
-        Assert.Empty(model.SortingCols!);
+        Assert.Equal(0, model.Draw);
+        Assert.Equal(0, model.Length);
+        Assert.Equal(0, model.Start);
+        Assert.Empty(model.Orders);
     }
 
     [Fact]
-    public async Task BindModelAsync_WithoutResponsiveColumn_DoesNotShiftSortColumn()
+    public async Task BindModelAsync_WithoutResponsiveColumn_DoesNotShiftOrderColumn()
     {
         var values = new Dictionary<string, StringValues>
         {
-            ["iSortingCols"] = "1",
-            ["sColumns"] = "Name,Bic",
-            ["iSortCol_0"] = "1",
-            ["sSortDir_0"] = "desc"
+            ["columns[0][name]"] = "Name",
+            ["order[0][column]"] = "1",
+            ["order[0][dir]"] = "desc"
         };
         var context = CreateContext(values);
 
         await new DataTablesModelBinder().BindModelAsync(context);
 
         var model = Assert.IsType<DataTablesParameters>(context.Result.Model);
-        var sort = Assert.Single(model.SortingCols!);
-        Assert.Equal(1, sort.Column);
-        Assert.Equal("desc", sort.Dir);
+        var order = Assert.Single(model.Orders);
+        Assert.Equal(1, order.Column);
+        Assert.Equal("desc", order.Dir);
     }
 
     [Fact]

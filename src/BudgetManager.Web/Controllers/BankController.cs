@@ -1,4 +1,4 @@
-﻿using BudgetManager.Application.Common;
+using BudgetManager.Application.Common;
 using BudgetManager.Application.Common.Pagination;
 using BudgetManager.Application.Enums;
 using BudgetManager.Application.Features.Bank.Create;
@@ -56,7 +56,7 @@ public class BankController(ISender sender, IStringLocalizer<SharedResource> sha
     [HttpGet]
     public async Task<IActionResult> GetDatatable(DataTablesParameters param)
     {
-        var sorts = param.SortingCols?
+        var sorts = param.Orders?
             .Where(x => x.Column is >= 0 and <= 2)
             .Select(x => new SortCriterion<BankSortField>(
                 x.Column switch
@@ -75,8 +75,8 @@ public class BankController(ISender sender, IStringLocalizer<SharedResource> sha
             new SearchBanksQuery(
                 new PagedSearchCriteria<BankSortField>(
                     param.Search,
-                    param.DisplayStart,
-                    param.DisplayLength,
+                    param.Start,
+                    param.Length,
                     sorts)),
             HttpContext.RequestAborted);
 
@@ -93,10 +93,10 @@ public class BankController(ISender sender, IStringLocalizer<SharedResource> sha
 
         return Json(new
         {
-            sEcho = param.Echo,
-            iTotalRecords = banks.TotalCount,
-            iTotalDisplayRecords = banks.FilteredCount,
-            aaData = data
+            draw = param.Draw,
+            recordsTotal = banks.TotalCount,
+            recordsFiltered = banks.FilteredCount,
+            data
         });
     }
 

@@ -1,4 +1,4 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
 
     var page = $('.js-entity-manager');
     var tableElement = page.find('.js-entity-table');
@@ -12,28 +12,25 @@
     });
 
     var table = EntityManager.initialize({
-        defaultSorting: [[1, 'desc'], [2, 'asc']],
+        defaultSorting: [[1, 'asc'], [2, 'asc']],
         ajaxData: function (data) {
-            data.push({
-                name: 'isActivated',
-                value: stateFilter.val()
-            });
+            data.isActivated = stateFilter.val();
         },
         columns: [
             {
-                "sName": "Responsive",
+                "name": "Responsive",
                 "className": "dtr-control align-middle",
-                "bSearchable": false,
-                "bSortable": false
+                "searchable": false,
+                "orderable": false
             },
-            { "sName": "LastName", "className": "align-middle text-start" },
-            { "sName": "FirstName", "className": "align-middle text-start" },
-            { "sName": "Email", "className": "align-middle text-start" },
-            { "sName": "Roles", "className": "align-middle text-start" },
+            { "name": "LastName", "className": "align-middle text-start" },
+            { "name": "FirstName", "className": "align-middle text-start" },
+            { "name": "Email", "className": "align-middle text-start" },
+            { "name": "Roles", "className": "align-middle text-start" },
             {
-                "sName": "Active",
+                "name": "Active",
                 "className": "align-middle text-center",
-                "mRender": function (data) {
+                "render": function (data) {
                     if (data == '' || data == null)
                         return "";
                     if (data == '1')
@@ -47,12 +44,12 @@
                 }
             },
             {
-                "sName": "Buttons",
+                "name": "Buttons",
                 "className": "align-middle text-end text-nowrap",
-                "bSearchable": false,
-                "bSortable": false,
-                "sWidth": "0",
-                "mRender": function (data) {
+                "searchable": false,
+                "orderable": false,
+                "width": "0",
+                "render": function (data) {
                     if (data == '' || data == null || !data.includes('¤'))
                         return "";
 

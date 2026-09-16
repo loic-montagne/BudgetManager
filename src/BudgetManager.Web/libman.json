@@ -36,14 +36,14 @@
       ]
     },
     {
-      "library": "datatables.net@1.13.5",
+      "library": "datatables.net@3.0.4",
       "destination": "wwwroot/lib/datatables/",
       "files": [
-        "js/jquery.dataTables.min.js"
+        "js/dataTables.min.js"
       ]
     },
     {
-      "library": "datatables.net-bs5@1.13.5",
+      "library": "datatables.net-bs5@3.0.4",
       "destination": "wwwroot/lib/datatables-bs5/",
       "files": [
         "css/dataTables.bootstrap5.min.css",
@@ -51,14 +51,14 @@
       ]
     },
     {
-      "library": "datatables.net-responsive@2.5.0",
+      "library": "datatables.net-responsive@4.0.3",
       "destination": "wwwroot/lib/datatables-responsive/",
       "files": [
         "js/dataTables.responsive.min.js"
       ]
     },
     {
-      "library": "datatables.net-responsive-bs5@2.5.0",
+      "library": "datatables.net-responsive-bs5@4.0.3",
       "destination": "wwwroot/lib/datatables-responsive-bs5/",
       "files": [
         "css/responsive.bootstrap5.min.css",
@@ -80,7 +80,7 @@
       "library": "axios@1.20.0",
       "destination": "wwwroot/lib/axios/"
     },
-	{
+    {
       "library": "sweetalert2@11.26.25",
       "destination": "wwwroot/lib/sweetalert/",
       "files": [

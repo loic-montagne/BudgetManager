@@ -18,14 +18,14 @@ describe('user-manager.js', () => {
     });
 
     it('adds activation state to ajax data and redraws when filter changes', () => {
-        const data=[]; options.ajaxData(data);
-        expect(data).toEqual([{name:'isActivated', value:'yes'}]);
+        const data={}; options.ajaxData(data);
+        expect(data).toEqual({isActivated:'yes'});
         $('.js-user-state-filter').trigger('change');
         expect(table.draw).toHaveBeenCalledOnce();
     });
 
     it('renders every activation-state branch', () => {
-        const active=options.columns[5].mRender;
+        const active=options.columns[5].render;
         expect(active('')).toBe('');
         expect(active(null)).toBe('');
         expect(active('1')).toContain('fa-check');
@@ -35,7 +35,7 @@ describe('user-manager.js', () => {
     });
 
     it('renders every action-button branch', () => {
-        const buttons=options.columns[6].mRender;
+        const buttons=options.columns[6].render;
         expect(buttons('')).toBe('');
         expect(buttons(null)).toBe('');
         expect(buttons('bad')).toBe('');

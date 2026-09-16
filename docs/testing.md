@@ -268,7 +268,7 @@ Le projet `BudgetManager.Web.Tests` couvre les comportements C# propres à la co
 
 La suite couvre notamment :
 
-- le protocole DataTables historique accepté par `DataTablesModelBinder` ;
+- le protocole DataTables moderne accepté par `DataTablesModelBinder` ;
 - les extensions Web et la gestion du cookie de culture ;
 - l'adaptation de l'utilisateur courant à partir des claims HTTP ;
 - les modèles Web et contrats de binding significatifs ;

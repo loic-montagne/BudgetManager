@@ -1,40 +1,44 @@
-﻿using BudgetManager.Web.Extensions;
+using BudgetManager.Web.Extensions;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace BudgetManager.Web.Models.Datatables
+namespace BudgetManager.Web.Models.Datatables;
+
+public class DataTablesModelBinder : IModelBinder
 {
-    public class DataTablesModelBinder : IModelBinder
+    public Task BindModelAsync(ModelBindingContext bindingContext)
     {
-        public Task BindModelAsync(ModelBindingContext bindingContext)
+        ArgumentNullException.ThrowIfNull(bindingContext, nameof(bindingContext));
+
+        var value = new DataTablesParameters
         {
-            ArgumentNullException.ThrowIfNull(bindingContext, nameof(bindingContext));
+            Draw = bindingContext.ValueProvider.GetValue("draw").FirstValue.ToInt(),
+            Search = bindingContext.ValueProvider.GetValue("search[value]").FirstValue,
+            Length = bindingContext.ValueProvider.GetValue("length").FirstValue.ToInt(),
+            Start = bindingContext.ValueProvider.GetValue("start").FirstValue.ToInt()
+        };
 
-            var value = new DataTablesParameters()
+        var orders = new List<DataTablesOrder>();
+        for (var i = 0; ; i++)
+        {
+            var columnValue = bindingContext.ValueProvider.GetValue($"order[{i}][column]");
+            if (columnValue == ValueProviderResult.None)
+                break;
+
+            var column = columnValue.FirstValue.ToInt();
+            var hasResponsiveColumn = string.Equals(
+                bindingContext.ValueProvider.GetValue("columns[0][name]").FirstValue,
+                "Responsive",
+                StringComparison.OrdinalIgnoreCase);
+
+            orders.Add(new DataTablesOrder
             {
-                Echo = bindingContext.ValueProvider.GetValue("sEcho").FirstValue,
-                Search = bindingContext.ValueProvider.GetValue("sSearch").FirstValue,
-                DisplayLength = bindingContext.ValueProvider.GetValue("iDisplayLength").FirstValue.ToInt(),
-                DisplayStart = bindingContext.ValueProvider.GetValue("iDisplayStart").FirstValue.ToInt(),
-                ColumnsCount = bindingContext.ValueProvider.GetValue("iColumns").FirstValue.ToInt(),
-                SortingColsCount = bindingContext.ValueProvider.GetValue("iSortingCols").FirstValue.ToInt(),
-                ColumnNames = bindingContext.ValueProvider.GetValue("sColumns").FirstValue,
-            };
-
-            var sorts = new List<DataTablesOrder>();
-            for (int i = 0; i < value.SortingColsCount; i++)
-            {
-                sorts.Add(new DataTablesOrder()
-                {
-                    Column = bindingContext.ValueProvider.GetValue($"iSortCol_{i}").FirstValue.ToInt() - ((bindingContext.ValueProvider.GetValue("sColumns").FirstValue?.Contains("Responsive") ?? false) ? 1 : 0),
-                    Dir = bindingContext.ValueProvider.GetValue($"sSortDir_{i}").FirstValue
-                });
-            }
-            value.SortingCols = sorts.AsEnumerable();
-
-
-            bindingContext.Result = ModelBindingResult.Success(value);
-
-            return Task.CompletedTask;
+                Column = column - (hasResponsiveColumn ? 1 : 0),
+                Dir = bindingContext.ValueProvider.GetValue($"order[{i}][dir]").FirstValue
+            });
         }
+
+        value.Orders = orders;
+        bindingContext.Result = ModelBindingResult.Success(value);
+        return Task.CompletedTask;
     }
 }

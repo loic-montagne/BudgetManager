@@ -17,8 +17,8 @@ describe.each(cases)('%s', (fileName, names) => {
         await loadScript(fileName);
         const options = window.EntityManager.initialize.mock.calls[0][0];
         expect(options.defaultSorting).toEqual([[1, 'asc']]);
-        expect(options.columns.map(c => c.sName)).toEqual(names);
-        const render = options.columns.at(-1).mRender;
+        expect(options.columns.map(c => c.name)).toEqual(names);
+        const render = options.columns.at(-1).render;
         expect(render(null)).toBe('');
         expect(render('42')).toContain('js-entity-edit');
         expect(render('42')).toContain('js-entity-delete');

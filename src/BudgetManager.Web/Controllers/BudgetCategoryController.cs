@@ -1,4 +1,4 @@
-﻿using BudgetManager.Application.Common;
+using BudgetManager.Application.Common;
 using BudgetManager.Application.Common.Pagination;
 using BudgetManager.Application.Enums;
 using BudgetManager.Application.Features.BudgetCategory.Create;
@@ -57,7 +57,7 @@ public class BudgetCategoryController(ISender sender, IStringLocalizer<SharedRes
     [HttpGet]
     public async Task<IActionResult> GetDatatable(DataTablesParameters param)
     {
-        var sorts = param.SortingCols?
+        var sorts = param.Orders?
             .Where(x => x.Column is >= 0 and <= 2)
             .Select(x => new SortCriterion<BudgetCategorySortField>(
                 x.Column switch
@@ -76,8 +76,8 @@ public class BudgetCategoryController(ISender sender, IStringLocalizer<SharedRes
             new SearchBudgetCategoriesQuery(
                 new PagedSearchCriteria<BudgetCategorySortField>(
                     param.Search,
-                    param.DisplayStart,
-                    param.DisplayLength,
+                    param.Start,
+                    param.Length,
                     sorts)),
             HttpContext.RequestAborted);
 
@@ -94,10 +94,10 @@ public class BudgetCategoryController(ISender sender, IStringLocalizer<SharedRes
 
         return Json(new
         {
-            sEcho = param.Echo,
-            iTotalRecords = categories.TotalCount,
-            iTotalDisplayRecords = categories.FilteredCount,
-            aaData = data
+            draw = param.Draw,
+            recordsTotal = categories.TotalCount,
+            recordsFiltered = categories.FilteredCount,
+            data
         });
     }
 
