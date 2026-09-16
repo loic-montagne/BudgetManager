@@ -7,7 +7,7 @@
     <!-- Tests -->
     <PackageVersion Include="coverlet.MTP" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.0.3" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <PackageVersion Include="NSubstitute" Version="6.2.0" />
     <PackageVersion Include="SkiaSharp.NativeAssets.Linux.NoDependencies" Version="4.152.0" />
     <PackageVersion Include="Testcontainers.MsSql" Version="4.15.0" />
