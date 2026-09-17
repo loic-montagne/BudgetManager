@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Exceptions;
 using BudgetManager.Application.Features.Account.Create;
@@ -183,6 +183,8 @@ public sealed class CoreCommandHandlerTests
             budgetId,
             "Budget",
             false,
+            0,
+            0,
             0,
             [],
             [],

@@ -48,6 +48,13 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
                             b.Name,
                             b.IsLocked,
 
+                            Expenses = b.Transactions
+                                .Where(t => t.Type == TransactionType.Expense)
+                                .Sum(t => -(decimal)t.Amount),
+                            Incomes = b.Transactions
+                                .Where(t => t.Type == TransactionType.Income)
+                                .Sum(t => (decimal)t.Amount),
+
                             Balance = b.Transactions.Sum(t =>
                                 t.Type == TransactionType.Income
                                     ? (decimal)t.Amount
@@ -132,6 +139,14 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
                     x.Description,
                     context
                         .Set<Transaction>()
+                        .Where(t => t.BudgetId == id && t.CategoryId == x.Id && t.Type == TransactionType.Expense)
+                        .Sum(t => -(decimal)t.Amount),
+                    context
+                        .Set<Transaction>()
+                        .Where(t => t.BudgetId == id && t.CategoryId == x.Id && t.Type == TransactionType.Income)
+                        .Sum(t => (decimal)t.Amount),
+                    context
+                        .Set<Transaction>()
                         .Where(t => t.BudgetId == id && t.CategoryId == x.Id)
                         .Sum(t =>
                             t.Type == TransactionType.Income
@@ -152,12 +167,20 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
                         x.Category.Name,
                         x.Category.Description,
                         context
-                        .Set<Transaction>()
-                        .Where(t => t.BudgetId == id && t.CategoryId == x.CategoryId)
-                        .Sum(t =>
-                            t.Type == TransactionType.Income
-                                ? (decimal)t.Amount
-                                : -(decimal)t.Amount)),
+                            .Set<Transaction>()
+                            .Where(t => t.BudgetId == id && t.CategoryId == x.CategoryId && t.Type == TransactionType.Expense)
+                            .Sum(t => -(decimal)t.Amount),
+                        context
+                            .Set<Transaction>()
+                            .Where(t => t.BudgetId == id && t.CategoryId == x.CategoryId && t.Type == TransactionType.Income)
+                            .Sum(t => (decimal)t.Amount),
+                        context
+                            .Set<Transaction>()
+                            .Where(t => t.BudgetId == id && t.CategoryId == x.CategoryId)
+                            .Sum(t =>
+                                t.Type == TransactionType.Income
+                                    ? (decimal)t.Amount
+                                    : -(decimal)t.Amount)),
                     x.Type,
                     x.Amount,
                     x.Type == TransactionType.Income
@@ -171,6 +194,8 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
             budget.Budget.Id,
             budget.Budget.Name,
             budget.Budget.IsLocked,
+            budget.Budget.Expenses,
+            budget.Budget.Incomes,
             budget.Budget.Balance,
             [.. accesses
                 .Select(x =>

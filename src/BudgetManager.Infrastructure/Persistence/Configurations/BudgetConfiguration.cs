@@ -11,6 +11,8 @@ internal sealed class BudgetConfiguration : IEntityTypeConfiguration<Budget>
         builder.ConfigureAuditableEntity();
         builder.ConfigureOptimisticConcurrencyToken();
 
+        builder.Ignore(x => x.Expenses);
+        builder.Ignore(x => x.Incomes);
         builder.Ignore(x => x.Balance);
 
         builder.Property(x => x.Name)

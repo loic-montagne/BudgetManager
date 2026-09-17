@@ -1,4 +1,4 @@
-using BudgetManager.Domain.Entities;
+﻿using BudgetManager.Domain.Entities;
 using BudgetManager.Domain.Enums;
 using BudgetManager.Domain.Exceptions;
 using Xunit;
@@ -168,7 +168,7 @@ public sealed class RegressionGuardTests
     }
 
     [Fact]
-    public void Balance_WhenBudgetContainsIncomeAndExpenses_ReturnsSignedSum()
+    public void Totals_WhenBudgetContainsIncomeAndExpenses_ReturnExpectedValues()
     {
         // Arrange
 
@@ -200,11 +200,36 @@ public sealed class RegressionGuardTests
 
         // Act
 
+        var expenses = budget.Expenses;
+        var incomes = budget.Incomes;
         var balance = budget.Balance;
 
         // Assert
 
+        Assert.Equal(-35m, expenses);
+        Assert.Equal(100m, incomes);
         Assert.Equal(65m, balance);
+    }
+
+    [Fact]
+    public void Totals_WhenBudgetHasNoTransaction_ReturnZero()
+    {
+        // Arrange
+
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+
+        // Act
+
+        var expenses = budget.Expenses;
+        var incomes = budget.Incomes;
+        var balance = budget.Balance;
+
+        // Assert
+
+        Assert.Equal(0m, expenses);
+        Assert.Equal(0m, incomes);
+        Assert.Equal(0m, balance);
     }
 
     [Fact]

@@ -12,6 +12,8 @@ public sealed class Budget : Entity, IHasOptimisticConcurrencyToken
 {
     public string Name { get; private set; } = string.Empty;
     public bool IsLocked { get; private set; }
+    public decimal Expenses => Transactions?.Where(x => x.Type == TransactionType.Expense)?.Sum(x => x.SignedAmount) ?? 0;
+    public decimal Incomes => Transactions?.Where(x => x.Type == TransactionType.Income)?.Sum(x => x.SignedAmount) ?? 0;
     public decimal Balance => Transactions?.Sum(x => x.SignedAmount) ?? 0;
 
 

@@ -1,4 +1,4 @@
-using BudgetManager.Application.Common.Pagination;
+﻿using BudgetManager.Application.Common.Pagination;
 using BudgetManager.Application.Enums;
 using BudgetManager.Domain.Enums;
 using BudgetManager.Domain.Extensions;
@@ -128,7 +128,7 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
     }
 
     [Fact]
-    public async Task GetByIdAsync_ProjectsBalanceTransactionsCategoriesAndOwnerPermissions()
+    public async Task GetByIdAsync_ProjectsTotalsTransactionsCategoriesAndOwnerPermissions()
     {
         // Arrange
 
@@ -156,6 +156,14 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
         Assert.NotNull(result);
 
         Assert.Equal(
+            0m,
+            result.Expenses);
+
+        Assert.Equal(
+            2500m,
+            result.Incomes);
+
+        Assert.Equal(
             2500m,
             result.Balance);
 
@@ -181,8 +189,28 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
             projectedCategory.Id);
 
         Assert.Equal(
+            0m,
+            projectedCategory.Expenses);
+
+        Assert.Equal(
+            2500m,
+            projectedCategory.Incomes);
+
+        Assert.Equal(
             2500m,
             projectedCategory.Balance);
+
+        Assert.Equal(
+            0m,
+            transaction.Category.Expenses);
+
+        Assert.Equal(
+            2500m,
+            transaction.Category.Incomes);
+
+        Assert.Equal(
+            2500m,
+            transaction.Category.Balance);
 
         Assert.Equal(
             "First Last",
@@ -194,7 +222,7 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
     }
 
     [Fact]
-    public async Task GetByIdAsync_WhenBudgetHasIncomeAndExpense_ComputesSignedBalanceInSql()
+    public async Task GetByIdAsync_WhenBudgetHasIncomeAndExpense_ComputesTotalsInSql()
     {
         // Arrange
 
@@ -235,8 +263,40 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
         Assert.NotNull(result);
 
         Assert.Equal(
+            -1000m,
+            result.Expenses);
+
+        Assert.Equal(
+            2500m,
+            result.Incomes);
+
+        Assert.Equal(
             1500m,
             result.Balance);
+
+        var projectedCategory =
+            Assert.Single(result.Categories);
+
+        Assert.Equal(
+            -1000m,
+            projectedCategory.Expenses);
+
+        Assert.Equal(
+            2500m,
+            projectedCategory.Incomes);
+
+        Assert.Equal(
+            1500m,
+            projectedCategory.Balance);
+
+        Assert.All(
+            result.Transactions,
+            transaction =>
+            {
+                Assert.Equal(-1000m, transaction.Category.Expenses);
+                Assert.Equal(2500m, transaction.Category.Incomes);
+                Assert.Equal(1500m, transaction.Category.Balance);
+            });
 
         Assert.Contains(
             result.Transactions,
@@ -415,7 +475,7 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
             result.Results.Select(x => x.Name).ToArray());
     }
     [Fact]
-    public async Task GetByIdAsync_WhenBudgetHasNoTransaction_ReturnsZeroBalance()
+    public async Task GetByIdAsync_WhenBudgetHasNoTransaction_ReturnsZeroTotals()
     {
         // Arrange
 
@@ -454,11 +514,19 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
 
         Assert.Equal(
             0m,
+            result.Expenses);
+
+        Assert.Equal(
+            0m,
+            result.Incomes);
+
+        Assert.Equal(
+            0m,
             result.Balance);
     }
 
     [Fact]
-    public async Task GetByIdAsync_WhenAssociatedCategoryHasNoTransaction_ReturnsCategoryWithZeroBalance()
+    public async Task GetByIdAsync_WhenAssociatedCategoryHasNoTransaction_ReturnsCategoryWithZeroTotals()
     {
         // Arrange
 
@@ -510,6 +578,14 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
         Assert.Equal(
             category.Id,
             projectedCategory.Id);
+
+        Assert.Equal(
+            0m,
+            projectedCategory.Expenses);
+
+        Assert.Equal(
+            0m,
+            projectedCategory.Incomes);
 
         Assert.Equal(
             0m,
