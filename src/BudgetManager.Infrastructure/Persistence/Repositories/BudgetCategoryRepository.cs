@@ -12,7 +12,8 @@ internal sealed class BudgetCategoryRepository(ApplicationDbContext context)
     {
         return await _context
             .Set<BudgetCategory>()
-            .Include(x => x.Budgets)
+            .Include(x => x.AssociatedBudgets)
+            .ThenInclude(x => x.Budget)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

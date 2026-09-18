@@ -70,7 +70,8 @@ internal sealed class BudgetRepository(ApplicationDbContext context)
         return await _context
             .Set<Budget>()
             .Include(x => x.Accesses)
-            .Include(x => x.Categories)
+            .Include(x => x.AssociatedCategories)
+            .ThenInclude(x => x.Category)
             .Include(x => x.Transactions)
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }

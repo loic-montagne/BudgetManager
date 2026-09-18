@@ -176,7 +176,7 @@ public sealed class RegressionGuardTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         budget.AddTransaction(
             category.Id,
@@ -243,7 +243,7 @@ public sealed class RegressionGuardTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,
@@ -278,7 +278,7 @@ public sealed class RegressionGuardTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,
@@ -312,7 +312,7 @@ public sealed class RegressionGuardTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,
@@ -346,7 +346,7 @@ public sealed class RegressionGuardTests
         var category = BudgetCategory.Create("Category", null);
         var invalidType = (TransactionType)42;
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         // Act
 
@@ -375,7 +375,7 @@ public sealed class RegressionGuardTests
         var category = BudgetCategory.Create("Category", null);
         var invalidMethod = (PaymentMethod)42;
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         // Act
 

@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Enums;
 using BudgetManager.Application.Features.Budget.AssociateCategory;
@@ -144,7 +144,7 @@ public sealed class ComplexValidatorSuccessTests
         var ownerId = Guid.NewGuid();
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var budgetContext = Substitute.For<IBudgetContext>();
         var categoryContext = Substitute.For<IBudgetCategoryContext>();
@@ -245,7 +245,7 @@ public sealed class ComplexValidatorSuccessTests
         var accountId = Guid.NewGuid();
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         var transaction = budget.AddTransaction(
             category.Id,
             accountId,
@@ -304,7 +304,7 @@ public sealed class ComplexValidatorSuccessTests
         var ownerId = Guid.NewGuid();
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         var transaction = budget.AddTransaction(
             category.Id,
             Guid.NewGuid(),

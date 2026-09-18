@@ -35,6 +35,6 @@ internal sealed class BudgetCategoryContext(IBudgetCategoryRepository categoryRe
     public async Task<bool> IsAssociatedToBudgetAsync(Guid categoryId, Guid budgetId, CancellationToken cancellationToken)
     {
         var category = await GetAsync(categoryId, cancellationToken);
-        return category?.Budgets?.Any(x => x.Id == budgetId) ?? false;
+        return category?.AssociatedBudgets?.Any(x => x.BudgetId == budgetId) ?? false;
     }
 }

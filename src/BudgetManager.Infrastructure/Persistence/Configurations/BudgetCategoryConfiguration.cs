@@ -21,8 +21,5 @@ internal sealed class BudgetCategoryConfiguration : IEntityTypeConfiguration<Bud
 
         builder.HasIndex(x => x.Name)
                .IsUnique();
-
-        builder.HasMany(x => x.Budgets)
-               .WithMany(x => x.Categories);
     }
 }

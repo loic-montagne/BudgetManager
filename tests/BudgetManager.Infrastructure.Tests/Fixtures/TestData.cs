@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Authentication;
+﻿using BudgetManager.Application.Abstractions.Authentication;
 using BudgetManager.Domain.Entities;
 using BudgetManager.Domain.Enums;
 using BudgetManager.Domain.ValueObjects;
@@ -120,7 +120,7 @@ internal static class TestData
             owner.Id);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             owner.Id);
 
         budget.AddTransaction(

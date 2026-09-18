@@ -132,7 +132,7 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
     {
         // Arrange
 
-        var (owner, budget, category, _, _) =
+        var (owner, budget, category, bank, account) =
             await TestData.AddBudgetGraphAsync(
                 Context,
                 CurrentUser);
@@ -181,6 +181,37 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
             2500m,
             transaction.SignedAmount);
 
+        Assert.Equal(
+            account.Id,
+            transaction.Account.Id);
+
+        Assert.Equal(
+            account.Name,
+            transaction.Account.Name);
+
+        Assert.Equal(
+            account.IsClosed,
+            transaction.Account.IsClosed);
+
+        Assert.Equal(
+            account.Iban.Value,
+            transaction.Account.Iban);
+
+        Assert.Equal(
+            bank.Id,
+            transaction.Account.Bank.Id);
+
+        Assert.Equal(
+            bank.Name,
+            transaction.Account.Bank.Name);
+
+        Assert.Equal(
+            bank.Bic.Value,
+            transaction.Account.Bank.Bic);
+
+        Assert.Null(
+            transaction.TransferAccount);
+
         var projectedCategory =
             Assert.Single(result.Categories);
 
@@ -219,6 +250,100 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
         Assert.Equal(
             "First Last",
             result.UpdatedByName);
+    }
+
+    [Fact]
+    public async Task GetByIdAsync_WhenTransactionIsBankTransfer_ProjectsTransferAccount()
+    {
+        // Arrange
+
+        var (owner, budget, category, bank, account) =
+            await TestData.AddBudgetGraphAsync(
+                Context,
+                CurrentUser);
+
+        var transferAccount =
+            TestData.Account(
+                bank.Id,
+                "Savings",
+                2);
+
+        Context.Add(transferAccount);
+
+        await Context.SaveChangesAsync(
+            TestContext.Current.CancellationToken);
+
+        var transfer =
+            budget.AddTransaction(
+                category.Id,
+                account.Id,
+                "Transfer",
+                TransactionType.Expense,
+                250m,
+                PaymentMethod.BankTransfer,
+                transferAccount.Id,
+                owner.Id);
+
+        await Context.SaveChangesAsync(
+            TestContext.Current.CancellationToken);
+
+        var queries =
+            new BudgetQueries(
+                Context,
+                NullLogger<BudgetQueries>.Instance);
+
+        // Act
+
+        var result =
+            await queries.GetByIdAsync(
+                budget.Id,
+                owner.Id,
+                Permission.View,
+                TestContext.Current.CancellationToken);
+
+        // Assert
+
+        Assert.NotNull(result);
+
+        var projectedTransfer =
+            Assert.Single(
+                result.Transactions,
+                x => x.Id == transfer.Id);
+
+        Assert.Equal(
+            account.Id,
+            projectedTransfer.Account.Id);
+
+        Assert.NotNull(
+            projectedTransfer.TransferAccount);
+
+        Assert.Equal(
+            transferAccount.Id,
+            projectedTransfer.TransferAccount.Id);
+
+        Assert.Equal(
+            transferAccount.Name,
+            projectedTransfer.TransferAccount.Name);
+
+        Assert.Equal(
+            transferAccount.IsClosed,
+            projectedTransfer.TransferAccount.IsClosed);
+
+        Assert.Equal(
+            transferAccount.Iban.Value,
+            projectedTransfer.TransferAccount.Iban);
+
+        Assert.Equal(
+            bank.Id,
+            projectedTransfer.TransferAccount.Bank.Id);
+
+        Assert.Equal(
+            bank.Name,
+            projectedTransfer.TransferAccount.Bank.Name);
+
+        Assert.Equal(
+            bank.Bic.Value,
+            projectedTransfer.TransferAccount.Bank.Bic);
     }
 
     [Fact]
@@ -545,7 +670,7 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
                 owner.Id);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             owner.Id);
 
         Context.Add(category);
@@ -646,5 +771,37 @@ public sealed class BudgetQueriesTests(SqlServerFixture fixture)
             result.Results);
     }
 
+
+
+
+    [Fact]
+    public async Task GetByIdAsync_WhenCategoriesAreReordered_ReturnsCategoriesByOrder()
+    {
+        var owner = await TestData.AddUserAsync(Context, "owner-order");
+        var firstCategory = TestData.Category("First");
+        var secondCategory = TestData.Category("Second");
+        var thirdCategory = TestData.Category("Third");
+        var budget = BudgetManager.Domain.Entities.Budget.Create("Budget", owner.Id);
+        budget.AssociateCategory(firstCategory.Id, owner.Id);
+        budget.AssociateCategory(secondCategory.Id, owner.Id);
+        budget.AssociateCategory(thirdCategory.Id, owner.Id);
+        budget.ReorderCategories([thirdCategory.Id, firstCategory.Id, secondCategory.Id], owner.Id);
+        Context.AddRange(firstCategory, secondCategory, thirdCategory, budget);
+        await Context.SaveChangesAsync(TestContext.Current.CancellationToken);
+        var queries = new BudgetQueries(Context, NullLogger<BudgetQueries>.Instance);
+
+        var result = await queries.GetByIdAsync(
+            budget.Id,
+            owner.Id,
+            Permission.View,
+            TestContext.Current.CancellationToken);
+
+        Assert.NotNull(result);
+        Assert.Collection(
+            result.Categories,
+            category => { Assert.Equal(thirdCategory.Id, category.Id); Assert.Equal(0, category.Order); },
+            category => { Assert.Equal(firstCategory.Id, category.Id); Assert.Equal(1, category.Order); },
+            category => { Assert.Equal(secondCategory.Id, category.Id); Assert.Equal(2, category.Order); });
+    }
 
 }

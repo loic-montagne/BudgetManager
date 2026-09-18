@@ -9,8 +9,8 @@ public sealed class BudgetCategory : Entity, IHasOptimisticConcurrencyToken
     public string Name { get; private set; } = string.Empty;
     public string? Description { get; private set; } = null!;
 
-    private readonly List<Budget> _budgets = [];
-    public IReadOnlyCollection<Budget> Budgets => _budgets.AsReadOnly();
+    private readonly List<BudgetCategoryAssociation> _associatedBudgets = [];
+    public IReadOnlyCollection<BudgetCategoryAssociation> AssociatedBudgets => _associatedBudgets.AsReadOnly();
 
     /// <summary>
     /// Gets the optimistic-concurrency token maintained by the persistence layer.

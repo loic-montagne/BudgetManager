@@ -1,4 +1,4 @@
-using BudgetManager.Application.Common;
+﻿using BudgetManager.Application.Common;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Contexts;
 using BudgetManager.Application.Exceptions;
@@ -224,7 +224,7 @@ public sealed class ContextRegressionGuardTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,
@@ -284,7 +284,7 @@ public sealed class ContextRegressionGuardTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,

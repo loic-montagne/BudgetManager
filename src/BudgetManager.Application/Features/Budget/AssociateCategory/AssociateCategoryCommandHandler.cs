@@ -5,14 +5,13 @@ using MediatR;
 
 namespace BudgetManager.Application.Features.Budget.AssociateCategory;
 
-public sealed class AssociateCategoryCommandHandler(IBudgetRepository budgetRepository, IBudgetContext budgetContext, IBudgetCategoryContext budgetCategoryContext, ICurrentUser currentUser) : IRequestHandler<AssociateCategoryCommand>
+public sealed class AssociateCategoryCommandHandler(IBudgetRepository budgetRepository, IBudgetContext budgetContext, ICurrentUser currentUser) : IRequestHandler<AssociateCategoryCommand>
 {
     public async Task Handle(AssociateCategoryCommand request, CancellationToken cancellationToken)
     {
         var budget = await budgetContext.GetRequiredAsync(request.BudgetId, cancellationToken);
-        var category = await budgetCategoryContext.GetRequiredAsync(request.CategoryId, cancellationToken);
 
-        budget.AssociateCategory(category, currentUser.RequiredUserId);
+        budget.AssociateCategory(request.CategoryId, currentUser.RequiredUserId);
 
         await budgetRepository.UpdateAsync(budget, cancellationToken);
     }

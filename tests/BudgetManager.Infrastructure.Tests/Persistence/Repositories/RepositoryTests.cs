@@ -1,4 +1,4 @@
-using BudgetManager.Domain.Enums;
+﻿using BudgetManager.Domain.Enums;
 using BudgetManager.Domain.ValueObjects;
 using BudgetManager.Infrastructure.Persistence.Repositories;
 using BudgetManager.Infrastructure.Tests.Fixtures;
@@ -156,8 +156,8 @@ public sealed class RepositoryTests(SqlServerFixture fixture)
         Assert.NotNull(result);
 
         Assert.Contains(
-            result.Budgets,
-            x => x.Id == budget.Id);
+            result.AssociatedBudgets,
+            x => x.BudgetId == budget.Id);
 
         Assert.Equal(
             EntityState.Unchanged,
@@ -572,7 +572,7 @@ public sealed class RepositoryTests(SqlServerFixture fixture)
 
         Assert.NotNull(result);
         Assert.NotEmpty(result.Accesses);
-        Assert.NotEmpty(result.Categories);
+        Assert.NotEmpty(result.AssociatedCategories);
         Assert.NotEmpty(result.Transactions);
     }
 

@@ -20,8 +20,8 @@ public sealed class Budget : Entity, IHasOptimisticConcurrencyToken
     private readonly List<BudgetAccess> _accesses = [];
     public IReadOnlyCollection<BudgetAccess> Accesses => _accesses.AsReadOnly();
 
-    private readonly List<BudgetCategory> _categories = [];
-    public IReadOnlyCollection<BudgetCategory> Categories => _categories.AsReadOnly();
+    private readonly List<BudgetCategoryAssociation> _associatedCategories = [];
+    public IReadOnlyCollection<BudgetCategoryAssociation> AssociatedCategories => _associatedCategories.AsReadOnly();
 
     private readonly List<Transaction> _transactions = [];
     public IReadOnlyCollection<Transaction> Transactions => _transactions.AsReadOnly();
@@ -262,18 +262,18 @@ public sealed class Budget : Entity, IHasOptimisticConcurrencyToken
             _accesses.Add(newOwnerAccess);
     }
 
-    public void AssociateCategory(BudgetCategory category, Guid currentUserId)
+    public void AssociateCategory(Guid categoryId, Guid currentUserId)
     {
-        ArgumentNullException.ThrowIfNull(category);
-        if (category.Id == Guid.Empty)
-            throw new ArgumentException("CategoryId cannot be empty.", nameof(category));
+        if (categoryId == Guid.Empty)
+            throw new ArgumentException("CategoryId cannot be empty.", nameof(categoryId));
 
         EnsureEditable(currentUserId);
 
-        if (_categories.Any(x => x.Id == category.Id))
+        if (_associatedCategories.Any(x => x.CategoryId == categoryId))
             throw new BudgetCategoryAlreadyAssociatedException();
 
-        _categories.Add(category);
+        var association = BudgetCategoryAssociation.Create(Id, categoryId, _associatedCategories.Count);
+        _associatedCategories.Add(association);
     }
     public void DissociateCategory(Guid categoryId, Guid currentUserId)
     {
@@ -284,12 +284,43 @@ public sealed class Budget : Entity, IHasOptimisticConcurrencyToken
 
         EnsureEditable(currentUserId);
 
-        var category = _categories.SingleOrDefault(x => x.Id == categoryId)
+        var category = _associatedCategories.SingleOrDefault(x => x.CategoryId == categoryId)
             ?? throw new BudgetCategoryNotAssociatedException();
         if (_transactions.Any(x => x.CategoryId == categoryId))
             throw new BudgetCategoryInUseException();
 
-        _categories.Remove(category);
+        var index = _associatedCategories.IndexOf(category);
+        _associatedCategories.Remove(category);
+        for (int i = index; i < _associatedCategories.Count; i++)
+            _associatedCategories[i].Order--;
+    }
+    public void ReorderCategories(IReadOnlyCollection<Guid> categoriesIds, Guid currentUserId)
+    {
+        ArgumentNullException.ThrowIfNull(categoriesIds, nameof(categoriesIds));
+        
+        var count = categoriesIds.Count;
+        if (count <= 0)
+            throw new ArgumentException("Categories cannot be empty.", nameof(categoriesIds));
+        if (categoriesIds.Distinct().Count() != count)
+            throw new ArgumentException("Categories ids must be unique.", nameof(categoriesIds));
+        if (count != _associatedCategories.Count)
+            throw new ArgumentException("Categories and AssociatedCategories must have same number of elements.", nameof(categoriesIds));
+
+        if (currentUserId == Guid.Empty)
+            throw new ArgumentException("UserId cannot be empty.", nameof(currentUserId));
+
+        EnsureEditable(currentUserId);
+
+        if (categoriesIds.Any(c => !_associatedCategories.Any(a => a.CategoryId == c)))
+            throw new BudgetCategoryNotAssociatedException();
+
+        var order = 0;
+        foreach (var categoryId in categoriesIds)
+        {
+            _associatedCategories
+                .Single(x => x.CategoryId == categoryId)
+                .Order = order++;
+        }
     }
 
     private Transaction GetRequiredTransaction(Guid transactionId)
@@ -309,7 +340,7 @@ public sealed class Budget : Entity, IHasOptimisticConcurrencyToken
 
         EnsureEditable(currentUserId);
 
-        if (!_categories.Any(x => x.Id == categoryId))
+        if (!_associatedCategories.Any(x => x.CategoryId == categoryId))
             throw new BudgetCategoryNotAssociatedException();
 
         var transaction = Transaction.Create(Id, categoryId, accountId, name, type, amount, method, transferAccountId);

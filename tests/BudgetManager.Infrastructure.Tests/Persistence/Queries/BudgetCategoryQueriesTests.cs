@@ -1,4 +1,4 @@
-using BudgetManager.Application.Common.Pagination;
+﻿using BudgetManager.Application.Common.Pagination;
 using BudgetManager.Application.Enums;
 using BudgetManager.Infrastructure.Persistence.Queries;
 using BudgetManager.Infrastructure.Tests.Fixtures;
@@ -30,7 +30,7 @@ public sealed class BudgetCategoryQueriesTests(SqlServerFixture fixture)
                 owner.Id);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             owner.Id);
 
         Context.Add(category);
@@ -147,7 +147,7 @@ public sealed class BudgetCategoryQueriesTests(SqlServerFixture fixture)
                 owner.Id);
 
         budget.AssociateCategory(
-            used,
+            used.Id,
             owner.Id);
 
         Context.AddRange(
@@ -252,7 +252,7 @@ public sealed class BudgetCategoryQueriesTests(SqlServerFixture fixture)
                 owner.Id);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             owner.Id);
 
         Context.Add(category);

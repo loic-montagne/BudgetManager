@@ -29,6 +29,7 @@ Budget
 ├── Delete
 ├── GetById
 ├── Search
+├── ReorderCategories
 └── Common
 ```
 
@@ -206,3 +207,8 @@ IEmailSender
 Les noms de templates connus sont centralisés dans `EmailTemplates` afin d'éviter les chaînes littérales dispersées dans le code.
 
 L'Application ne connaît ni MailKit, ni MimeKit, ni le protocole SMTP.
+
+
+# Ordre des catégories d’un budget
+
+Le cas d’utilisation `Budget/ReorderCategories` reçoit l’identifiant du budget et la collection ordonnée des identifiants de catégories. Le Domain valide et applique l’ordre ; l’Application vérifie au préalable l’existence, l’éditabilité du budget et l’association des catégories.

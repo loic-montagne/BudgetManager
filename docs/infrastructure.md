@@ -24,6 +24,8 @@ Entity Framework Core est utilisé pour :
 
 Les configurations sont réalisées via `IEntityTypeConfiguration<T>`.
 
+La relation entre `Budget` et `BudgetCategory` est une association explicite `BudgetCategoryAssociation`, identifiée par la clé composite `(BudgetId, CategoryId)` et portant la colonne `Order`. Les Query Services de budget projettent les catégories selon cet ordre.
+
 ---
 
 # Repositories

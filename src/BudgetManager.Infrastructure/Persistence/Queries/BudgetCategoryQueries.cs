@@ -21,7 +21,7 @@ internal sealed class BudgetCategoryQueries(ApplicationDbContext context, ILogge
                 x.Id,
                 x.Name,
                 x.Description,
-                x.Budgets.Count))
+                x.AssociatedBudgets.Count))
             .ToListAsync(cancellationToken);
     }
 
@@ -30,7 +30,7 @@ internal sealed class BudgetCategoryQueries(ApplicationDbContext context, ILogge
         var data = await context
             .Set<BudgetCategory>()
             .AsNoTracking()
-            .Include(x => x.Budgets)
+            .Include(x => x.AssociatedBudgets)
             .Where(x => x.Id == id)
             .GroupJoin(
                 context.Set<ApplicationUser>(),
@@ -75,7 +75,7 @@ internal sealed class BudgetCategoryQueries(ApplicationDbContext context, ILogge
             data.BudgetCategory.Id,
             data.BudgetCategory.Name,
             data.BudgetCategory.Description,
-            data.BudgetCategory.Budgets.Count,
+            data.BudgetCategory.AssociatedBudgets.Count,
             data.BudgetCategory.CreatedBy,
             data.CreatedByUser.GetDisplayName(data.BudgetCategory.CreatedBy),
             data.BudgetCategory.CreatedOn,
@@ -108,7 +108,7 @@ internal sealed class BudgetCategoryQueries(ApplicationDbContext context, ILogge
                     x.Id,
                     x.Name,
                     x.Description,
-                    x.Budgets.Count),
+                    x.AssociatedBudgets.Count),
                 null,
                 searchPredicate,
                 x => x.Id,
@@ -118,7 +118,7 @@ internal sealed class BudgetCategoryQueries(ApplicationDbContext context, ILogge
                         sort.Field switch
                         {
                             BudgetCategorySortField.Description => x => x.Description,
-                            BudgetCategorySortField.BudgetsCount => x => x.Budgets.Count,
+                            BudgetCategorySortField.BudgetsCount => x => x.AssociatedBudgets.Count,
                             _ => x => x.Name,
                         };
                     return keySelector;

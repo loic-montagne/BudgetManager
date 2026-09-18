@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Common.Errors;
 using BudgetManager.Application.Enums;
@@ -368,7 +368,7 @@ public sealed class TransactionValidatorRegressionTests
             ownerId);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             ownerId);
 
         var transaction = budget.AddTransaction(

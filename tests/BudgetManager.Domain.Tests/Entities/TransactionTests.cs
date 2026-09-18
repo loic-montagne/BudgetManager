@@ -1,4 +1,4 @@
-using BudgetManager.Domain.Common;
+﻿using BudgetManager.Domain.Common;
 using BudgetManager.Domain.Entities;
 using BudgetManager.Domain.Enums;
 using BudgetManager.Domain.Exceptions;
@@ -96,7 +96,7 @@ public sealed class TransactionTests
         var ownerId = Guid.NewGuid();
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Courses", null);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         return (budget, ownerId, category);
     }
 

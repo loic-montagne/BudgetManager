@@ -1,4 +1,4 @@
-using BudgetManager.Domain.Common;
+﻿using BudgetManager.Domain.Common;
 using BudgetManager.Domain.Entities;
 using BudgetManager.Domain.Enums;
 using BudgetManager.Domain.Exceptions;
@@ -82,7 +82,7 @@ public sealed class BudgetTests
             () => budget.AssociateCategory(
                 BudgetCategory.Create(
                     "Courses",
-                    null),
+                    null).Id,
                 ownerId));
     }
 
@@ -92,9 +92,9 @@ public sealed class BudgetTests
         var ownerId = Guid.NewGuid();
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Courses", null);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
-        Assert.Throws<BudgetCategoryAlreadyAssociatedException>(() => budget.AssociateCategory(category, ownerId));
+        Assert.Throws<BudgetCategoryAlreadyAssociatedException>(() => budget.AssociateCategory(category.Id, ownerId));
     }
     
     [Fact]
@@ -176,7 +176,7 @@ public sealed class BudgetTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Courses", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         budget.AddTransaction(
             category.Id,
             Guid.NewGuid(),
@@ -538,7 +538,7 @@ public sealed class BudgetTests
             null);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             ownerId);
 
         // Act
@@ -550,8 +550,8 @@ public sealed class BudgetTests
         // Assert
 
         Assert.DoesNotContain(
-            budget.Categories,
-            item => item.Id == category.Id);
+            budget.AssociatedCategories,
+            item => item.CategoryId == category.Id);
     }
 
     [Fact]
@@ -652,4 +652,137 @@ public sealed class BudgetTests
         Assert.Throws<ArgumentException>(
             action);
     }
+
+
+    [Fact]
+    public void AssociateCategory_WhenCategoriesAreAdded_AssignsSequentialOrder()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+
+        Assert.Collection(
+            budget.AssociatedCategories,
+            first =>
+            {
+                Assert.Equal(firstCategoryId, first.CategoryId);
+                Assert.Equal(0, first.Order);
+            },
+            second =>
+            {
+                Assert.Equal(secondCategoryId, second.CategoryId);
+                Assert.Equal(1, second.Order);
+            });
+    }
+
+    [Fact]
+    public void DissociateCategory_WhenCategoryIsRemoved_CompactsFollowingOrders()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        var thirdCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+        budget.AssociateCategory(thirdCategoryId, ownerId);
+
+        budget.DissociateCategory(secondCategoryId, ownerId);
+
+        Assert.Collection(
+            budget.AssociatedCategories,
+            first =>
+            {
+                Assert.Equal(firstCategoryId, first.CategoryId);
+                Assert.Equal(0, first.Order);
+            },
+            second =>
+            {
+                Assert.Equal(thirdCategoryId, second.CategoryId);
+                Assert.Equal(1, second.Order);
+            });
+    }
+
+    [Fact]
+    public void ReorderCategories_WhenOrderIsValid_UpdatesAllOrders()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        var thirdCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+        budget.AssociateCategory(thirdCategoryId, ownerId);
+
+        budget.ReorderCategories([thirdCategoryId, firstCategoryId, secondCategoryId], ownerId);
+
+        Assert.Equal(2, budget.AssociatedCategories.Single(x => x.CategoryId == secondCategoryId).Order);
+        Assert.Equal(1, budget.AssociatedCategories.Single(x => x.CategoryId == firstCategoryId).Order);
+        Assert.Equal(0, budget.AssociatedCategories.Single(x => x.CategoryId == thirdCategoryId).Order);
+    }
+
+    [Fact]
+    public void ReorderCategories_WhenIdsContainDuplicate_Throws()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+
+        Assert.Throws<ArgumentException>(
+            () => budget.ReorderCategories([firstCategoryId, firstCategoryId], ownerId));
+    }
+
+    [Fact]
+    public void ReorderCategories_WhenIdsCountDoesNotMatch_Throws()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+
+        Assert.Throws<ArgumentException>(
+            () => budget.ReorderCategories([firstCategoryId], ownerId));
+    }
+
+    [Fact]
+    public void ReorderCategories_WhenCategoryIsNotAssociated_Throws()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+
+        Assert.Throws<BudgetCategoryNotAssociatedException>(
+            () => budget.ReorderCategories([firstCategoryId, Guid.NewGuid()], ownerId));
+    }
+
+
+
+    [Fact]
+    public void ReorderCategories_WhenBudgetIsLocked_Throws()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+        budget.Lock(ownerId);
+
+        Assert.Throws<BudgetLockedException>(
+            () => budget.ReorderCategories([secondCategoryId, firstCategoryId], ownerId));
+    }
+
 }

@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Features.Account.Close;
 using BudgetManager.Application.Features.Account.Delete;
@@ -10,6 +10,7 @@ using BudgetManager.Application.Features.Budget.AssociateCategory;
 using BudgetManager.Application.Features.Budget.Delete;
 using BudgetManager.Application.Features.Budget.DissociateCategory;
 using BudgetManager.Application.Features.Budget.Lock;
+using BudgetManager.Application.Features.Budget.ReorderCategories;
 using BudgetManager.Application.Features.Budget.TransferOwnership;
 using BudgetManager.Application.Features.Budget.Unlock;
 using BudgetManager.Application.Features.Budget.Update;
@@ -426,7 +427,6 @@ public sealed class CommandHandlerTests
         var handler = new AssociateCategoryCommandHandler(
             budgetRepository,
             budgetContext,
-            categoryContext,
             currentUser);
 
         // Act
@@ -437,7 +437,7 @@ public sealed class CommandHandlerTests
 
         // Assert
 
-        Assert.Contains(budget.Categories, item => item.Id == category.Id);
+        Assert.Contains(budget.AssociatedCategories, item => item.CategoryId == category.Id);
 
         await budgetRepository.Received(1).UpdateAsync(budget, cancellationToken);
     }
@@ -450,7 +450,7 @@ public sealed class CommandHandlerTests
         var ownerId = Guid.NewGuid();
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var budgetContext = Substitute.For<IBudgetContext>();
         var budgetRepository = Substitute.For<IBudgetRepository>();
@@ -472,7 +472,7 @@ public sealed class CommandHandlerTests
 
         // Assert
 
-        Assert.DoesNotContain(budget.Categories, item => item.Id == category.Id);
+        Assert.DoesNotContain(budget.AssociatedCategories, item => item.CategoryId == category.Id);
         await budgetRepository.Received(1).UpdateAsync(budget, cancellationToken);
     }
 
@@ -588,7 +588,7 @@ public sealed class CommandHandlerTests
         var ownerId = Guid.NewGuid();
         var category = BudgetCategory.Create("Category", null);
         var budget = Budget.Create("Budget", ownerId);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var budgetContext = Substitute.For<IBudgetContext>();
         var budgetRepository = Substitute.For<IBudgetRepository>();
@@ -632,7 +632,7 @@ public sealed class CommandHandlerTests
         var ownerId = Guid.NewGuid();
         var category = BudgetCategory.Create("Category", null);
         var budget = Budget.Create("Budget", ownerId);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         var transaction = budget.AddTransaction(
             category.Id,
             Guid.NewGuid(),
@@ -685,7 +685,7 @@ public sealed class CommandHandlerTests
         var ownerId = Guid.NewGuid();
         var category = BudgetCategory.Create("Category", null);
         var budget = Budget.Create("Budget", ownerId);
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         var transaction = budget.AddTransaction(
             category.Id,
             Guid.NewGuid(),
@@ -719,4 +719,31 @@ public sealed class CommandHandlerTests
         Assert.Empty(budget.Transactions);
         await budgetRepository.Received(1).UpdateAsync(budget, cancellationToken);
     }
+
+
+    [Fact]
+    public async Task ReorderCategoriesHandler_WhenCommandIsValid_ReordersAndPersistsBudget()
+    {
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+        var budgetContext = Substitute.For<IBudgetContext>();
+        var budgetRepository = Substitute.For<IBudgetRepository>();
+        var currentUser = new TestCurrentUser(true, ownerId);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        budgetContext.GetRequiredAsync(budget.Id, cancellationToken).Returns(budget);
+        var handler = new ReorderCategoriesCommandHandler(budgetRepository, budgetContext, currentUser);
+
+        await handler.Handle(
+            new ReorderCategoriesCommand(budget.Id, [secondCategoryId, firstCategoryId]),
+            cancellationToken);
+
+        Assert.Equal(0, budget.AssociatedCategories.Single(x => x.CategoryId == secondCategoryId).Order);
+        Assert.Equal(1, budget.AssociatedCategories.Single(x => x.CategoryId == firstCategoryId).Order);
+        await budgetRepository.Received(1).UpdateAsync(budget, cancellationToken);
+    }
+
 }

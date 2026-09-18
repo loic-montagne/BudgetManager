@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Common.Errors;
 using BudgetManager.Application.Common.Pagination;
@@ -554,7 +554,7 @@ public sealed class ValidatorTests
         var budget = BudgetManager.Domain.Entities.Budget.Create("Budget", ownerId);
         var otherBudget = BudgetManager.Domain.Entities.Budget.Create("Other", ownerId);
         var category = BudgetManager.Domain.Entities.BudgetCategory.Create("Category", null);
-        otherBudget.AssociateCategory(category, ownerId);
+        otherBudget.AssociateCategory(category.Id, ownerId);
         var transaction = otherBudget.AddTransaction(
             category.Id,
             Guid.NewGuid(),

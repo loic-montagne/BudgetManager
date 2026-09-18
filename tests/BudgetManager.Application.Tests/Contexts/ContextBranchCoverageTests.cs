@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Persistence;
+﻿using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Contexts;
 using BudgetManager.Domain.Entities;
 using BudgetManager.Domain.Enums;
@@ -58,7 +58,7 @@ public sealed class ContextBranchCoverageTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,
@@ -100,7 +100,7 @@ public sealed class ContextBranchCoverageTests
         var budget = Budget.Create("Budget", ownerId);
         var category = BudgetCategory.Create("Category", null);
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
 
         var transaction = budget.AddTransaction(
             category.Id,

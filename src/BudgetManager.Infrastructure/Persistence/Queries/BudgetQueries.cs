@@ -129,25 +129,35 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
             .ToListAsync(cancellationToken);
 
         var categories = await context
-            .Set<BudgetCategory>()
+            .Set<BudgetCategoryAssociation>()
             .AsNoTracking()
-            .Where(x => x.Budgets.Any(b => b.Id == id))
+            .Where(x => x.BudgetId == id)
+            .OrderBy(x => x.Order)
             .Select(x =>
                 new Application.Features.Budget.GetById.BudgetCategoryDto(
-                    x.Id,
-                    x.Name,
-                    x.Description,
+                    x.Category.Id,
+                    x.Category.Name,
+                    x.Category.Description,
+                    x.Order,
                     context
                         .Set<Transaction>()
-                        .Where(t => t.BudgetId == id && t.CategoryId == x.Id && t.Type == TransactionType.Expense)
+                        .Where(t =>
+                            t.BudgetId == id &&
+                            t.CategoryId == x.CategoryId &&
+                            t.Type == TransactionType.Expense)
                         .Sum(t => -(decimal)t.Amount),
                     context
                         .Set<Transaction>()
-                        .Where(t => t.BudgetId == id && t.CategoryId == x.Id && t.Type == TransactionType.Income)
+                        .Where(t =>
+                            t.BudgetId == id &&
+                            t.CategoryId == x.CategoryId &&
+                            t.Type == TransactionType.Income)
                         .Sum(t => (decimal)t.Amount),
                     context
                         .Set<Transaction>()
-                        .Where(t => t.BudgetId == id && t.CategoryId == x.Id)
+                        .Where(t =>
+                            t.BudgetId == id &&
+                            t.CategoryId == x.CategoryId)
                         .Sum(t =>
                             t.Type == TransactionType.Income
                                 ? (decimal)t.Amount
@@ -167,6 +177,11 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
                         x.Category.Name,
                         x.Category.Description,
                         context
+                            .Set<BudgetCategoryAssociation>()
+                            .Where(a => a.BudgetId == id && a.CategoryId == x.CategoryId)
+                            .Select(a => a.Order)
+                            .Single(),
+                        context
                             .Set<Transaction>()
                             .Where(t => t.BudgetId == id && t.CategoryId == x.CategoryId && t.Type == TransactionType.Expense)
                             .Sum(t => -(decimal)t.Amount),
@@ -181,12 +196,39 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
                                 t.Type == TransactionType.Income
                                     ? (decimal)t.Amount
                                     : -(decimal)t.Amount)),
-                    x.Type,
-                    x.Amount,
-                    x.Type == TransactionType.Income
-                        ? (decimal)x.Amount
-                        : -(decimal)x.Amount,
-                    x.Method))
+                        x.Type,
+                        x.Amount,
+                        x.Type == TransactionType.Income
+                            ? (decimal)x.Amount
+                            : -(decimal)x.Amount,
+                        x.Method,
+                        context
+                            .Set<Account>()
+                            .Where(a => a.Id == x.AccountId)
+                            .Select(a => new Application.Features.Budget.GetById.AccountDto(
+                                a.Id,
+                                a.Name,
+                                a.IsClosed,
+                                a.Iban.Value,
+                                new Application.Features.Budget.GetById.BankDto(
+                                    a.Bank.Id,
+                                    a.Bank.Name,
+                                    a.Bank.Bic.Value)))
+                            .Single(),
+                        x.TransferAccountId == null ? null :
+                        context
+                            .Set<Account>()
+                            .Where(a => a.Id == x.TransferAccountId)
+                            .Select(a => new Application.Features.Budget.GetById.AccountDto(
+                                a.Id,
+                                a.Name,
+                                a.IsClosed,
+                                a.Iban.Value,
+                                new Application.Features.Budget.GetById.BankDto(
+                                    a.Bank.Id,
+                                    a.Bank.Name,
+                                    a.Bank.Bic.Value)))
+                            .Single()))
             .ToListAsync(
                 cancellationToken);
 

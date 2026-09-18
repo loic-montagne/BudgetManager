@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Common.Errors;
 using BudgetManager.Application.Enums;
@@ -523,7 +523,7 @@ public sealed class ValidatorErrorCodeCoverageTests
                 null);
 
         budget.AssociateCategory(
-            category,
+            category.Id,
             ownerId);
 
         var budgetContext =

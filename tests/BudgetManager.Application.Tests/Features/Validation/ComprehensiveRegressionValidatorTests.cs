@@ -1,4 +1,4 @@
-using BudgetManager.Application.Abstractions.Contexts;
+﻿using BudgetManager.Application.Abstractions.Contexts;
 using BudgetManager.Application.Abstractions.Persistence;
 using BudgetManager.Application.Common.Errors;
 using BudgetManager.Application.Common.Pagination;
@@ -11,6 +11,7 @@ using BudgetManager.Application.Features.Budget.Search;
 using BudgetManager.Application.Features.BudgetCategory.Search;
 using BudgetManager.Application.Features.User.Search;
 using BudgetManager.Application.Features.Budget.AssociateCategory;
+using BudgetManager.Application.Features.Budget.ReorderCategories;
 using BudgetManager.Application.Features.Budget.TransferOwnership;
 using BudgetManager.Application.Features.Budget.UpdateAccess;
 using BudgetManager.Application.Features.Transaction.Update;
@@ -401,7 +402,7 @@ public sealed class ComprehensiveRegressionValidatorTests
         var budget = Budget.Create("Budget", ownerId);
         var accountId = Guid.NewGuid();
 
-        budget.AssociateCategory(category, ownerId);
+        budget.AssociateCategory(category.Id, ownerId);
         var transaction = budget.AddTransaction(
             category.Id,
             accountId,
@@ -454,4 +455,91 @@ public sealed class ComprehensiveRegressionValidatorTests
         IBudgetContext BudgetContext,
         UpdateTransactionCommand Command,
         CancellationToken CancellationToken);
+
+
+    [Fact]
+    public async Task ReorderCategoriesValidator_WhenCommandIsValid_HasNoErrors()
+    {
+        var budgetContext = Substitute.For<IBudgetContext>();
+        var categoryContext = Substitute.For<IBudgetCategoryContext>();
+        var budgetId = Guid.NewGuid();
+        var firstCategoryId = Guid.NewGuid();
+        var secondCategoryId = Guid.NewGuid();
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        budget.AssociateCategory(firstCategoryId, ownerId);
+        budget.AssociateCategory(secondCategoryId, ownerId);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        budgetContext.ExistsAsync(budgetId, cancellationToken).Returns(true);
+        budgetContext.IsEditableAsync(budgetId, cancellationToken).Returns(BudgetEditableStatus.Editable);
+        budgetContext.GetAsync(budgetId, cancellationToken).Returns(budget);
+        categoryContext.ExistsAsync(firstCategoryId, cancellationToken).Returns(true);
+        categoryContext.ExistsAsync(secondCategoryId, cancellationToken).Returns(true);
+        categoryContext.GetAsync(firstCategoryId, cancellationToken).Returns(BudgetCategory.Create("First", null));
+        categoryContext.GetAsync(secondCategoryId, cancellationToken).Returns(BudgetCategory.Create("Second", null));
+        categoryContext.IsAssociatedToBudgetAsync(firstCategoryId, budgetId, cancellationToken).Returns(true);
+        categoryContext.IsAssociatedToBudgetAsync(secondCategoryId, budgetId, cancellationToken).Returns(true);
+        var validator = new ReorderCategoriesCommandValidator(budgetContext, categoryContext);
+
+        var result = await validator.TestValidateAsync(
+            new ReorderCategoriesCommand(budgetId, [firstCategoryId, secondCategoryId]),
+            cancellationToken: cancellationToken);
+
+        Assert.Empty(result.Errors);
+    }
+
+    [Fact]
+    public async Task ReorderCategoriesValidator_WhenCategoryDoesNotExist_DoesNotCheckAssociationForIt()
+    {
+        var budgetContext = Substitute.For<IBudgetContext>();
+        var categoryContext = Substitute.For<IBudgetCategoryContext>();
+        var budgetId = Guid.NewGuid();
+        var categoryId = Guid.NewGuid();
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        budgetContext.ExistsAsync(budgetId, cancellationToken).Returns(true);
+        budgetContext.IsEditableAsync(budgetId, cancellationToken).Returns(BudgetEditableStatus.Editable);
+        budgetContext.GetAsync(budgetId, cancellationToken).Returns(budget);
+        categoryContext.ExistsAsync(categoryId, cancellationToken).Returns(false);
+        categoryContext.GetAsync(categoryId, cancellationToken).Returns((BudgetCategory?)null);
+        var validator = new ReorderCategoriesCommandValidator(budgetContext, categoryContext);
+
+        var result = await validator.TestValidateAsync(
+            new ReorderCategoriesCommand(budgetId, [categoryId]),
+            cancellationToken: cancellationToken);
+
+        Assert.Contains(result.Errors, x => x.ErrorCode == ErrorCodes.BudgetBudgetCategoryNotExists);
+        await categoryContext.DidNotReceive().IsAssociatedToBudgetAsync(
+            categoryId,
+            budgetId,
+            Arg.Any<CancellationToken>());
+    }
+
+    [Fact]
+    public async Task ReorderCategoriesValidator_WhenCategoryIsNotAssociated_ReturnsExpectedError()
+    {
+        var budgetContext = Substitute.For<IBudgetContext>();
+        var categoryContext = Substitute.For<IBudgetCategoryContext>();
+        var budgetId = Guid.NewGuid();
+        var categoryId = Guid.NewGuid();
+        var ownerId = Guid.NewGuid();
+        var budget = Budget.Create("Budget", ownerId);
+        var category = BudgetCategory.Create("Category", null);
+        var cancellationToken = TestContext.Current.CancellationToken;
+        budgetContext.ExistsAsync(budgetId, cancellationToken).Returns(true);
+        budgetContext.IsEditableAsync(budgetId, cancellationToken).Returns(BudgetEditableStatus.Editable);
+        budgetContext.GetAsync(budgetId, cancellationToken).Returns(budget);
+        categoryContext.ExistsAsync(categoryId, cancellationToken).Returns(true);
+        categoryContext.GetAsync(categoryId, cancellationToken).Returns(category);
+        categoryContext.IsAssociatedToBudgetAsync(categoryId, budgetId, cancellationToken).Returns(false);
+        var validator = new ReorderCategoriesCommandValidator(budgetContext, categoryContext);
+
+        var result = await validator.TestValidateAsync(
+            new ReorderCategoriesCommand(budgetId, [categoryId]),
+            cancellationToken: cancellationToken);
+
+        Assert.Contains(result.Errors, x => x.ErrorCode == ErrorCodes.BudgetBudgetCategoryNotAssociated);
+    }
+
 }

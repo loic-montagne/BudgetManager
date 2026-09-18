@@ -1,4 +1,4 @@
-# Domaine
+﻿# Domaine
 
 ## Objectif
 
@@ -40,11 +40,13 @@ Les principales racines d’agrégat manipulées par l’Application sont notamm
 Il est responsable notamment de :
 
 - la gestion des accès ;
-- des catégories ;
+- des catégories associées, dont il conserve l’ordre d’affichage propre au budget ;
 - des transactions ;
 - du verrouillage.
 
 Toutes les modifications de ces éléments passent par le Budget.
+
+L’association entre un budget et une catégorie est matérialisée par `BudgetCategoryAssociation`. Elle porte un `Order` 0-based propre au budget. L’ajout place une catégorie en fin de liste, la dissociation compacte les ordres suivants et le réordonnancement exige une permutation complète, sans doublon, des catégories associées.
 
 ---
 
