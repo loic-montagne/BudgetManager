@@ -2,13 +2,15 @@
 @using BudgetManager.Web.Controllers
 @using BudgetManager.Web.Extensions
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+<!-- Accueil -->
 <li>
     <a href="@Url.Action("Index", "Home")"><i class="fa-solid fa-house"></i><span class="link-name">@Localizer["Home"]</span></a>
     <ul class="sub-menu blank">
         <li><a href="@Url.Action("Index", "Home")" class="link-name">@Localizer["Home"]</a></li>
     </ul>
 </li>
-<li class="menu">
+@* <li class="menu">
     <div class="icon-link">
         <a href="#"><i class="fa-solid fa-wallet"></i><span class="link-name">@Localizer["Budgets"]</span></a><i class="fas fa-caret-down arrow"></i>
     </div>
@@ -16,7 +18,7 @@
         <li><a href="#" class="link-name">@Localizer["Budgets"]</a></li>
         <li><a href="#">@Localizer["CurrentBudget"]</a></li>
     </ul>
-</li>
+</li> *@
 @* <li class="menu">
     <div class="icon-link">
         <a href="#"><i class="fa-solid fa-user-tie"></i><span class="link-name">@Localizer["Professional"]</span></a><i class="fas fa-caret-down arrow"></i>
@@ -31,6 +33,11 @@
     </ul>
 </li> *@
 
+<!-- Budgets -->
+@await Component.InvokeAsync("BudgetMenu")
+
+
+<!-- Administration -->
 @if (User.IsInRole(ApplicationRoles.Administrator))
 {
 <li class="menu">

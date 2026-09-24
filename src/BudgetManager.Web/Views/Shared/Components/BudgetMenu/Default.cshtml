@@ -1,0 +1,26 @@
+@using BudgetManager.Application.Features.Budget.GetAll
+@using BudgetManager.Web.Controllers
+@using BudgetManager.Web.Extensions
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@model IReadOnlyCollection<BudgetDto>
+
+<li class="menu">
+    <div class="icon-link">
+        <a href="#">
+            <i class="fa-solid fa-wallet"></i>
+            <span class="link-name">@Localizer["Budgets"]</span>
+        </a>
+        <i class="fas fa-caret-down arrow"></i>
+    </div>
+    <ul class="sub-menu">
+        <li><a href="#" class="link-name">@Localizer["Budgets"]</a></li>
+        @foreach (var budget in Model)
+        {
+            <li>
+                <a href="@Url.Action(nameof(BudgetController.Index), nameof(BudgetController).ToControllerName(), new { id = budget.Id })">
+                    @budget.Name
+                </a>
+            </li>
+        }
+    </ul>
+</li>
