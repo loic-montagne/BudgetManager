@@ -22,7 +22,7 @@
                 console.log(error);
 
             Toast.fire({
-                type: 'error',
+                icon: 'error',
                 title: page.data('error')
             });
         }
@@ -181,7 +181,7 @@
                             errors.push(...unmatchedErrors.map(textToHtml));
                         if (errors.length > 0) {
                             Toast.fire({
-                                type: 'error',
+                                icon: 'error',
                                 title: errors.join('<br/>')
                             });
                         }
@@ -190,7 +190,7 @@
 
                     table.draw();
                     Toast.fire({
-                        type: 'success',
+                        icon: 'success',
                         title: page.data('saved')
                     });
                     editModal.modal('hide');
@@ -273,7 +273,7 @@
                             });
                         }
                         Toast.fire({
-                            type: 'error',
+                            icon: 'error',
                             title: errors.join('<br/>')
                         });
                         confirmModal.modal('hide');
@@ -283,7 +283,7 @@
                     table.draw();
 
                     Toast.fire({
-                        type: 'success',
+                        icon: 'success',
                         title: confirmSuccessMessage
                     });
 

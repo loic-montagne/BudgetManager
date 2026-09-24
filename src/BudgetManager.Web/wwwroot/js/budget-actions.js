@@ -7,6 +7,54 @@
 
     const states = new WeakMap();
 
+    function postBudgetAction(container, action) {
+        const budgetId = container.dataset.budgetId;
+        const url = container.dataset[`${action}Url`];
+
+        if (!budgetId || !url) {
+            return;
+        }
+
+        axios.post(url + '?id=' + encodeURIComponent(budgetId))
+            .then(function (response) {
+                if (response.data.success === false) {
+                    var errors = [];
+                    if (response.data.error)
+                        errors.push(response.data.error);
+                    if (response.data.invalidControls) {
+                        response.data.invalidControls.forEach(function (invalidControl) {
+                            errors.push(textToHtml(invalidControl.text));
+                        });
+                    }
+                    Toast.fire({
+                        icon: 'error',
+                        title: errors.join('<br/>')
+                    });
+
+                    return;
+                }
+
+                location.reload();
+            })
+            .catch(function () {
+                location.reload();
+            });
+    }
+
+    function initializeBudgetActions(container) {
+        container.addEventListener('click', function (event) {
+            const button = event.target.closest('[data-budget-action]');
+
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
+
+            postBudgetAction(container, button.dataset.budgetAction);
+        });
+    }
+
     function getActions(container) {
         return Array.from(container.querySelectorAll(':scope > .budget-action'));
     }
@@ -241,6 +289,7 @@
     }
 
     containers.forEach(container => {
+        initializeBudgetActions(container);
         scheduleApply(container);
     });
 

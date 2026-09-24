@@ -252,22 +252,14 @@
     align-items: center;
 }
 
-.sidebar .nav-list li .sub-menu a i {
-    height: auto;
-    min-width: auto;
-    width: auto;
-    line-height: normal;
-    margin-left: 20px;
-    font-size: 14px;
-}
-
+.sidebar .nav-list li .sub-menu a i,
 .sidebar.close .nav-list li .sub-menu a i {
     height: auto;
     min-width: auto;
     width: auto;
     line-height: normal;
     margin-left: 20px;
-    font-size: 14px;
+    font-size: 10px;
 }
 
 .sidebar.close .nav-list li i.arrow {
@@ -660,6 +652,10 @@ body.dark .switch::before {
 
 .content .navbar-title-content i {
     font-size: 30px;
+}
+.content .navbar-title-content .title-indcators i {
+    margin-left: 10px;
+    font-size: 14px;
 }
 
 .content .navbar-title-content .sidebar-open-btn,

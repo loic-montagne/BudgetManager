@@ -19,9 +19,22 @@
     <script src="@Url.Content("~/js/budget-actions.js")" type="text/javascript" asp-append-version="true"></script>
 }
 
+@section title_indicators
+{
+    @if (Model.IsLocked)
+    {
+        <i class="fa-solid fa-lock"></i>
+    }
+}
+
 @section right_actions
 {
-    <div class="budget-actions" data-budget-actions>
+    <div class="budget-actions"
+         data-budget-actions
+         data-budget-id="@Model.Id"
+         data-lock-url="@Url.Action("Lock", "Budget")"
+         data-unlock-url="@Url.Action("Unlock", "Budget")">
+
         @if (Model.CurrentUserPermissions.Contains(Permission.Edit) && !Model.IsLocked)
         {
             <div class="budget-action" data-action-priority="5">
@@ -37,14 +50,18 @@
             <div class="budget-action" data-action-priority="4">
                 @if (Model.IsLocked)
                 {
-                    <button type="button" class="btn btn-outline-primary btn-sm">
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            data-budget-action="unlock">
                         <i class="fa-solid fa-lock-open"></i>
                         <span class="budget-action-label">@Localizer["Action.Unlock"]</span>
                     </button>
                 }
                 else
                 {
-                    <button type="button" class="btn btn-outline-primary btn-sm">
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm"
+                            data-budget-action="lock">
                         <i class="fa-solid fa-lock"></i>
                         <span class="budget-action-label">@Localizer["Action.Lock"]</span>
                     </button>

@@ -46,6 +46,7 @@
     <link href="@Url.Content("~/lib/bootstrap-multiselect/dist/css/bootstrap-multiselect.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
     <link href="@Url.Content("~/lib/datatables-bs5/css/dataTables.bootstrap5.min.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
     <link href="@Url.Content("~/lib/datatables-responsive-bs5/css/responsive.bootstrap5.min.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link href="@Url.Content("~/lib/sweetalert/dist/sweetalert2.min.css")" rel="stylesheet" asp-append-version="true" />
     <link href="@Url.Content("~/lib/fontawesome/css/fontawesome.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
     <link href="@Url.Content("~/lib/fontawesome/css/brands.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
     <link href="@Url.Content("~/lib/fontawesome/css/solid.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
@@ -185,6 +186,7 @@
                         <i class="fas fa-bars sidebar-open-btn btn-visible"></i>
                         <i class="fa-solid fa-xmark sidebar-close-btn"></i>
                         <span class="title">@(ViewData["HeaderTitle"] ?? ViewData["Title"])</span>
+                        <span class="title-indcators">@await RenderSectionAsync("title_indicators", required: false)</span>
                     </div>
 
                     <div class="navbar-title-actions gap-2">

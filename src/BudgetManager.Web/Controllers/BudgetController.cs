@@ -1,6 +1,8 @@
 using BudgetManager.Application.Exceptions;
 using BudgetManager.Application.Features.Budget.Create;
 using BudgetManager.Application.Features.Budget.GetById;
+using BudgetManager.Application.Features.Budget.Lock;
+using BudgetManager.Application.Features.Budget.Unlock;
 using BudgetManager.Web.Models.Budget;
 using BudgetManager.Web.Services;
 using MediatR;
@@ -53,6 +55,18 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
 
             return View(model);
         }
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> Lock(Guid id)
+    {
+        return await Send(new LockBudgetCommand(id));
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> Unlock(Guid id)
+    {
+        return await Send(new UnlockBudgetCommand(id));
     }
 
 }
