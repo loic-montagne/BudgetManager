@@ -10,32 +10,9 @@
         <li><a href="@Url.Action("Index", "Home")" class="link-name">@Localizer["Home"]</a></li>
     </ul>
 </li>
-@* <li class="menu">
-    <div class="icon-link">
-        <a href="#"><i class="fa-solid fa-wallet"></i><span class="link-name">@Localizer["Budgets"]</span></a><i class="fas fa-caret-down arrow"></i>
-    </div>
-    <ul class="sub-menu">
-        <li><a href="#" class="link-name">@Localizer["Budgets"]</a></li>
-        <li><a href="#">@Localizer["CurrentBudget"]</a></li>
-    </ul>
-</li> *@
-@* <li class="menu">
-    <div class="icon-link">
-        <a href="#"><i class="fa-solid fa-user-tie"></i><span class="link-name">@Localizer["Professional"]</span></a><i class="fas fa-caret-down arrow"></i>
-    </div>
-    <ul class="sub-menu">
-        <li><a href="#" class="link-name">@Localizer["Professional"]</a></li>
-        <li><a href="#">@Localizer["AnnualAnalysis"]</a></li>
-        <li><a href="#">@Localizer["Items"]</a></li>
-        <li><a href="#">@Localizer["Customers"]</a></li>
-        <li><a href="#">@Localizer["Expenses"]</a></li>
-        <li><a href="#">@Localizer["Invoices"]</a></li>
-    </ul>
-</li> *@
 
 <!-- Budgets -->
 @await Component.InvokeAsync("BudgetMenu")
-
 
 <!-- Administration -->
 @if (User.IsInRole(ApplicationRoles.Administrator))

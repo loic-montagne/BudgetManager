@@ -62,7 +62,13 @@ $menus.on('click', function (e) {
     if ($sidebar.hasClass('close')) {
         return;
     }
+
+    if ($(e.target).closest('.sub-menu').length > 0) {
+        return;
+    }
+
     toggleMenu($(e.target));
+
     // Fermeture des autres menus
     var index = getIndex($(e.target));
     for (var j = 0; j < $menus.length; j++) {

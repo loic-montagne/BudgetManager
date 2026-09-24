@@ -21,6 +21,7 @@ internal sealed class BudgetQueries(ApplicationDbContext context, ILogger<Budget
             .AsNoTracking()
             .Where(x => x.Accesses.Any(x => x.UserId == currentUserId
                                          && (x.IsOwner || (EF.Property<Permission>(x, BudgetAccess.PermissionsPropertyName) & requiredPermission) == requiredPermission)))
+            .OrderBy(x => x.Name)
             .Select(x => new Application.Features.Budget.GetAll.BudgetDto(
                 x.Id,
                 x.Name,

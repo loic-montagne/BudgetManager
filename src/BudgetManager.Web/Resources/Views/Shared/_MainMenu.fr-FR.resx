@@ -123,29 +123,8 @@
   <data name="Budgets" xml:space="preserve">
     <value>Budgets</value>
   </data>
-  <data name="CurrentBudget" xml:space="preserve">
-    <value>Budget courant</value>
-  </data>
   <data name="BudgetCategories" xml:space="preserve">
     <value>Catégories de budget</value>
-  </data>
-  <data name="Professional" xml:space="preserve">
-    <value>Professionnel</value>
-  </data>
-  <data name="AnnualAnalysis" xml:space="preserve">
-    <value>Analyse annuelle</value>
-  </data>
-  <data name="Items" xml:space="preserve">
-    <value>Articles</value>
-  </data>
-  <data name="Customers" xml:space="preserve">
-    <value>Clients</value>
-  </data>
-  <data name="Expenses" xml:space="preserve">
-    <value>Dépenses</value>
-  </data>
-  <data name="Invoices" xml:space="preserve">
-    <value>Factures</value>
   </data>
   <data name="Banks" xml:space="preserve">
     <value>Banques</value>
