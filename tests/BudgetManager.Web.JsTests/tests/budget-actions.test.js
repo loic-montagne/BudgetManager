@@ -57,61 +57,44 @@ function createMarkup() {
 function setDimensions(container, clientWidth) {
     let width = clientWidth;
 
+    container.style.columnGap = '8px';
+
     Object.defineProperty(container, 'clientWidth', {
         configurable: true,
         get: () => width
     });
 
-    Object.defineProperty(container, 'scrollWidth', {
-        configurable: true,
-        get: () => {
-            const iconOnly = container.classList.contains(
-                'budget-actions-icons-only'
-            );
+    container
+        .querySelectorAll(':scope > .budget-action')
+        .forEach(action => {
+            Object.defineProperty(action, 'getBoundingClientRect', {
+                configurable: true,
+                value: () => ({
+                    width: container.classList.contains(
+                        'budget-actions-icons-only'
+                    )
+                        ? 40
+                        : 100
+                })
+            });
+        });
 
-            const visibleActions = container.querySelectorAll(
-                ':scope > .budget-action'
-            ).length;
+    const overflow = container.querySelector(
+        '[data-budget-actions-overflow]'
+    );
 
-            const overflow = container.querySelector(
-                '[data-budget-actions-overflow]'
-            );
+    if (overflow) {
+        const button = overflow.querySelector('button');
 
-            const hasOverflowButton = overflow && !overflow.hidden;
-
-            if (iconOnly) {
-                const actionWidth = 40;
-                const gap = 8;
-                const overflowWidth = hasOverflowButton ? 40 : 0;
-
-                const itemCount =
-                    visibleActions + (hasOverflowButton ? 1 : 0);
-
-                if (itemCount === 0) {
-                    return 0;
-                }
-
-                return (
-                    visibleActions * actionWidth +
-                    (itemCount - 1) * gap +
-                    overflowWidth
-                );
-            }
-
-            const actionWidth = 100;
-            const gap = 8;
-
-            if (visibleActions === 0) {
-                return hasOverflowButton ? 40 : 0;
-            }
-
-            return (
-                visibleActions * actionWidth +
-                (visibleActions - 1) * gap +
-                (hasOverflowButton ? gap + 40 : 0)
-            );
+        if (button) {
+            Object.defineProperty(button, 'getBoundingClientRect', {
+                configurable: true,
+                value: () => ({
+                    width: 40
+                })
+            });
         }
-    });
+    }
 
     return {
         setWidth(value) {
@@ -333,6 +316,156 @@ describe('budget-actions.js', () => {
         expect(
             container.classList.contains('budget-actions-icons-only')
         ).toBe(false);
+    });
+
+    it('does nothing when there are no actions', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        container
+            .querySelectorAll(':scope > .budget-action')
+            .forEach(action => action.remove());
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        expect(
+            container.classList.contains('budget-actions-icons-only')
+        ).toBe(false);
+
+        expect(
+            container.querySelectorAll(':scope > .budget-action')
+        ).toHaveLength(0);
+    });
+
+    it('handles an overflow container without a button', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        container
+            .querySelector('[data-budget-actions-overflow] button')
+            .remove();
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        expect(
+            container.querySelectorAll(':scope > .budget-action')
+        ).toHaveLength(4);
+    });
+
+    it('handles a missing overflow container', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        container
+            .querySelector('[data-budget-actions-overflow]')
+            .remove();
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        expect(
+            container.querySelectorAll(':scope > .budget-action')
+        ).toHaveLength(5);
+    });
+
+    it('handles a missing overflow menu', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        container
+            .querySelector('[data-budget-actions-menu]')
+            .remove();
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        expect(
+            container.querySelectorAll(':scope > .budget-action')
+        ).toHaveLength(5);
+    });
+
+    it('ignores an action without a button when moving actions to overflow', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const actionWithoutButton = container.querySelector(
+            '[data-action-priority="1"]'
+        );
+
+        actionWithoutButton.querySelector('button').remove();
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        expect(
+            container.querySelector(
+                '[data-budget-actions-menu] .budget-action[data-action-priority="1"]'
+            )
+        ).toBeNull();
+
+        expect(
+            container.querySelector(
+                ':scope > .budget-action[data-action-priority="1"]'
+            )
+        ).toBe(actionWithoutButton);
+
+        expect(
+            container.querySelectorAll(
+                '[data-budget-actions-menu] .budget-action'
+            )
+        ).toHaveLength(2);
+    });
+
+    it('removes invalid menu items when restoring actions', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        const menu = container.querySelector('[data-budget-actions-menu]');
+
+        const invalidItem = document.createElement('li');
+        menu.appendChild(invalidItem);
+
+        setDimensions(container, 600);
+        window.dispatchEvent(new Event('resize'));
+
+        expect(invalidItem.parentElement).toBeNull();
+
+        expect(
+            container.querySelectorAll(':scope > .budget-action')
+        ).toHaveLength(5);
+    });
+
+    it('ignores a resize event while another resize is pending', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        setDimensions(container, 200);
+
+        let animationFrameCallback;
+
+        globalThis.requestAnimationFrame =
+            window.requestAnimationFrame = callback => {
+                animationFrameCallback = callback;
+                return 1;
+            };
+
+        await loadScript('budget-actions.js');
+
+        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event('resize'));
+
+        expect(animationFrameCallback).toBeDefined();
+
+        animationFrameCallback();
+
+        expect(
+            container.querySelectorAll(
+                '[data-budget-actions-menu] .budget-action'
+            )
+        ).toHaveLength(2);
     });
 
     it('keeps button event handlers when actions are moved to and restored from overflow', async () => {
