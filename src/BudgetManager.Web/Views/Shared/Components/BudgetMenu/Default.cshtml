@@ -14,13 +14,27 @@
     </div>
     <ul class="sub-menu">
         <li><a href="#" class="link-name">@Localizer["Budgets"]</a></li>
-        @foreach (var budget in Model)
+
+        @if (Model.Count == 0)
         {
             <li>
-                <a href="@Url.Action(nameof(BudgetController.Index), nameof(BudgetController).ToControllerName(), new { id = budget.Id })">
-                    @budget.Name
-                </a>
+                <span class="no-budgets">@Localizer["NoBudgets"]</span>
             </li>
+        }
+        else
+        {
+            @foreach (var budget in Model)
+            {
+                <li>
+                    <a href="@Url.Action(nameof(BudgetController.Index), nameof(BudgetController).ToControllerName(), new { id = budget.Id })">
+                        @budget.Name
+                        @if (budget.IsLocked)
+                        {
+                            <i class="fa-solid fa-lock"></i>
+                        }
+                    </a>
+                </li>
+            }
         }
     </ul>
 </li>

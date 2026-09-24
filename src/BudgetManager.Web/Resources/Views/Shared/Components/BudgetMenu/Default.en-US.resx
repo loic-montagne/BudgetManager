@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,22 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Home" xml:space="preserve">
-    <value>Accueil</value>
+  <data name="Budgets" xml:space="preserve">
+    <value>Budgets</value>
   </data>
-  <data name="BudgetCategories" xml:space="preserve">
-    <value>Catégories de budget</value>
-  </data>
-  <data name="Banks" xml:space="preserve">
-    <value>Banques</value>
-  </data>
-  <data name="Accounts" xml:space="preserve">
-    <value>Comptes bancaires</value>
-  </data>
-  <data name="Administration" xml:space="preserve">
-    <value>Administration</value>
-  </data>
-  <data name="Users" xml:space="preserve">
-    <value>Utilisateurs</value>
+  <data name="NoBudgets" xml:space="preserve">
+    <value>No budget</value>
   </data>
 </root>

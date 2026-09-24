@@ -120,9 +120,6 @@
   <data name="Home" xml:space="preserve">
     <value>Home</value>
   </data>
-  <data name="Budgets" xml:space="preserve">
-    <value>Budgets</value>
-  </data>
   <data name="BudgetCategories" xml:space="preserve">
     <value>Budget categories</value>
   </data>
