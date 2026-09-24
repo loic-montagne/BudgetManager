@@ -22,7 +22,7 @@ const sidebarMenuStorageKey = 'sidebar-menu';
 
 const storedSidebarState = localStorage.getItem(sidebarStateStorageKey);
 
-if (window.matchMedia('(max-width: 500px)').matches) {
+if (window.matchMedia && window.matchMedia('(max-width: 500px)').matches) {
     $sidebar.addClass('close');
     $openBtn.addClass('btn-visible');
     $closeBtn.removeClass('btn-visible');
