@@ -17,18 +17,65 @@ let preferredCulture = $sidebar.data('preferred-culture'),
     preferredTheme = $sidebar.data('preferred-theme-null') ? null : $sidebar.data('preferred-theme'),
     preferencesSaveDismissed = false;
 
+const sidebarStateStorageKey = 'sidebar-state';
+const sidebarMenuStorageKey = 'sidebar-menu';
+
+const storedSidebarState = localStorage.getItem(sidebarStateStorageKey);
+
+if (storedSidebarState === 'open') {
+    $sidebar.removeClass('close');
+    $openBtn.removeClass('btn-visible');
+    $closeBtn.addClass('btn-visible');
+}
+
+function restoreOpenMenu() {
+    const menuId = localStorage.getItem(sidebarMenuStorageKey);
+
+    if (!menuId || $sidebar.hasClass('close')) {
+        return;
+    }
+
+    const $menu = $menus.filter(function () {
+        return $(this).data('menu-id') === menuId;
+    });
+
+    if ($menu.length > 0) {
+        openCloseMenu($menu, true);
+    }
+}
+
 $toggle.on('click', () => {
     $sidebar.toggleClass('close');
+
+    localStorage.setItem(
+        sidebarStateStorageKey,
+        $sidebar.hasClass('close') ? 'closed' : 'open');
+
+    if (!$sidebar.hasClass('close')) {
+        restoreOpenMenu();
+    }
 });
 $openBtn.on('click', () => {
     $sidebar.toggleClass('close');
     $openBtn.toggleClass('btn-visible');
     $closeBtn.toggleClass('btn-visible');
+
+    localStorage.setItem(
+        sidebarStateStorageKey,
+        $sidebar.hasClass('close') ? 'closed' : 'open');
+
+    if (!$sidebar.hasClass('close')) {
+        restoreOpenMenu();
+    }
 });
 $closeBtn.on('click', () => {
     $sidebar.toggleClass('close');
     $openBtn.toggleClass('btn-visible');
     $closeBtn.toggleClass('btn-visible');
+
+    localStorage.setItem(
+        sidebarStateStorageKey,
+        $sidebar.hasClass('close') ? 'closed' : 'open');
 });
 
 function toggleMenu($element) {
@@ -48,16 +95,7 @@ function openCloseMenu($element, open) {
         $element.removeClass('show');
     }
 }
-function getIndex($element) {
-    if (!$element.is('li')) {
-        $element = $element.parents('li');
-    }
-    return $element.data('index');
-}
 
-for (var i = 0; i < $menus.length; i++) {
-    $menus[i].dataset.index = i;
-}
 $menus.on('click', function (e) {
     if ($sidebar.hasClass('close')) {
         return;
@@ -67,17 +105,27 @@ $menus.on('click', function (e) {
         return;
     }
 
-    toggleMenu($(e.target));
+    const $menu = $(this);
 
-    // Fermeture des autres menus
-    var index = getIndex($(e.target));
-    for (var j = 0; j < $menus.length; j++) {
-        if (index != j) {
-            openCloseMenu($($menus[j]), false);
-        }
+    toggleMenu($menu);
+
+    $menus.not($menu).each(function () {
+        openCloseMenu($(this), false);
+    });
+
+    if ($menu.hasClass('show')) {
+        localStorage.setItem(
+            sidebarMenuStorageKey,
+            $menu.data('menu-id'));
     }
+    else {
+        localStorage.removeItem(sidebarMenuStorageKey);
+    }
+
     return;
 });
+
+restoreOpenMenu();
 
 function resolvePreferredTheme(theme) {
     var normalizedTheme = typeof theme === 'string' ? theme.toLowerCase() : theme;

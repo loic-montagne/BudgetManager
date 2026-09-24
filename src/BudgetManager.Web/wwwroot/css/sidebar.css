@@ -805,6 +805,11 @@ body.dark .switch::before {
     );
 }
 
+.sidebar .nav-list li .sub-menu a.active {
+    opacity: 1;
+    font-weight: 600;
+}
+
 .sidebar:not(.close) .nav-list li.menu > .sub-menu > li > .no-budgets {
     display: block;
     width: 100%;

@@ -3,6 +3,10 @@
 @using BudgetManager.Web.Extensions
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
 <!-- Accueil -->
 <li>
     <a href="@Url.Action("Index", "Home")"><i class="fa-solid fa-house"></i><span class="link-name">@Localizer["Home"]</span></a>
@@ -17,16 +21,36 @@
 <!-- Administration -->
 @if (User.IsInRole(ApplicationRoles.Administrator))
 {
-<li class="menu">
+    <li class="menu" data-menu-id="administration">
     <div class="icon-link">
         <a href="#"><i class="fa-solid fa-screwdriver-wrench"></i><span class="link-name">@Localizer["Administration"]</span></a><i class="fas fa-caret-down arrow"></i>
     </div>
     <ul class="sub-menu">
         <li><a href="#" class="link-name">@Localizer["Administration"]</a></li>
-        <li><a href="@Url.Action(nameof(BankController.Index), nameof(BankController).ToControllerName())">@Localizer["Banks"]</a></li>
-        <li><a href="@Url.Action(nameof(AccountController.Index), nameof(AccountController).ToControllerName())">@Localizer["Accounts"]</a></li>
-        <li><a href="@Url.Action(nameof(BudgetCategoryController.Index), nameof(BudgetCategoryController).ToControllerName())">@Localizer["BudgetCategories"]</a></li>
-        <li><a href="@Url.Action(nameof(UserController.Index), nameof(UserController).ToControllerName())">@Localizer["Users"]</a></li>
+        <li>
+            <a class="@(string.Equals(currentController, nameof(BankController).ToControllerName(), StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+               href="@Url.Action(nameof(BankController.Index), nameof(BankController).ToControllerName())">
+                @Localizer["Banks"]
+            </a>
+        </li>
+        <li>
+            <a class="@(string.Equals(currentController, nameof(AccountController).ToControllerName(), StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+               href="@Url.Action(nameof(AccountController.Index), nameof(AccountController).ToControllerName())">
+                @Localizer["Accounts"]
+            </a>
+        </li>
+        <li>
+            <a class="@(string.Equals(currentController, nameof(BudgetCategoryController).ToControllerName(), StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+               href="@Url.Action(nameof(BudgetCategoryController.Index), nameof(BudgetCategoryController).ToControllerName())">
+                @Localizer["BudgetCategories"]
+            </a>
+        </li>
+        <li>
+            <a class="@(string.Equals(currentController, nameof(UserController).ToControllerName(), StringComparison.OrdinalIgnoreCase) ? "active" : null)"
+               href="@Url.Action(nameof(UserController.Index), nameof(UserController).ToControllerName())">
+                @Localizer["Users"]
+            </a>
+        </li>
     </ul>
 </li>
 }

@@ -4,7 +4,12 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @model IReadOnlyCollection<BudgetDto>
 
-<li class="menu">
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentBudgetId = ViewContext.RouteData.Values["id"]?.ToString();
+}
+
+<li class="menu" data-menu-id="budgets">
     <div class="icon-link">
         <a href="#">
             <i class="fa-solid fa-wallet"></i>
@@ -26,7 +31,11 @@
             @foreach (var budget in Model)
             {
                 <li>
-                    <a href="@Url.Action(nameof(BudgetController.Index), nameof(BudgetController).ToControllerName(), new { id = budget.Id })">
+                    <a class="@(string.Equals(currentController, nameof(BudgetController).ToControllerName(), StringComparison.OrdinalIgnoreCase)
+                                       && string.Equals(currentBudgetId, budget.Id.ToString(), StringComparison.OrdinalIgnoreCase)
+                                           ? "active"
+                                           : null)"
+                       href="@Url.Action(nameof(BudgetController.Index), nameof(BudgetController).ToControllerName(), new { id = budget.Id })">
                         @budget.Name
                         @if (budget.IsLocked)
                         {
