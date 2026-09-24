@@ -8,48 +8,14 @@
     align-items: start;
 }
 
-.manage-navigation-card,
-.manage-content-card {
+.manage-navigation-card
+{
     border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     background-color: var(--color-surface);
     color: var(--color-text);
     box-shadow: var(--shadow-sm);
-}
-
-.manage-navigation-card {
     padding: .75rem;
-}
-
-.manage-content-card {
-    min-width: 0;
-    padding: 1.5rem;
-}
-
-.manage-content-card > h3:first-of-type {
-    margin-bottom: 1.25rem;
-    color: var(--color-text);
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-.manage-content-card a:not(.btn) {
-    color: var(--color-primary);
-}
-
-.manage-content-card a:not(.btn):hover,
-.manage-content-card a:not(.btn):focus-visible {
-    color: var(--color-primary-hover);
-}
-
-.manage-content-card .row {
-    margin-right: 0;
-    margin-left: 0;
-}
-
-.manage-content-card .row > [class*="col-"] {
-    padding-right: 0;
-    padding-left: 0;
 }
 
 .manage-nav {
@@ -196,30 +162,6 @@
     min-width: 160px;
 }
 
-.manage-content-card .form-control,
-.manage-content-card .form-select {
-    color: var(--color-text);
-    background-color: var(--color-input-bg);
-    border-color: var(--color-border);
-}
-
-.manage-content-card .form-control:focus,
-.manage-content-card .form-select:focus {
-    color: var(--color-text);
-    background-color: var(--color-input-bg);
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 .25rem var(--color-focus-ring);
-}
-
-.manage-content-card .form-floating > label,
-.manage-content-card .form-label {
-    color: var(--color-text-muted);
-}
-
-.manage-content-card .alert {
-    border-radius: var(--radius-sm);
-}
-
 @media (max-width: 800px) {
     .manage-layout {
         grid-template-columns: 1fr;
@@ -246,10 +188,6 @@
 }
 
 @media (max-width: 600px) {
-    .manage-content-card {
-        padding: 1rem;
-    }
-
     .profile-form-grid,
     .profile-preferences-grid {
         grid-template-columns: 1fr;
@@ -324,21 +262,6 @@
 
 .manage-action-group-start {
     justify-content: flex-start;
-}
-
-.manage-content-card .alert {
-    margin-bottom: 1.25rem;
-    border-color: var(--color-border);
-}
-
-.manage-content-card .alert > :last-child {
-    margin-bottom: 0;
-}
-
-.manage-content-card kbd {
-    background-color: var(--color-surface-secondary);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
 }
 
 .manage-steps {

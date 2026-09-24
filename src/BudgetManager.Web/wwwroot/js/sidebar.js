@@ -22,7 +22,12 @@ const sidebarMenuStorageKey = 'sidebar-menu';
 
 const storedSidebarState = localStorage.getItem(sidebarStateStorageKey);
 
-if (storedSidebarState === 'open') {
+if (window.matchMedia('(max-width: 500px)').matches) {
+    $sidebar.addClass('close');
+    $openBtn.addClass('btn-visible');
+    $closeBtn.removeClass('btn-visible');
+}
+else if (storedSidebarState === 'open') {
     $sidebar.removeClass('close');
     $openBtn.removeClass('btn-visible');
     $closeBtn.addClass('btn-visible');
@@ -98,6 +103,10 @@ function openCloseMenu($element, open) {
 
 $menus.on('click', function (e) {
     if ($sidebar.hasClass('close')) {
+        return;
+    }
+
+    if ($(e.target).closest('.budget-add-link').length > 0) {
         return;
     }
 

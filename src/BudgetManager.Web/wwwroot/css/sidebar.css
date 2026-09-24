@@ -757,6 +757,10 @@ body.dark .switch::before {
         text-align: left !important;
     }
 
+    .content .navbar-title-actions:not( :has( > :not(.search-zone):not(.length-zone), .search-zone > *, .length-zone > * ) ) {
+        display: none;
+    }
+
     .content .navbar-title-content .title {
         padding-left: 0px;
     }

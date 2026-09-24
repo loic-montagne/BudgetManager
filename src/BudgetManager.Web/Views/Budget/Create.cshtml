@@ -1,6 +1,4 @@
-﻿@using BudgetManager.Web.Controllers
-@using BudgetManager.Web.Extensions
-@using BudgetManager.Web.Models.Budget
+﻿@using BudgetManager.Web.Models.Budget
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
 
@@ -10,31 +8,28 @@
     ViewData["Title"] = Localizer["PageTitle"].Value;
 }
 
-<h3>@ViewData["Title"]</h3>
+<section class="manage-content-card manage-content-card-compact">
+    <h3>@ViewData["Title"]</h3>
 
-<form method="post" class="manage-form">
-    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+    <form method="post" class="manage-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
 
-    <div class="form-floating">
-        <input asp-for="Name"
-               class="form-control"
-               autocomplete="off"
-               placeholder="@SharedLocalizer["Placeholder.Name"]" />
-        <label asp-for="Name">@SharedLocalizer["Field.Name"]</label>
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
+        <div class="form-floating">
+            <input asp-for="Name"
+                   class="form-control"
+                   autocomplete="off"
+                   placeholder="@SharedLocalizer["Placeholder.Name"]" />
+            <label asp-for="Name">@SharedLocalizer["Field.Name"]</label>
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
 
-    <div class="manage-form-actions">
-        <button type="submit" class="btn btn-primary">
-            @SharedLocalizer["Action.Add"]
-        </button>
-
-        <a href="@Url.Action(nameof(BudgetController.Index), nameof(BudgetController).ToControllerName())"
-           class="btn btn-outline-primary">
-            @SharedLocalizer["Action.Cancel"]
-        </a>
-    </div>
-</form>
+        <div class="manage-form-actions">
+            <button type="submit" class="btn btn-primary">
+                @SharedLocalizer["Action.Add"]
+            </button>
+        </div>
+    </form>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
