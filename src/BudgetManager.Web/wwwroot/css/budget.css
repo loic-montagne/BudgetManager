@@ -36,18 +36,46 @@
 }
 
 .budget-actions-overflow .dropdown-menu {
-    min-width: 200px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    margin-top: 10px;
+    padding: 8px;
 }
 
 .budget-actions-overflow .dropdown-item {
     display: flex;
     align-items: center;
     gap: .75rem;
+    width: 100%;
+    padding: 9px 11px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text);
+    font-size: .875rem;
+    text-align: left;
+    transition: background-color .2s ease, color .2s ease;
+}
+
+.budget-actions-overflow .dropdown-item:hover,
+.budget-actions-overflow .dropdown-item:focus-visible {
+    background-color: var(--color-hover);
+    color: var(--color-primary);
+    outline: none;
 }
 
 .budget-actions-overflow .dropdown-item i {
-    width: 1rem;
+    width: 18px;
+    color: var(--color-text-muted);
     text-align: center;
+    transition: color .2s ease;
+}
+
+.budget-actions-overflow .dropdown-item:hover i,
+.budget-actions-overflow .dropdown-item:focus-visible i {
+    color: var(--color-primary);
 }
 
 
@@ -55,6 +83,10 @@
 
 .budget-actions-icons-only .budget-action-label {
     display: none;
+}
+
+.budget-actions-icons-only .budget-actions-overflow .budget-action-label {
+    display: inline;
 }
 
 
