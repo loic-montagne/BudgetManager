@@ -728,7 +728,8 @@ body.dark .switch::before {
     .content .navbar-title-actions .search-zone .dt-search,
     .content .navbar-title-actions .search-zone .dt-search input,
     .content .navbar-title-actions span.multiselect-native-select,
-    .content .navbar-title-actions span.multiselect-native-select div.btn-group {
+    .content .navbar-title-actions span.multiselect-native-select div.btn-group,
+    .content .navbar-title-actions > div:not(.search-zone):not(.length-zone) .btn {
         width: 100%;
     }
 
@@ -757,6 +758,8 @@ body.dark .switch::before {
         text-align: left !important;
     }
 
+    .content .navbar-title-actions .search-zone:empty,
+    .content .navbar-title-actions .length-zone:empty,
     .content .navbar-title-actions:not( :has( > :not(.search-zone):not(.length-zone), .search-zone > *, .length-zone > * ) ) {
         display: none;
     }

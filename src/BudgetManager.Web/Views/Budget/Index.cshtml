@@ -1,5 +1,99 @@
-﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+﻿@using BudgetManager.Application.Features.Budget.GetById
+@using BudgetManager.Domain.Enums
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+
+@model BudgetDto
 
 @{
-    ViewData["Title"] = Localizer["PageTitle"].Value;
+    ViewData["Title"] = Model.Name;
+}
+
+@section styles
+{
+    <link href="@Url.Content("~/css/budget.css")" rel="stylesheet" type="text/css" asp-append-version="true" />
+}
+
+@section scripts
+{
+    <script src="@Url.Content("~/js/budget-actions.js")" type="text/javascript" asp-append-version="true"></script>
+}
+
+@section right_actions
+{
+    <div class="budget-actions" data-budget-actions>
+        @if (Model.CurrentUserPermissions.Contains(Permission.Edit) && !Model.IsLocked)
+        {
+            <div class="budget-action" data-action-priority="5">
+                <button type="button" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="budget-action-label">@Localizer["Action.AddCategory"]</span>
+                </button>
+            </div>
+        }
+
+        @if (Model.CurrentUserPermissions.Contains(Permission.Lock))
+        {
+            <div class="budget-action" data-action-priority="4">
+                @if (Model.IsLocked)
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm">
+                        <i class="fa-solid fa-lock-open"></i>
+                        <span class="budget-action-label">@Localizer["Action.Unlock"]</span>
+                    </button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-outline-primary btn-sm">
+                        <i class="fa-solid fa-lock"></i>
+                        <span class="budget-action-label">@Localizer["Action.Lock"]</span>
+                    </button>
+                }
+            </div>
+        }
+
+        @if (Model.CurrentUserPermissions.Contains(Permission.Share))
+        {
+            <div class="budget-action" data-action-priority="3">
+                <button type="button" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-users"></i>
+                    <span class="budget-action-label">@Localizer["Action.Share"]</span>
+                </button>
+            </div>
+        }
+
+        @if (Model.CurrentUserPermissions.Contains(Permission.Edit) && !Model.IsLocked)
+        {
+            <div class="budget-action" data-action-priority="2">
+                <button type="button" class="btn btn-outline-primary btn-sm">
+                    <i class="fa-solid fa-pen"></i>
+                    <span class="budget-action-label">@Localizer["Action.Rename"]</span>
+                </button>
+            </div>
+        }
+
+        @if (Model.IsCurrentUserOwner)
+        {
+            <div class="budget-action" data-action-priority="1">
+                <button type="button" class="btn btn-danger btn-sm">
+                    <i class="fa-solid fa-trash"></i>
+                    <span class="budget-action-label">@SharedLocalizer["Action.Delete"]</span>
+                </button>
+            </div>
+        }
+
+        <div class="budget-actions-overflow dropdown" data-budget-actions-overflow hidden>
+            <button type="button"
+                    class="btn btn-outline-primary btn-sm dropdown-toggle"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="@Localizer["Action.More"]">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end"
+                data-budget-actions-menu>
+            </ul>
+        </div>
+    </div>
 }

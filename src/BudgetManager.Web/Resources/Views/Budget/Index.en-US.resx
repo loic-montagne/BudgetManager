@@ -117,8 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="PageTitle" xml:space="preserve">
-    <value>Show a budget</value>
+  <data name="Action.AddCategory" xml:space="preserve">
+    <value>Add a category</value>
+  </data>
+  <data name="Action.Lock" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="Action.More" xml:space="preserve">
+    <value>More actions</value>
+  </data>
+  <data name="Action.Rename" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="Action.Share" xml:space="preserve">
+    <value>Manage permissions</value>
+  </data>
+  <data name="Action.Unlock" xml:space="preserve">
+    <value>Unlock</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Show a budget</value>

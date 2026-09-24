@@ -1,0 +1,148 @@
+﻿/* ===== Budget actions ===== */
+
+.budget-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: .5rem;
+    min-width: 0;
+}
+
+.budget-action {
+    flex: 0 0 auto;
+}
+
+.budget-action .btn,
+.budget-actions-overflow .btn {
+    width: auto;
+    white-space: nowrap;
+}
+
+.budget-action-label {
+    white-space: nowrap;
+}
+
+.budget-actions-overflow[hidden] {
+    display: none;
+}
+
+.budget-actions-overflow {
+    flex: 0 0 auto;
+}
+
+.budget-actions-overflow .dropdown-toggle::after {
+    display: none;
+}
+
+.budget-actions-overflow .dropdown-menu {
+    min-width: 200px;
+}
+
+.budget-actions-overflow .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.budget-actions-overflow .dropdown-item i {
+    width: 1rem;
+    text-align: center;
+}
+
+
+/* ===== Icon-only state ===== */
+
+.budget-actions-icons-only .budget-action-label {
+    display: none;
+}
+
+
+/* ===== Budget actions container sizing ===== */
+
+.content .navbar:has(.budget-actions) {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    min-width: 0;
+}
+
+.content .navbar:has(.budget-actions) .navbar-title-content {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.content .navbar:has(.budget-actions) .navbar-title-content .title {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.content .navbar:has(.budget-actions) .navbar-title-actions {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+    flex-wrap: nowrap;
+}
+
+.content .navbar:has(.budget-actions) .navbar-title-actions > .budget-actions {
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.content .navbar:has(.budget-actions) .user-profile-menu-container {
+    flex: 0 0 auto;
+}
+
+
+/* ===== Small screens ===== */
+
+@media (max-width: 500px) {
+    .content .navbar:has(.budget-actions) {
+        flex-wrap: nowrap;
+    }
+
+    .content .navbar:has(.budget-actions) .navbar-title-content {
+        flex: 1 1 auto;
+        min-width: 0;
+        margin-right: 8px;
+        order: 1;
+    }
+
+    .content .navbar:has(.budget-actions) .navbar-title-actions {
+        flex: 0 1 auto;
+        width: auto;
+        min-width: 0;
+        max-width: 100%;
+        margin: 0 10px 0 auto;
+        padding-right: 10px;
+        border-right: 1px solid var(--color-navigation-text);
+        order: 2;
+    }
+
+    .content .navbar:has(.budget-actions) .navbar-title-actions > .budget-actions {
+        flex: 0 1 auto;
+        width: auto;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .content .navbar:has(.budget-actions) .user-profile-menu-container {
+        flex: 0 0 auto;
+        order: 3;
+    }
+
+    .budget-actions .budget-action-label {
+        display: none;
+    }
+
+    .budget-actions .budget-action .btn,
+    .budget-actions .budget-actions-overflow .btn {
+        width: auto;
+    }
+}
+

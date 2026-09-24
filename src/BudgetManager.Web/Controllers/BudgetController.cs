@@ -1,5 +1,6 @@
 using BudgetManager.Application.Exceptions;
 using BudgetManager.Application.Features.Budget.Create;
+using BudgetManager.Application.Features.Budget.GetById;
 using BudgetManager.Web.Models.Budget;
 using BudgetManager.Web.Services;
 using MediatR;
@@ -15,7 +16,11 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
     [HttpGet]
     public async Task<IActionResult> Index(Guid id)
     {
-        return View();
+        var budget = await _sender.Send(
+            new GetBudgetByIdQuery(id),
+            HttpContext.RequestAborted);
+
+        return View(budget);
     }
 
     [HttpGet]
