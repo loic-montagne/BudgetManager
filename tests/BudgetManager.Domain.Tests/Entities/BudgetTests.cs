@@ -555,6 +555,33 @@ public sealed class BudgetTests
     }
 
     [Fact]
+    public void DissociateCategory_WhenCategoryIsNotAssociated_Throws()
+    {
+        // Arrange
+
+        var ownerId = Guid.NewGuid();
+
+        var budget = Budget.Create(
+            "Budget",
+            ownerId);
+
+        var category = BudgetCategory.Create(
+            "Courses",
+            null);
+
+        // Act
+
+        var action = () => budget.DissociateCategory(
+            category.Id,
+            ownerId);
+
+        // Assert
+
+        Assert.Throws<BudgetCategoryNotAssociatedException>(
+            action);
+    }
+
+    [Fact]
     public void RemoveTransaction_WhenTransactionIsNotAssociated_Throws()
     {
         // Arrange

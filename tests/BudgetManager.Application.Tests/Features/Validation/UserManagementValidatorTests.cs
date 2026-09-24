@@ -742,6 +742,37 @@ public sealed class UserManagementValidatorTests
                 ErrorCodes.UserNotCurrent);
     }
 
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task ChangeEmailValidator_WhenOldEmailIsEmpty_ReturnsRequiredAndStopsCurrentCheck(string? oldEmail)
+    {
+        var id = Guid.NewGuid();
+        var userManager = Substitute.For<IUserManager>();
+        userManager.ExistsAsync(id, Arg.Any<CancellationToken>()).Returns(true);
+        var validator = CreateChangeEmailValidator(
+            userManager,
+            id,
+            new TestCurrentUser(true, id));
+
+        var result = await validator.TestValidateAsync(
+            new ChangeEmailUserCommand(id, oldEmail!, "new@example.test"),
+            cancellationToken: TestContext.Current.CancellationToken);
+
+        result
+
+            .ShouldHaveValidationErrorFor(x => x.NormalizedOldEmail)
+
+            .WithErrorCode(ErrorCodes.UserOldEmailRequired);
+        await userManager
+            .DidNotReceiveWithAnyArgs()
+            .EmailIsCurrentAsync(
+                default,
+                default!,
+                TestContext.Current.CancellationToken);
+    }
+
     [Fact]
     public async Task ChangeEmailValidator_WhenOldEmailIsNotCurrent_ReturnsExpectedError()
     {
