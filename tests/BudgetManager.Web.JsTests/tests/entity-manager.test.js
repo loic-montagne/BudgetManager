@@ -285,7 +285,7 @@ describe('entity-manager.js', () => {
 
         expect(Toast.fire).toHaveBeenCalledTimes(2);
         expect(Toast.fire).toHaveBeenLastCalledWith({
-            type: 'error',
+            icon: 'error',
             title: 'Error'
         });
 
@@ -316,7 +316,7 @@ describe('entity-manager.js', () => {
         expect(table.draw).toHaveBeenCalledOnce();
 
         expect(Toast.fire).toHaveBeenCalledWith({
-            type: 'success',
+            icon: 'success',
             title: 'Saved'
         });
 
@@ -364,7 +364,7 @@ describe('entity-manager.js', () => {
         expect(validateForm).toHaveBeenCalled();
 
         expect(Toast.fire).toHaveBeenCalledWith({
-            type: 'error',
+            icon: 'error',
             title: 'No<br/>html:Missing'
         });
 
@@ -402,7 +402,7 @@ describe('entity-manager.js', () => {
         expect($('[name="Locked"]').prop('disabled')).toBe(true);
 
         expect(Toast.fire).toHaveBeenCalledWith({
-            type: 'error',
+            icon: 'error',
             title: 'Error'
         });
 
@@ -476,7 +476,7 @@ describe('entity-manager.js', () => {
         expect(table.draw).toHaveBeenCalledOnce();
 
         expect(Toast.fire).toHaveBeenCalledWith({
-            type: 'success',
+            icon: 'success',
             title: 'Done'
         });
 
@@ -510,7 +510,7 @@ describe('entity-manager.js', () => {
         await flush();
 
         expect(Toast.fire).toHaveBeenCalledWith({
-            type: 'error',
+            icon: 'error',
             title: 'No<br/>html:Bad<br/>html:Worse'
         });
 
@@ -531,7 +531,7 @@ describe('entity-manager.js', () => {
         await flush();
 
         expect(Toast.fire).toHaveBeenCalledWith({
-            type: 'error',
+            icon: 'error',
             title: 'Error'
         });
 
