@@ -247,6 +247,70 @@ ul.pagination li:last-child .page-link {
     color: var(--color-text-muted);
 }
 
+/* ===== Generic forms ===== */
+.manage-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.manage-form-compact {
+    width: 100%;
+}
+
+.manage-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+    width: 100%;
+    margin-top: .5rem;
+}
+
+.manage-form-actions-start {
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+}
+
+.manage-form-actions .btn {
+    min-width: 160px;
+}
+
+.manage-form .form-control,
+.manage-form .form-select {
+    color: var(--color-text);
+    background-color: var(--color-input-bg);
+    border-color: var(--color-border);
+}
+
+.manage-form .form-control:focus,
+.manage-form .form-select:focus {
+    color: var(--color-text);
+    background-color: var(--color-input-bg);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 .25rem var(--color-focus-ring);
+}
+
+.manage-form .form-floating > label,
+.manage-form .form-label {
+    color: var(--color-text-muted);
+}
+
+@media (max-width: 600px) {
+    .manage-form-actions {
+        justify-content: stretch;
+    }
+
+    .manage-form-actions .btn,
+    .manage-form-actions form {
+        width: 100%;
+    }
+
+    .manage-form-actions form .btn {
+        width: 100%;
+    }
+}
+
 /* Multi-select */
 .multiselect-container {
     background-color: var(--color-surface);

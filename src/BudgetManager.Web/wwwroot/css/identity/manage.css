@@ -276,34 +276,6 @@
     }
 }
 
-.manage-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-}
-
-.manage-form-compact {
-    width: 100%;
-}
-
-.manage-form-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: .75rem;
-    width: 100%;
-    margin-top: .5rem;
-}
-
-.manage-form-actions-start {
-    justify-content: flex-end;
-    margin-top: 1.25rem;
-}
-
-.manage-form-actions .btn {
-    min-width: 160px;
-}
-
 .manage-inline-action {
     margin-top: .25rem;
     padding-right: 0;
@@ -417,19 +389,6 @@
 }
 
 @media (max-width: 600px) {
-    .manage-form-actions {
-        justify-content: stretch;
-    }
-
-    .manage-form-actions .btn,
-    .manage-form-actions form {
-        width: 100%;
-    }
-
-    .manage-form-actions form .btn {
-        width: 100%;
-    }
-
     .manage-action-group {
         align-items: stretch;
     }

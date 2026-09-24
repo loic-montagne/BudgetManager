@@ -1,4 +1,6 @@
-using BudgetManager.Application.Common;
+using BudgetManager.Application.Exceptions;
+using BudgetManager.Application.Features.Budget.Create;
+using BudgetManager.Web.Models.Budget;
 using BudgetManager.Web.Services;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +16,38 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
     public async Task<IActionResult> Index(Guid id)
     {
         return View();
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new BudgetFormModel());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(BudgetFormModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+
+        try
+        {
+            var budgetId = await _sender.Send(
+                new CreateBudgetCommand(model.Name),
+                HttpContext.RequestAborted);
+
+            return RedirectToAction(nameof(Index), new { id = budgetId });
+        }
+        catch (BadRequestException ex)
+        {
+            foreach (var error in ex.ValidationErrors)
+            {
+                ModelState.AddModelError(
+                    error.PropertyName,
+                    _businessErrorLocalizer.Localize(error));
+            }
+
+            return View(model);
+        }
     }
 
 }
