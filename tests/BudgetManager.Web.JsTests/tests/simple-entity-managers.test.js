@@ -7,8 +7,8 @@ const cases = [
 ];
 
 describe.each(cases)('%s', (fileName, names) => {
-    beforeEach(() => {
-        installJQuery();
+    beforeEach(async () => {
+        await installJQuery();
         document.body.innerHTML = `<div class="js-entity-manager" data-edit-action="Edit" data-delete-action="Delete"></div>`;
         window.EntityManager = { initialize: vi.fn(() => ({})) };
     });

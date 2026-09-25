@@ -135,6 +135,18 @@
   <data name="Action.Unlock" xml:space="preserve">
     <value>Déverrouiller</value>
   </data>
+  <data name="Modal.Lock.Confirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir verrouiller ce budget ?</value>
+  </data>
+  <data name="Modal.Lock.Title" xml:space="preserve">
+    <value>Verrouiller le budget</value>
+  </data>
+  <data name="Modal.Unlock.Confirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir déverrouiller ce budget ?</value>
+  </data>
+  <data name="Modal.Unlock.Title" xml:space="preserve">
+    <value>Déverrouiller le budget</value>
+  </data>
   <data name="Title" xml:space="preserve">
     <value>Afficher un budget</value>
   </data>

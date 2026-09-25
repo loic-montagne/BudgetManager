@@ -1,9 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { loadScript } from './test-utils.js';
+import { installJQuery, loadScript } from './test-utils.js';
 
 function createMarkup() {
     return `
-<div class="budget-actions" data-budget-actions>
+<div class="budget-actions"
+     data-budget-actions
+     data-budget-id="42"
+     data-lock-url="/Budget/Lock"
+     data-unlock-url="/Budget/Unlock">
     <div class="budget-action" data-action-priority="5">
         <button type="button" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-plus"></i>
@@ -12,7 +16,12 @@ function createMarkup() {
     </div>
 
     <div class="budget-action" data-action-priority="4">
-        <button type="button" class="btn btn-outline-primary btn-sm">
+        <button type="button"
+                class="btn btn-outline-primary btn-sm"
+                data-budget-action="lock"
+                data-budget-action-confirm
+                data-budget-action-confirm-title="Verrouiller le budget"
+                data-budget-action-confirmation="Êtes-vous sûr de vouloir verrouiller ce budget&nbsp;?">
             <i class="fa-solid fa-lock"></i>
             <span class="budget-action-label">Verrouiller</span>
         </button>
@@ -50,6 +59,35 @@ function createMarkup() {
         <ul class="dropdown-menu dropdown-menu-end"
             data-budget-actions-menu>
         </ul>
+    </div>
+</div>
+
+<div class="modal fade js-budget-action-confirm-modal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title"></h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body"></div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-danger js-budget-action-confirm">
+                    Oui
+                </button>
+
+                <button type="button"
+                        class="btn btn-secondary js-budget-action-confirm-cancel">
+                    Non
+                </button>
+            </div>
+        </div>
     </div>
 </div>`;
 }
@@ -104,8 +142,10 @@ function setDimensions(container, clientWidth) {
 }
 
 describe('budget-actions.js', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
         document.body.innerHTML = createMarkup();
+
+        await installJQuery();
 
         globalThis.requestAnimationFrame = window.requestAnimationFrame =
             callback => {
@@ -494,4 +534,309 @@ describe('budget-actions.js', () => {
 
         expect(handler).toHaveBeenCalledTimes(2);
     });
+
+    it('opens the confirmation modal for a confirmable budget action', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const lockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        lockButton.click();
+
+        await shown;
+
+        expect(modal.classList.contains('show')).toBe(true);
+
+        expect(
+            modal.querySelector('.modal-title').textContent
+        ).toBe('Verrouiller le budget');
+
+        expect(
+            modal.querySelector('.modal-body').textContent
+        ).toBe('Êtes-vous sûr de vouloir verrouiller ce budget\u00A0?');
+    });
+
+    it('closes the confirmation modal without posting when the user cancels', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const lockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+        const cancelButton = modal.querySelector(
+            '.js-budget-action-confirm-cancel'
+        );
+
+        globalThis.axios = {
+            post: vi.fn()
+        };
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        lockButton.click();
+
+        await shown;
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        cancelButton.click();
+
+        await hidden;
+
+        expect(globalThis.axios.post).not.toHaveBeenCalled();
+        expect(modal.classList.contains('show')).toBe(false);
+    });
+
+    it('posts the lock action when the user confirms', async () => {
+        globalThis.axios = {
+            post: vi.fn(() => {
+                return Promise.resolve({
+                    data: {
+                        success: false
+                    }
+                });
+            })
+        };
+
+        globalThis.Toast = {
+            fire: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const lockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        lockButton.click();
+
+        await shown;
+
+        const confirmButton = modal.querySelector(
+            '.js-budget-action-confirm'
+        );
+        const cancelButton = modal.querySelector(
+            '.js-budget-action-confirm-cancel'
+        );
+
+        confirmButton.click();
+
+        expect(confirmButton.disabled).toBe(true);
+        expect(cancelButton.disabled).toBe(true);
+
+        expect(globalThis.axios.post).toHaveBeenCalledTimes(1);
+        expect(globalThis.axios.post).toHaveBeenCalledWith(
+            '/Budget/Lock?id=42'
+        );
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        await hidden;
+
+        expect(modal.classList.contains('show')).toBe(false);
+    });
+
+    it('re-enables the confirmation buttons after the modal is closed', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const lockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+        const confirmButton = modal.querySelector(
+            '.js-budget-action-confirm'
+        );
+        const cancelButton = modal.querySelector(
+            '.js-budget-action-confirm-cancel'
+        );
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        lockButton.click();
+
+        await shown;
+
+        confirmButton.disabled = true;
+        cancelButton.disabled = true;
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        $(modal).modal('hide');
+
+        await hidden;
+
+        expect(confirmButton.disabled).toBe(false);
+        expect(cancelButton.disabled).toBe(false);
+    });
+
+    it('opens the confirmation modal for the unlock action', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const unlockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+
+        unlockButton.dataset.budgetAction = 'unlock';
+        unlockButton.dataset.budgetActionConfirmTitle =
+            'Déverrouiller le budget';
+        unlockButton.dataset.budgetActionConfirmation =
+            'Êtes-vous sûr de vouloir déverrouiller ce budget&nbsp;?';
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        unlockButton.click();
+
+        await shown;
+
+        expect(modal.classList.contains('show')).toBe(true);
+
+        expect(
+            modal.querySelector('.modal-title').textContent
+        ).toBe('Déverrouiller le budget');
+
+        expect(
+            modal.querySelector('.modal-body').textContent
+        ).toBe('Êtes-vous sûr de vouloir déverrouiller ce budget\u00A0?');
+    });
+
+    it('posts the unlock action when the user confirms', async () => {
+        globalThis.axios = {
+            post: vi.fn(() => {
+                return Promise.resolve({
+                    data: {
+                        success: false
+                    }
+                });
+            })
+        };
+
+        globalThis.Toast = {
+            fire: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const unlockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+
+        unlockButton.dataset.budgetAction = 'unlock';
+        unlockButton.dataset.budgetActionConfirmTitle =
+            'Déverrouiller le budget';
+        unlockButton.dataset.budgetActionConfirmation =
+            'Êtes-vous sûr de vouloir déverrouiller ce budget&nbsp;?';
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        unlockButton.click();
+
+        await shown;
+
+        const confirmButton = modal.querySelector(
+            '.js-budget-action-confirm'
+        );
+        const cancelButton = modal.querySelector(
+            '.js-budget-action-confirm-cancel'
+        );
+
+        confirmButton.click();
+
+        expect(confirmButton.disabled).toBe(true);
+        expect(cancelButton.disabled).toBe(true);
+
+        expect(globalThis.axios.post).toHaveBeenCalledTimes(1);
+        expect(globalThis.axios.post).toHaveBeenCalledWith(
+            '/Budget/Unlock?id=42'
+        );
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        await hidden;
+
+        expect(modal.classList.contains('show')).toBe(false);
+    });
+
 });

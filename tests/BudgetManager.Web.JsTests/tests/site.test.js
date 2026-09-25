@@ -3,8 +3,9 @@ import { installJQuery, loadScript } from './test-utils.js';
 
 describe('site.js', () => {
  let $, originalOuterWidth, originalOuterHeight;
- beforeEach(() => {
-   vi.useFakeTimers(); $=installJQuery();
+ beforeEach(async () => {
+   vi.useFakeTimers();
+   $ = await installJQuery();
    originalOuterWidth=$.fn.outerWidth; originalOuterHeight=$.fn.outerHeight;
    document.body.innerHTML='<div class="main-content"></div><footer class="footer"></footer>';
    document.documentElement.style.setProperty('--scrollbar-size','17px');

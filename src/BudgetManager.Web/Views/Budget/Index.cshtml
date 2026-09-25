@@ -52,7 +52,10 @@
                 {
                     <button type="button"
                             class="btn btn-outline-primary btn-sm"
-                            data-budget-action="unlock">
+                            data-budget-action="unlock"
+                            data-budget-action-confirm
+                            data-budget-action-confirm-title="@Localizer["Modal.Unlock.Title"].Value"
+                            data-budget-action-confirmation="@Localizer["Modal.Unlock.Confirmation"].Value">
                         <i class="fa-solid fa-lock-open"></i>
                         <span class="budget-action-label">@Localizer["Action.Unlock"]</span>
                     </button>
@@ -61,7 +64,10 @@
                 {
                     <button type="button"
                             class="btn btn-outline-primary btn-sm"
-                            data-budget-action="lock">
+                            data-budget-action="lock"
+                            data-budget-action-confirm
+                            data-budget-action-confirm-title="@Localizer["Modal.Lock.Title"].Value"
+                            data-budget-action-confirmation="@Localizer["Modal.Lock.Confirmation"].Value">
                         <i class="fa-solid fa-lock"></i>
                         <span class="budget-action-label">@Localizer["Action.Lock"]</span>
                     </button>
@@ -114,3 +120,25 @@
         </div>
     </div>
 }
+
+<!-- Section des div modales -->
+<div class="modal fade js-budget-action-confirm-modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header primary">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger js-budget-action-confirm">
+                    @SharedLocalizer["Action.Yes"].Value
+                </button>
+                <button type="button" class="btn btn-secondary js-budget-action-confirm-cancel">
+                    @SharedLocalizer["Action.No"].Value
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fin de la section des div modales -->

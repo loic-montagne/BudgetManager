@@ -19,8 +19,9 @@ function markup({ bodyClass = 'authenticated theme-initializing', preferredTheme
 }
 
 describe('sidebar.js', () => {
-    beforeEach(() => {
-        installJQuery(); document.body.outerHTML = markup().trim();
+    beforeEach(async () => {
+        await installJQuery();
+        document.body.outerHTML = markup().trim();
         localStorage.clear(); sessionStorage.clear();
         window.matchMedia = vi.fn(() => ({ matches: false }));
         globalThis.requestAnimationFrame = window.requestAnimationFrame = cb => { cb(); return 1; };

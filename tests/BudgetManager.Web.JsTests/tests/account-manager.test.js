@@ -4,7 +4,7 @@ import { installJQuery, loadScript } from './test-utils.js';
 describe('account-manager.js', () => {
     let $, options, table, multiselectOptions;
     beforeEach(async () => {
-        $ = installJQuery();
+        $ = await installJQuery();
         document.body.innerHTML = `
           <div class="js-entity-manager" data-bank-filter-select-all-text="All" data-bank-filter-non-selected-text="None" data-bank-filter-selected-text="selected" data-bank-filter-all-selected-text="All selected" data-select-all-value="*" data-separator-char="," data-edit-action="Edit" data-close-action="Close" data-delete-action="Delete" data-close-url="/close" data-close-title="Close title" data-close-confirmation="Sure?" data-closed="Closed">
             <table class="js-entity-table"><tbody><tr><td><button class="js-entity-close" data-id="a b"></button></td></tr></tbody></table>

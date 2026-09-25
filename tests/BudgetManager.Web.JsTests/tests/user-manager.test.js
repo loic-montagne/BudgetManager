@@ -4,7 +4,7 @@ import { installJQuery, loadScript } from './test-utils.js';
 describe('user-manager.js', () => {
     let options, table;
     beforeEach(async () => {
-        installJQuery();
+        await installJQuery();
         document.body.innerHTML = `
           <div class="js-entity-manager" data-send-activation-email-url="/activate" data-send-activation-email-title="Title" data-send-activation-email-confirmation="Confirm" data-activation-email-sent="Sent" data-edit-action="Edit" data-delete-action="Delete" data-send-activation-email-action="Send">
             <table class="js-entity-table"><tbody><tr><td><button class="js-entity-send-activation-email" data-id="a b"></button></td></tr></tbody></table>

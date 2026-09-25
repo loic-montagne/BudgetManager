@@ -38,7 +38,7 @@ export async function loadScriptOnDomContentLoaded(fileName) {
     }
 }
 
-export function installJQuery() {
+export async function installJQuery() {
     // Les scripts de production initialisent leur comportement avec
     // $(document).ready(...). Sous jsdom, jQuery peut déclencher ready
     // de manière asynchrone après le retour de loadScript(), ce qui
@@ -56,6 +56,8 @@ export function installJQuery() {
     window.jQuery = $;
     globalThis.$ = $;
     globalThis.jQuery = $;
+
+    await import('bootstrap/dist/js/bootstrap.bundle.min.js');
 
     return $;
 }

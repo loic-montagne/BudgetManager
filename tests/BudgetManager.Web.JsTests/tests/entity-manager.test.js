@@ -7,7 +7,7 @@ describe('entity-manager.js', () => {
     let $, table, config;
 
     beforeEach(async () => {
-        $ = installJQuery();
+        $ = await installJQuery();
 
         document.body.innerHTML = `
         <div class="js-entity-manager"

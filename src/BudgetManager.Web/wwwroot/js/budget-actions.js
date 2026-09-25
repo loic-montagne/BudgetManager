@@ -7,6 +7,29 @@
 
     const states = new WeakMap();
 
+    const confirmModal = $('.js-budget-action-confirm-modal');
+    const confirmButton = confirmModal.find('.js-budget-action-confirm');
+    const confirmCancelButton = confirmModal.find('.js-budget-action-confirm-cancel');
+
+    let pendingConfirmation = null;
+
+    function showConfirmation(container, button) {
+        pendingConfirmation = {
+            container: container,
+            action: button.dataset.budgetAction
+        };
+
+        confirmModal.find('.modal-title').text(
+            button.dataset.budgetActionConfirmTitle
+        );
+
+        confirmModal.find('.modal-body').html(
+            button.dataset.budgetActionConfirmation
+        );
+
+        confirmModal.modal('show');
+    }
+
     function postBudgetAction(container, action) {
         const budgetId = container.dataset.budgetId;
         const url = container.dataset[`${action}Url`];
@@ -14,6 +37,7 @@
         if (!budgetId || !url) {
             return;
         }
+
 
         axios.post(url + '?id=' + encodeURIComponent(budgetId))
             .then(function (response) {
@@ -44,12 +68,14 @@
     function initializeBudgetActions(container) {
         container.addEventListener('click', function (event) {
             const button = event.target.closest('[data-budget-action]');
-
-            if (!button) {
-                return;
-            }
+            if (!button) return;
 
             event.preventDefault();
+
+            if (button.hasAttribute('data-budget-action-confirm')) {
+                showConfirmation(container, button);
+                return;
+            }
 
             postBudgetAction(container, button.dataset.budgetAction);
         });
@@ -307,5 +333,39 @@
                 apply(container);
             });
         });
+    });
+
+    confirmButton.on('click', function (event) {
+        event.preventDefault();
+
+        if (!pendingConfirmation) {
+            confirmModal.modal('hide');
+            return;
+        }
+
+        const confirmation = pendingConfirmation;
+
+        confirmButton.prop('disabled', true);
+        confirmCancelButton.prop('disabled', true);
+
+        postBudgetAction(
+            confirmation.container,
+            confirmation.action
+        );
+
+        confirmModal.modal('hide');
+    });
+
+    confirmCancelButton.on('click', function (event) {
+        event.preventDefault();
+
+        pendingConfirmation = null;
+        confirmModal.modal('hide');
+    });
+
+    confirmModal.on('hidden.bs.modal', function () {
+        pendingConfirmation = null;
+        confirmButton.prop('disabled', false);
+        confirmCancelButton.prop('disabled', false);
     });
 })();
