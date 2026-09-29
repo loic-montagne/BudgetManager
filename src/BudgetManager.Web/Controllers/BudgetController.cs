@@ -1,5 +1,6 @@
 using BudgetManager.Application.Exceptions;
 using BudgetManager.Application.Features.Budget.Create;
+using BudgetManager.Application.Features.Budget.Delete;
 using BudgetManager.Application.Features.Budget.GetById;
 using BudgetManager.Application.Features.Budget.Lock;
 using BudgetManager.Application.Features.Budget.Unlock;
@@ -55,6 +56,12 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
 
             return View(model);
         }
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> Delete(Guid id)
+    {
+        return await Send(new DeleteBudgetCommand(id));
     }
 
     [HttpPost]

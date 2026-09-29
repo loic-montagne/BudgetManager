@@ -16,7 +16,8 @@
     function showConfirmation(container, button) {
         pendingConfirmation = {
             container: container,
-            action: button.dataset.budgetAction
+            action: button.dataset.budgetAction,
+            button: button
         };
 
         confirmModal.find('.modal-title').text(
@@ -30,7 +31,7 @@
         confirmModal.modal('show');
     }
 
-    function postBudgetAction(container, action) {
+    function postBudgetAction(container, action, button = null) {
         const budgetId = container.dataset.budgetId;
         const url = container.dataset[`${action}Url`];
 
@@ -58,10 +59,18 @@
                     return;
                 }
 
+                const successUrl = button?.dataset.budgetActionSuccessUrl;
+                if (successUrl) {
+                    location.href = successUrl;
+                    return;
+                }
                 location.reload();
             })
             .catch(function () {
-                location.reload();
+                Toast.fire({
+                    icon: 'error',
+                    title: container.dataset.budgetActionError
+                });
             });
     }
 
@@ -77,7 +86,7 @@
                 return;
             }
 
-            postBudgetAction(container, button.dataset.budgetAction);
+            postBudgetAction(container, button.dataset.budgetAction, button);
         });
     }
 
@@ -350,7 +359,8 @@
 
         postBudgetAction(
             confirmation.container,
-            confirmation.action
+            confirmation.action,
+            confirmation.button
         );
 
         confirmModal.modal('hide');

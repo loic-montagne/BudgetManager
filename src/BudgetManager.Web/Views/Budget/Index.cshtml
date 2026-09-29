@@ -1,5 +1,7 @@
 ﻿@using BudgetManager.Application.Features.Budget.GetById
 @using BudgetManager.Domain.Enums
+@using BudgetManager.Web.Controllers
+@using BudgetManager.Web.Extensions
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 @inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
 
@@ -32,8 +34,10 @@
     <div class="budget-actions"
          data-budget-actions
          data-budget-id="@Model.Id"
-         data-lock-url="@Url.Action("Lock", "Budget")"
-         data-unlock-url="@Url.Action("Unlock", "Budget")">
+         data-budget-action-error="@SharedLocalizer["Error.Generic"]"
+         data-delete-url="@Url.Action(nameof(BudgetController.Delete), nameof(BudgetController).ToControllerName())"
+         data-lock-url="@Url.Action(nameof(BudgetController.Lock), nameof(BudgetController).ToControllerName())"
+         data-unlock-url="@Url.Action(nameof(BudgetController.Unlock), nameof(BudgetController).ToControllerName())">
 
         @if (Model.CurrentUserPermissions.Contains(Permission.Edit) && !Model.IsLocked)
         {
@@ -98,7 +102,13 @@
         @if (Model.IsCurrentUserOwner)
         {
             <div class="budget-action" data-action-priority="1">
-                <button type="button" class="btn btn-danger btn-sm">
+                <button type="button"
+                        class="btn btn-danger btn-sm"
+                        data-budget-action="delete"
+                        data-budget-action-confirm
+                        data-budget-action-confirm-title="@Localizer["Modal.Delete.Title"].Value"
+                        data-budget-action-confirmation="@Localizer["Modal.Delete.Confirmation"].Value"
+                        data-budget-action-success-url="@Url.Action(nameof(HomeController.Index), nameof(HomeController).ToControllerName())">
                     <i class="fa-solid fa-trash"></i>
                     <span class="budget-action-label">@SharedLocalizer["Action.Delete"]</span>
                 </button>

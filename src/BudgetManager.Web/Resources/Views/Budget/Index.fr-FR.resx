@@ -135,6 +135,12 @@
   <data name="Action.Unlock" xml:space="preserve">
     <value>Déverrouiller</value>
   </data>
+  <data name="Modal.Delete.Confirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer ce budget ?</value>
+  </data>
+  <data name="Modal.Delete.Title" xml:space="preserve">
+    <value>Supprimer le budget</value>
+  </data>
   <data name="Modal.Lock.Confirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir verrouiller ce budget ?</value>
   </data>

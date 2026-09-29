@@ -135,6 +135,12 @@
   <data name="Action.Unlock" xml:space="preserve">
     <value>Unlock</value>
   </data>
+  <data name="Modal.Delete.Confirmation" xml:space="preserve">
+    <value>Are you sure you want to delete this budget?</value>
+  </data>
+  <data name="Modal.Delete.Title" xml:space="preserve">
+    <value>Delete budget</value>
+  </data>
   <data name="Modal.Lock.Confirmation" xml:space="preserve">
     <value>Are you sure you want to lock this budget?</value>
   </data>

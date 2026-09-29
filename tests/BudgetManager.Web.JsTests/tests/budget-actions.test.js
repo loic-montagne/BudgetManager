@@ -7,7 +7,8 @@ function createMarkup() {
      data-budget-actions
      data-budget-id="42"
      data-lock-url="/Budget/Lock"
-     data-unlock-url="/Budget/Unlock">
+     data-unlock-url="/Budget/Unlock"
+     data-delete-url="/Budget/Delete">
     <div class="budget-action" data-action-priority="5">
         <button type="button" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-plus"></i>
@@ -42,7 +43,13 @@ function createMarkup() {
     </div>
 
     <div class="budget-action" data-action-priority="1">
-        <button type="button" class="btn btn-danger btn-sm">
+        <button type="button"
+                class="btn btn-danger btn-sm"
+                data-budget-action="delete"
+                data-budget-action-confirm
+                data-budget-action-confirm-title="Supprimer le budget"
+                data-budget-action-confirmation="Êtes-vous sûr de vouloir supprimer ce budget&nbsp;?"
+                data-budget-action-success-url="/Home/Index">
             <i class="fa-solid fa-trash"></i>
             <span class="budget-action-label">Supprimer</span>
         </button>
@@ -832,6 +839,167 @@ describe('budget-actions.js', () => {
             modal.addEventListener('hidden.bs.modal', resolve, {
                 once: true
             });
+        });
+
+        await hidden;
+
+        expect(modal.classList.contains('show')).toBe(false);
+    });
+
+    it('opens the confirmation modal for the delete action', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const deleteButton = container.querySelector(
+            '[data-budget-action="delete"]'
+        );
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        deleteButton.click();
+
+        await shown;
+
+        expect(modal.classList.contains('show')).toBe(true);
+
+        expect(
+            modal.querySelector('.modal-title').textContent
+        ).toBe('Supprimer le budget');
+
+        expect(
+            modal.querySelector('.modal-body').textContent
+        ).toBe('Êtes-vous sûr de vouloir supprimer ce budget\u00A0?');
+    });
+
+    it('posts the delete action when the user confirms', async () => {
+        globalThis.axios = {
+            post: vi.fn(() => {
+                return Promise.resolve({
+                    data: {
+                        success: false
+                    }
+                });
+            })
+        };
+
+        globalThis.Toast = {
+            fire: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const deleteButton = container.querySelector(
+            '[data-budget-action="delete"]'
+        );
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        deleteButton.click();
+
+        await shown;
+
+        const confirmButton = modal.querySelector(
+            '.js-budget-action-confirm'
+        );
+        const cancelButton = modal.querySelector(
+            '.js-budget-action-confirm-cancel'
+        );
+
+        confirmButton.click();
+
+        expect(confirmButton.disabled).toBe(true);
+        expect(cancelButton.disabled).toBe(true);
+
+        expect(globalThis.axios.post).toHaveBeenCalledTimes(1);
+        expect(globalThis.axios.post).toHaveBeenCalledWith(
+            '/Budget/Delete?id=42'
+        );
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        await hidden;
+
+        expect(modal.classList.contains('show')).toBe(false);
+    });
+
+    it('displays a generic error toast when the budget action request fails', async () => {
+        globalThis.axios = {
+            post: vi.fn(() => Promise.reject(new Error('Network error')))
+        };
+
+        globalThis.Toast = {
+            fire: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        container.dataset.budgetActionError = 'Une erreur est survenue';
+
+        const lockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+
+        setDimensions(container, 600);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        lockButton.click();
+
+        await shown;
+
+        const confirmButton = modal.querySelector(
+            '.js-budget-action-confirm'
+        );
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        confirmButton.click();
+
+        await vi.waitFor(() => {
+            expect(globalThis.Toast.fire).toHaveBeenCalledTimes(1);
+        });
+
+        expect(globalThis.Toast.fire).toHaveBeenCalledWith({
+            icon: 'error',
+            title: 'Une erreur est survenue'
         });
 
         await hidden;
