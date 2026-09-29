@@ -507,4 +507,7 @@
   <data name="User.IsLastActivatedAdministrator" xml:space="preserve">
     <value>At least one activated administrator must be retained.</value>
   </data>
+  <data name="Budget.Category.MustBeUnique" xml:space="preserve">
+    <value>A budget category can be selected only once.</value>
+  </data>
 </root>

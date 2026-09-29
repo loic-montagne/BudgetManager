@@ -131,6 +131,29 @@
 }
 
 
+/* ===== Budget add category modal checkboxes */
+.budget-categories-form .form-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding-left: 0 !important;
+}
+
+.budget-categories-form .form-check-input {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.budget-categories-form .form-check + .form-check {
+    margin-top: .5rem;
+}
+
+.budget-categories-form .invalid-feedback {
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
+
+
 /* ===== Small screens ===== */
 
 @media (max-width: 500px) {

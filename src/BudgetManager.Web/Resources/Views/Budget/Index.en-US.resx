@@ -138,6 +138,9 @@
   <data name="Action.Unlock" xml:space="preserve">
     <value>Unlock</value>
   </data>
+  <data name="Modal.AddCategory.Title" xml:space="preserve">
+    <value>Add one or more categories</value>
+  </data>
   <data name="Modal.Delete.Confirmation" xml:space="preserve">
     <value>Are you sure you want to delete this budget?</value>
   </data>

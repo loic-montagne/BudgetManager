@@ -86,6 +86,7 @@ public static class ErrorCodes
     public const string BudgetBudgetCategoryAssociated = "Budget.Category.Associated";
     public const string BudgetBudgetCategoryNotAssociated = "Budget.Category.NotAssociated";
     public const string BudgetBudgetCategoryIsUsedInBudget = "Budget.Category.IsUsed";
+    public const string BudgetBudgetCategoryMustBeUnique = "Budget.Category.MustBeUnique";
 
     // Transaction entity
     public const string TransactionNotExists = "Transaction.NotExists";

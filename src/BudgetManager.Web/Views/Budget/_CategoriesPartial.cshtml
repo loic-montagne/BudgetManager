@@ -1,0 +1,36 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<BudgetManager.Web.SharedResource> SharedLocalizer
+@model BudgetManager.Web.Models.Budget.BudgetCategoriesFormModel
+
+<input asp-for="Id" type="hidden" />
+
+<div class="budget-categories-form">
+    <div class="form-check">
+        <input class="form-check-input"
+               type="checkbox"
+               id="select-all-categories" />
+        <label class="form-check-label" for="select-all-categories">
+            @SharedLocalizer["Action.SelectAll"]
+        </label>
+    </div>
+
+    <hr />
+
+    <div class="invalid-feedback"></div>
+
+    @foreach (var category in Model.Categories)
+    {
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="CategoriesIds"
+                   value="@category.Id"
+                   id="category-@category.Id"
+                   checked="@category.IsAssociated"
+                   disabled="@category.IsAssociated" />
+            <label class="form-check-label" for="category-@category.Id">
+                @category.Name
+            </label>
+        </div>
+    }
+</div>

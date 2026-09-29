@@ -4,11 +4,11 @@ using BudgetManager.Application.Extensions;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace BudgetManager.Application.Features.Budget.ReorderCategories;
+namespace BudgetManager.Application.Features.Budget.AssociateCategories;
 
-public sealed class ReorderCategoriesCommandValidator : AbstractValidator<ReorderCategoriesCommand>
+public sealed class AssociateCategoriesCommandValidator : AbstractValidator<AssociateCategoriesCommand>
 {
-    public ReorderCategoriesCommandValidator(IBudgetContext budgetContext, IBudgetCategoryContext budgetCategoryContext)
+    public AssociateCategoriesCommandValidator(IBudgetContext budgetContext, IBudgetCategoryContext categoryContext)
     {
         RuleFor(x => x.BudgetId)
             .Cascade(CascadeMode.Stop)
@@ -19,8 +19,8 @@ public sealed class ReorderCategoriesCommandValidator : AbstractValidator<Reorde
                 .WithMessage("BudgetId does not exist.")
                 .WithErrorCode(ErrorCodes.BudgetNotExists)
             .CustomAsync(async (id, context, cancellationToken)
-                        => (await budgetContext.IsEditableAsync(id, cancellationToken))
-                                               .GetBudgetEditableStatusError());
+                => (await budgetContext.IsEditableAsync(id, cancellationToken))
+                                       .GetBudgetEditableStatusError());
 
         RuleFor(x => x.CategoriesIds)
             .Cascade(CascadeMode.Stop)
@@ -37,7 +37,7 @@ public sealed class ReorderCategoriesCommandValidator : AbstractValidator<Reorde
                     .NotEmpty()
                         .WithMessage("CategoryId is required.")
                         .WithErrorCode(ErrorCodes.BudgetBudgetCategoryRequired)
-                    .MustAsync(budgetCategoryContext.ExistsAsync)
+                    .MustAsync(categoryContext.ExistsAsync)
                         .WithMessage("CategoryId must exist.")
                         .WithErrorCode(ErrorCodes.BudgetBudgetCategoryNotExists);
             });
@@ -54,20 +54,20 @@ public sealed class ReorderCategoriesCommandValidator : AbstractValidator<Reorde
 
                 foreach (var categoryId in command.CategoriesIds)
                 {
-                    var category = await budgetCategoryContext.GetAsync(categoryId, cancellationToken);
+                    var category = await categoryContext.GetAsync(categoryId, cancellationToken);
                     if (category is null)
                         continue;
 
-                    if (!await budgetCategoryContext.IsAssociatedToBudgetAsync(
+                    if (await categoryContext.IsAssociatedToBudgetAsync(
                         categoryId,
                         command.BudgetId,
                         cancellationToken))
                     {
                         context.AddFailure(new ValidationFailure(
                             "CategoriesIds",
-                            "Category is not associated with budget.")
+                            "Category is already associated with budget.")
                         {
-                            ErrorCode = ErrorCodes.BudgetBudgetCategoryNotAssociated
+                            ErrorCode = ErrorCodes.BudgetBudgetCategoryAssociated
                         });
                     }
                 }

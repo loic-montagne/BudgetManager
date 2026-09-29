@@ -167,7 +167,7 @@ function textToHtml(text)
 
 function validateForm(form, invalidControls) {
     form.find(':input').removeClass('is-invalid');
-    form.find(':input + div.invalid-feedback').html('');
+    form.find('div.invalid-feedback').removeClass('d-block').html('');
 
     var unmatchedErrors = [];
 
@@ -183,9 +183,22 @@ function validateForm(form, invalidControls) {
         }
 
         input.addClass('is-invalid');
-        input.next('div.invalid-feedback').html(
-            textToHtml(invalidControl.text)
-        );
+
+        var feedback = input.next('div.invalid-feedback');
+        if (feedback.length === 0) {
+            feedback = input.prev('div.invalid-feedback');
+        }
+        if (feedback.length === 0) {
+            feedback = input.closest('form').find('div.invalid-feedback').first();
+        }
+        if (feedback.length !== 0) {
+            feedback
+                .addClass('d-block')
+                .html(textToHtml(invalidControl.text));
+        }
+        else {
+            unmatchedErrors.push(invalidControl.text);
+        }
     });
 
     return unmatchedErrors;

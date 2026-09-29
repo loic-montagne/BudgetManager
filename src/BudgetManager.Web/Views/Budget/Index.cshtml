@@ -43,7 +43,13 @@
         @if (Model.CurrentUserPermissions.Contains(Permission.Edit) && !Model.IsLocked)
         {
             <div class="budget-action" data-action-priority="6">
-                <button type="button" class="btn btn-primary btn-sm">
+                <button type="button"
+                        class="btn btn-primary btn-sm"
+                        data-budget-action="add-category"
+                        data-budget-action-form
+                        data-budget-action-form-get-url="@Url.Action(nameof(BudgetController.GetCategoriesPartial), nameof(BudgetController).ToControllerName())"
+                        data-budget-action-form-post-url="@Url.Action(nameof(BudgetController.AssociateCategories), nameof(BudgetController).ToControllerName())"
+                        data-budget-action-form-title="@Localizer["Modal.AddCategory.Title"].Value">
                     <i class="fa-solid fa-plus"></i>
                     <span class="budget-action-label">@Localizer["Action.AddCategory"]</span>
                 </button>
@@ -150,6 +156,10 @@
         </div>
     </div>
 }
+
+<div>
+    @Html.Raw(string.Join("<br/>", Model.Categories.OrderBy(x => x.Order).Select(x => x.Name)))
+</div>
 
 <!-- Section des div modales -->
 <div class="modal fade js-budget-action-confirm-modal" aria-hidden="true">

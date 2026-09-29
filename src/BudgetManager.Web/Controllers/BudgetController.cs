@@ -1,11 +1,12 @@
 using BudgetManager.Application.Exceptions;
+using BudgetManager.Application.Features.Budget.AssociateCategories;
 using BudgetManager.Application.Features.Budget.Create;
 using BudgetManager.Application.Features.Budget.Delete;
 using BudgetManager.Application.Features.Budget.GetById;
 using BudgetManager.Application.Features.Budget.Lock;
 using BudgetManager.Application.Features.Budget.Unlock;
 using BudgetManager.Application.Features.Budget.Update;
-using BudgetManager.Domain.Entities;
+using BudgetManager.Application.Features.BudgetCategory.GetAll;
 using BudgetManager.Web.Models.Budget;
 using BudgetManager.Web.Services;
 using MediatR;
@@ -68,6 +69,25 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
         });
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetCategoriesPartial(Guid id)
+    {
+        var budget = await _sender.Send(new GetBudgetByIdQuery(id), HttpContext.RequestAborted);
+        var categories = await _sender.Send(new GetAllBudgetCategoriesQuery(), HttpContext.RequestAborted);
+        categories = [.. categories.OrderBy(x => x.Name)];
+               
+        return PartialView("_CategoriesPartial", new BudgetCategoriesFormModel()
+        {
+            Id = budget.Id,
+            Categories = [.. categories.Select(x => new BudgetCategoryFormModel()
+            {
+                Id = x.Id,
+                Name= x.Name,
+                IsAssociated = budget.Categories.Any(c => c.Id == x.Id),
+            })]
+        });
+    }
+
 
 
     [HttpPost]
@@ -119,6 +139,13 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
     public async Task<JsonResult> Unlock(Guid id)
     {
         return await Send(new UnlockBudgetCommand(id));
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> AssociateCategories(BudgetCategoriesFormModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+        return await Send(new AssociateCategoriesCommand(model.Id, model.CategoriesIds));
     }
 
 }

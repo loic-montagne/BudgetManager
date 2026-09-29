@@ -74,6 +74,7 @@
         axios.get(url + '?id=' + encodeURIComponent(budgetId))
             .then(function (response) {
                 formModalContent.html(response.data);
+                initializeCategoriesSelection();
                 formModal.modal('show');
             })
             .catch(function () {
@@ -85,12 +86,50 @@
             });
     }
 
+    function initializeCategoriesSelection() {
+        const selectAll = formModalContent.find('#select-all-categories');
+        const categories = formModalContent.find(
+            'input[name="CategoriesIds"]:not(:disabled)'
+        );
+
+        if (selectAll.length === 0) {
+            return;
+        }
+
+        function updateSelectAllState() {
+            const selectedCount = categories.filter(':checked').length;
+
+            selectAll.prop('checked', categories.length > 0 && selectedCount === categories.length);
+            selectAll.prop(
+                'indeterminate',
+                selectedCount > 0 && selectedCount < categories.length
+            );
+        }
+
+        selectAll.on('change', function () {
+            categories.prop('checked', this.checked);
+            updateSelectAllState();
+        });
+
+        categories.on('change', function () {
+            updateSelectAllState();
+        });
+
+        updateSelectAllState();
+    }
+
     function postBudgetActionForm(container, button) {
         const url = button.dataset.budgetActionFormPostUrl;
 
         if (!url) {
             return;
         }
+
+        console.log(formModalForm.find('input[name="CategoriesIds"]:checked').length);
+        console.log(formModalForm.find('input[name="CategoriesIds"]:checked').map(function () {
+            return this.value;
+        }).get());
+        console.log(formModalForm.serialize());
 
         const formData = formModalForm.serialize();
 

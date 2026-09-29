@@ -441,4 +441,7 @@
   <data name="Action.Close" xml:space="preserve">
     <value>Fermer</value>
   </data>
+  <data name="Action.SelectAll" xml:space="preserve">
+    <value>Sélectionner tout</value>
+  </data>
 </root>
