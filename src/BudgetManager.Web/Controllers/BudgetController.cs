@@ -4,6 +4,7 @@ using BudgetManager.Application.Features.Budget.Delete;
 using BudgetManager.Application.Features.Budget.GetById;
 using BudgetManager.Application.Features.Budget.Lock;
 using BudgetManager.Application.Features.Budget.Unlock;
+using BudgetManager.Application.Features.Budget.Update;
 using BudgetManager.Web.Models.Budget;
 using BudgetManager.Web.Services;
 using MediatR;
@@ -32,6 +33,23 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
         return View(new BudgetFormModel());
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetEditPartial(Guid id)
+    {
+        var budget = await _sender.Send(new GetBudgetByIdQuery(id), HttpContext.RequestAborted);
+
+        ViewData["Edit"] = true;
+        ViewData["ShowDetails"] = false;
+
+        return PartialView("_BudgetPartial", new BudgetFormModel()
+        {
+            Id = budget.Id,
+            Name = budget.Name
+        });
+    }
+
+
+
     [HttpPost]
     public async Task<IActionResult> Create(BudgetFormModel model)
     {
@@ -56,6 +74,13 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
 
             return View(model);
         }
+    }
+
+    [HttpPost]
+    public async Task<JsonResult> Update(BudgetFormModel model)
+    {
+        ArgumentNullException.ThrowIfNull(model);
+        return await Send(new UpdateBudgetCommand(model.Id ?? Guid.Empty, model.Name));
     }
 
     [HttpPost]

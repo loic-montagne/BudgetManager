@@ -120,6 +120,9 @@
   <data name="Action.AddCategory" xml:space="preserve">
     <value>Ajouter une catégorie</value>
   </data>
+  <data name="Action.Details" xml:space="preserve">
+    <value>Voir les détails</value>
+  </data>
   <data name="Action.Lock" xml:space="preserve">
     <value>Verrouiller</value>
   </data>
@@ -146,6 +149,9 @@
   </data>
   <data name="Modal.Lock.Title" xml:space="preserve">
     <value>Verrouiller le budget</value>
+  </data>
+  <data name="Modal.Rename.Title" xml:space="preserve">
+    <value>Renommer le budget</value>
   </data>
   <data name="Modal.Unlock.Confirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir déverrouiller ce budget ?</value>

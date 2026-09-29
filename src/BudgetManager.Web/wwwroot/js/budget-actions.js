@@ -10,8 +10,12 @@
     const confirmModal = $('.js-budget-action-confirm-modal');
     const confirmButton = confirmModal.find('.js-budget-action-confirm');
     const confirmCancelButton = confirmModal.find('.js-budget-action-confirm-cancel');
+    const formModal = $('.js-budget-action-form-modal');
+    const formModalForm = formModal.find('.js-budget-action-form');
+    const formModalContent = formModal.find('.js-budget-action-form-content');
 
     let pendingConfirmation = null;
+    let pendingForm = null;
 
     function showConfirmation(container, button) {
         pendingConfirmation = {
@@ -29,6 +33,96 @@
         );
 
         confirmModal.modal('show');
+    }
+
+    function showForm(container, button) {
+        const url = button.dataset.budgetActionFormGetUrl;
+        if (!url) {
+            return;
+        }
+
+        const budgetId = container.dataset.budgetId;
+        if (!budgetId) {
+            return;
+        }
+
+        pendingForm = {
+            container: container,
+            button: button
+        };
+
+        formModal.find('.modal-title').text(
+            button.dataset.budgetActionFormTitle
+        );
+
+        formModalContent.empty();
+
+        axios.get(
+            url + '?id=' + encodeURIComponent(budgetId)
+        )
+            .then(function (response) {
+                formModalContent.html(response.data);
+                formModal.modal('show');
+            })
+            .catch(function () {
+                pendingForm = null;
+                Toast.fire({
+                    icon: 'error',
+                    title: container.dataset.budgetActionError
+                });
+            });
+    }
+
+    function postBudgetActionForm(container, button) {
+        const url = button.dataset.budgetActionFormPostUrl;
+
+        if (!url) {
+            return;
+        }
+
+        const formData = formModalForm.serialize();
+
+        formModalForm.find(':input').prop('disabled', true);
+
+        axios.post(url, formData)
+            .then(function (response) {
+                if (response.data.success === false) {
+                    const unmatchedErrors = validateForm(
+                        formModalForm,
+                        response.data.invalidControls
+                    );
+
+                    const errors = [];
+
+                    if (response.data.error) {
+                        errors.push(response.data.error);
+                    }
+
+                    errors.push(...unmatchedErrors.map(textToHtml));
+
+                    if (errors.length > 0) {
+                        Toast.fire({
+                            icon: 'error',
+                            title: errors.join('<br/>')
+                        });
+                    }
+
+                    formModalForm.find(':input').prop('disabled', false);
+
+                    return;
+                }
+
+                formModal.modal('hide');
+                location.reload();
+            })
+            .catch(function () {
+                formModalForm.find(':input').prop('disabled', false);
+
+                Toast.fire({
+                    icon: 'error',
+                    title: container.dataset.budgetActionError
+                });
+            });
     }
 
     function postBudgetAction(container, action, button = null) {
@@ -83,6 +177,11 @@
 
             if (button.hasAttribute('data-budget-action-confirm')) {
                 showConfirmation(container, button);
+                return;
+            }
+
+            if (button.hasAttribute('data-budget-action-form')) {
+                showForm(container, button);
                 return;
             }
 
@@ -365,17 +464,39 @@
 
         confirmModal.modal('hide');
     });
-
     confirmCancelButton.on('click', function (event) {
         event.preventDefault();
 
         pendingConfirmation = null;
         confirmModal.modal('hide');
     });
-
     confirmModal.on('hidden.bs.modal', function () {
         pendingConfirmation = null;
         confirmButton.prop('disabled', false);
         confirmCancelButton.prop('disabled', false);
     });
+
+    formModal.find('.js-budget-action-form-submit').on('click', function (event) {
+        event.preventDefault();
+
+        if (!pendingForm) {
+            formModal.modal('hide');
+            return;
+        }
+
+        postBudgetActionForm(
+            pendingForm.container,
+            pendingForm.button
+        );
+    });
+    formModal.find('.js-budget-action-form-cancel').on('click', function (event) {
+        event.preventDefault();
+
+        formModal.modal('hide');
+    });
+    formModal.on('hidden.bs.modal', function () {
+        pendingForm = null;
+        formModalContent.empty();
+    });
+
 })();
