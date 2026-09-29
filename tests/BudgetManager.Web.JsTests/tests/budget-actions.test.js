@@ -536,6 +536,28 @@ describe('budget-actions.js', () => {
         ).toHaveLength(3);
     });
 
+    it('hides the overflow when no action can be moved into it', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+
+        container
+            .querySelectorAll(':scope > .budget-action button')
+            .forEach(button => button.remove());
+
+        setDimensions(container, 200);
+
+        await loadScript('budget-actions.js');
+
+        expect(
+            container.querySelector('[data-budget-actions-overflow]').hidden
+        ).toBe(true);
+
+        expect(
+            container.querySelectorAll(
+                '[data-budget-actions-menu] > li'
+            )
+        ).toHaveLength(0);
+    });
+
     it('removes invalid menu items when restoring actions', async () => {
         const container = document.querySelector('[data-budget-actions]');
 
@@ -1834,6 +1856,59 @@ describe('budget-actions.js', () => {
         );
     });
 
+    it('reloads the page when a budget action succeeds without a success URL', async () => {
+        globalThis.axios = {
+            post: vi.fn(() => Promise.resolve({
+                data: {
+                    success: true
+                }
+            }))
+        };
+
+        globalThis.Toast = {
+            fire: vi.fn()
+        };
+
+        vi.stubGlobal('location', {
+            href: '',
+            reload: vi.fn()
+        });
+
+        const container = document.querySelector('[data-budget-actions]');
+        const lockButton = container.querySelector(
+            '[data-budget-action="lock"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-confirm-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        lockButton.click();
+
+        await shown;
+
+        modal.querySelector('.js-budget-action-confirm').click();
+
+        await vi.waitFor(() => {
+            expect(globalThis.location.reload).toHaveBeenCalledTimes(1);
+        });
+
+        expect(globalThis.axios.post).toHaveBeenCalledTimes(1);
+        expect(globalThis.axios.post).toHaveBeenCalledWith(
+            '/Budget/Lock?id=42'
+        );
+    });
+
     it('clears the pending confirmation when the confirmation modal is closed', async () => {
         globalThis.axios = {
             post: vi.fn()
@@ -2184,6 +2259,51 @@ describe('budget-actions.js', () => {
         modal.querySelector('[name="Description"]').dispatchEvent(
             new KeyboardEvent('keydown', {
                 key: 'Enter',
+                bubbles: true,
+                cancelable: true
+            })
+        );
+
+        expect(globalThis.axios.post).not.toHaveBeenCalled();
+    });
+
+    it('does not submit the form when another key is pressed in a form input', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <input type="text" name="Name" value="Budget actuel">
+            `
+            })),
+            post: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const renameButton = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        renameButton.click();
+
+        await shown;
+
+        modal.querySelector('[name="Name"]').dispatchEvent(
+            new KeyboardEvent('keydown', {
+                key: 'Tab',
                 bubbles: true,
                 cancelable: true
             })

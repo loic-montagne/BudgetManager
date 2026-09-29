@@ -45,6 +45,19 @@ describe('sidebar.js', () => {
         expect($('.menu').eq(0).hasClass('show')).toBe(false);
     });
 
+    it('does not toggle a menu when clicking the budget add link', async () => {
+        await loadScript('sidebar.js');
+
+        $('.menu').eq(0).append(
+            '<a href="#" class="budget-add-link">Add</a>'
+        );
+
+        $('.budget-add-link').trigger('click');
+
+        expect($('.menu').eq(0).hasClass('show')).toBe(false);
+        expect(localStorage.getItem('sidebar-menu')).toBeNull();
+    });
+
     it('opens and closes the responsive sidebar controls', async () => {
         await loadScript('sidebar.js');
         $('.sidebar-open-btn').trigger('click');
@@ -54,6 +67,23 @@ describe('sidebar.js', () => {
         $('.sidebar-close-btn').trigger('click');
         expect($('.sidebar').hasClass('close')).toBe(false);
         expect($('.sidebar-open-btn').hasClass('btn-visible')).toBe(false);
+    });
+
+    it('restores the remembered menu when reopening the sidebar with the open button', async () => {
+        await loadScript('sidebar.js');
+
+        $('.menu-target').trigger('click');
+        expect($('.menu').eq(0).hasClass('show')).toBe(true);
+
+        $('.sidebar-open-btn').trigger('click');
+
+        expect($('.sidebar').hasClass('close')).toBe(true);
+
+        $('.sidebar-open-btn').trigger('click');
+
+        expect($('.sidebar').hasClass('close')).toBe(false);
+        expect($('.menu').eq(0).hasClass('show')).toBe(true);
+        expect(localStorage.getItem('sidebar-menu')).toBe('one');
     });
 
     it('persists the sidebar state when toggling it', async () => {
@@ -223,5 +253,20 @@ describe('sidebar.js', () => {
         $('.preferences-save-close').trigger('click');
         expect($('.preferences-save').prop('hidden')).toBe(true);
         expect($('.preferences-save-error').prop('hidden')).toBe(true);
+    });
+
+    it('does not toggle a menu when clicking inside a sub-menu', async () => {
+        await loadScript('sidebar.js');
+
+        $('.menu').eq(0).append(`
+        <div class="sub-menu">
+            <a href="#" class="sub-menu-link">Child</a>
+        </div>
+    `);
+
+        $('.sub-menu-link').trigger('click');
+
+        expect($('.menu').eq(0).hasClass('show')).toBe(false);
+        expect(localStorage.getItem('sidebar-menu')).toBeNull();
     });
 });
