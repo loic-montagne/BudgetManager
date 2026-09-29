@@ -438,4 +438,7 @@
   <data name="Password.Hide" xml:space="preserve">
     <value>Hide password</value>
   </data>
+  <data name="Action.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
 </root>

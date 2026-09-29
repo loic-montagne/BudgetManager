@@ -1,6 +1,8 @@
-﻿namespace BudgetManager.Web.Models.Budget;
+﻿using BudgetManager.Web.Models.Common;
 
-public sealed class BudgetFormModel
+namespace BudgetManager.Web.Models.Budget;
+
+public sealed class BudgetFormModel : AuditableFormModel
 {
     public Guid? Id { get; set; }
 

@@ -10,7 +10,7 @@
 <input asp-for="Id" type="hidden" />
 
 <div class="form-floating">
-    <input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Placeholder.Name"]" />
+    <input asp-for="Name" class="form-control" placeholder="@SharedLocalizer["Placeholder.Name"]" readonly="@showDetails" />
     <div class="invalid-feedback"></div>
     <label asp-for="Name" class="form-label">
         @SharedLocalizer["Field.Name"]

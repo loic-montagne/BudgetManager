@@ -13,6 +13,9 @@
     const formModal = $('.js-budget-action-form-modal');
     const formModalForm = formModal.find('.js-budget-action-form');
     const formModalContent = formModal.find('.js-budget-action-form-content');
+    const formSaveButton = formModal.find('.js-budget-action-form-submit');
+    const formCancelButton = formModal.find('.js-budget-action-form-cancel');
+    const formCloseButton = formModal.find('.js-budget-action-form-close');
 
     let pendingConfirmation = null;
     let pendingForm = null;
@@ -46,10 +49,21 @@
             return;
         }
 
-        pendingForm = {
-            container: container,
-            button: button
-        };
+        const isReadonly = button.hasAttribute('data-budget-action-form-readonly');
+
+        formSaveButton.prop('hidden', isReadonly);
+        formCancelButton.prop('hidden', isReadonly);
+        formCloseButton.prop('hidden', !isReadonly);
+
+        if (isReadonly) {
+            pendingForm = null;
+        }
+        else {
+            pendingForm = {
+                container: container,
+                button: button
+            };
+        }
 
         formModal.find('.modal-title').text(
             button.dataset.budgetActionFormTitle
@@ -57,9 +71,7 @@
 
         formModalContent.empty();
 
-        axios.get(
-            url + '?id=' + encodeURIComponent(budgetId)
-        )
+        axios.get(url + '?id=' + encodeURIComponent(budgetId))
             .then(function (response) {
                 formModalContent.html(response.data);
                 formModal.modal('show');
@@ -475,8 +487,11 @@
         confirmButton.prop('disabled', false);
         confirmCancelButton.prop('disabled', false);
     });
+    confirmModal.on('shown.bs.modal', function () {
+        confirmButton.trigger('focus');
+    });
 
-    formModal.find('.js-budget-action-form-submit').on('click', function (event) {
+    formSaveButton.on('click', function (event) {
         event.preventDefault();
 
         if (!pendingForm) {
@@ -489,14 +504,35 @@
             pendingForm.button
         );
     });
-    formModal.find('.js-budget-action-form-cancel').on('click', function (event) {
+    formCancelButton.on('click', function (event) {
         event.preventDefault();
-
+        formModal.modal('hide');
+    });
+    formCloseButton.on('click', function (event) {
+        event.preventDefault();
         formModal.modal('hide');
     });
     formModal.on('hidden.bs.modal', function () {
         pendingForm = null;
         formModalContent.empty();
+    });
+    formModal.on('shown.bs.modal', function () {
+        $('input:visible:enabled:first', this).trigger('focus');
+    });
+    formModalForm.on('keydown', ':input', function (event) {
+        if (event.key !== 'Enter') {
+            return;
+        }
+
+        if ($(this).is('textarea')) {
+            return;
+        }
+
+        event.preventDefault();
+
+        if (!formSaveButton.prop('disabled') && !formSaveButton.prop('hidden')) {
+            formSaveButton.trigger('click');
+        }
     });
 
 })();

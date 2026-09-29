@@ -107,7 +107,13 @@
         }
 
         <div class="budget-action" data-action-priority="2">
-            <button type="button" class="btn btn-outline-primary btn-sm">
+            <button type="button"
+                    class="btn btn-outline-primary btn-sm"
+                    data-budget-action="details"
+                    data-budget-action-form
+                    data-budget-action-form-readonly
+                    data-budget-action-form-get-url="@Url.Action(nameof(BudgetController.GetDetailsPartial), nameof(BudgetController).ToControllerName())"
+                    data-budget-action-form-title="@Localizer["Modal.Details.Title"].Value">
                 <i class="fa-solid fa-circle-info"></i>
                 <span class="budget-action-label">@Localizer["Action.Details"]</span>
             </button>
@@ -190,6 +196,10 @@
                 <button type="button"
                         class="btn btn-secondary js-budget-action-form-cancel">
                     @SharedLocalizer["Action.Cancel"].Value
+                </button>
+                <button type="button"
+                        class="btn btn-secondary js-budget-action-form-close">
+                    @SharedLocalizer["Action.Close"].Value
                 </button>
             </div>
         </div>

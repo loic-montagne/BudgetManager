@@ -5,6 +5,7 @@ using BudgetManager.Application.Features.Budget.GetById;
 using BudgetManager.Application.Features.Budget.Lock;
 using BudgetManager.Application.Features.Budget.Unlock;
 using BudgetManager.Application.Features.Budget.Update;
+using BudgetManager.Domain.Entities;
 using BudgetManager.Web.Models.Budget;
 using BudgetManager.Web.Services;
 using MediatR;
@@ -45,6 +46,25 @@ public class BudgetController(ISender sender, IStringLocalizer<SharedResource> s
         {
             Id = budget.Id,
             Name = budget.Name
+        });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetDetailsPartial(Guid id)
+    {
+        var budget = await _sender.Send(new GetBudgetByIdQuery(id), HttpContext.RequestAborted);
+
+        ViewData["Edit"] = true;
+        ViewData["ShowDetails"] = true;
+
+        return PartialView("_BudgetPartial", new BudgetFormModel()
+        {
+            Id = budget.Id,
+            Name = budget.Name,
+            CreatedBy = string.IsNullOrWhiteSpace(budget.CreatedByName) ? _sharedLocalizer["Value.User.System"] : budget.CreatedByName,
+            CreatedOn = budget.CreatedOn,
+            UpdatedBy = string.IsNullOrWhiteSpace(budget.UpdatedByName) ? _sharedLocalizer["Value.User.System"] : budget.UpdatedByName,
+            UpdatedOn = budget.UpdatedOn,
         });
     }
 

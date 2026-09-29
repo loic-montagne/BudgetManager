@@ -10,14 +10,14 @@ function createMarkup() {
      data-lock-url="/Budget/Lock"
      data-unlock-url="/Budget/Unlock"
      data-delete-url="/Budget/Delete">
-    <div class="budget-action" data-action-priority="5">
+    <div class="budget-action" data-action-priority="6">
         <button type="button" class="btn btn-primary btn-sm">
             <i class="fa-solid fa-plus"></i>
             <span class="budget-action-label">Ajouter une catégorie</span>
         </button>
     </div>
 
-    <div class="budget-action" data-action-priority="4">
+    <div class="budget-action" data-action-priority="5">
         <button type="button"
                 class="btn btn-outline-primary btn-sm"
                 data-budget-action="lock"
@@ -29,14 +29,14 @@ function createMarkup() {
         </button>
     </div>
 
-    <div class="budget-action" data-action-priority="3">
+    <div class="budget-action" data-action-priority="4">
         <button type="button" class="btn btn-outline-primary btn-sm">
             <i class="fa-solid fa-users"></i>
             <span class="budget-action-label">Gérer les permissions</span>
         </button>
     </div>
 
-    <div class="budget-action" data-action-priority="2">
+    <div class="budget-action" data-action-priority="3">
         <button type="button"
                 class="btn btn-outline-primary btn-sm"
                 data-budget-action="rename"
@@ -46,6 +46,19 @@ function createMarkup() {
                 data-budget-action-form-title="Renommer le budget">
             <i class="fa-solid fa-pen"></i>
             <span class="budget-action-label">Renommer</span>
+        </button>
+    </div>
+
+    <div class="budget-action" data-action-priority="2">
+        <button type="button"
+                class="btn btn-outline-primary btn-sm"
+                data-budget-action="details"
+                data-budget-action-form
+                data-budget-action-form-readonly
+                data-budget-action-form-get-url="/Budget/GetDetailsPartial"
+                data-budget-action-form-title="Détails du budget">
+            <i class="fa-solid fa-circle-info"></i>
+            <span class="budget-action-label">Détails</span>
         </button>
     </div>
 
@@ -131,6 +144,11 @@ function createMarkup() {
                 <button type="button"
                         class="btn btn-secondary js-budget-action-form-cancel">
                     Annuler
+                </button>
+
+                <button type="button"
+                        class="btn btn-secondary js-budget-action-form-close">
+                    Fermer
                 </button>
             </div>
         </div>
@@ -226,7 +244,7 @@ describe('budget-actions.js', () => {
     it('keeps all actions with their labels when they fit', async () => {
         const container = document.querySelector('[data-budget-actions]');
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -236,7 +254,7 @@ describe('budget-actions.js', () => {
 
         expect(
             container.querySelectorAll(':scope > .budget-action')
-        ).toHaveLength(5);
+        ).toHaveLength(6);
 
         expect(
             container.querySelector('[data-budget-actions-overflow]').hidden
@@ -244,14 +262,14 @@ describe('budget-actions.js', () => {
 
         expect(
             container.querySelectorAll('.budget-action-label')
-        ).toHaveLength(5);
+        ).toHaveLength(6);
     });
 
     it('switches to icon-only mode before using the overflow menu', async () => {
         const container = document.querySelector('[data-budget-actions]');
 
-        // 5 icon buttons + gaps fit, but the labelled buttons do not.
-        setDimensions(container, 240);
+        // 3 visible icons + overflow fit, but the labelled buttons do not.
+        setDimensions(container, 220);
 
         await loadScript('budget-actions.js');
 
@@ -261,15 +279,15 @@ describe('budget-actions.js', () => {
 
         expect(
             container.querySelectorAll(':scope > .budget-action')
-        ).toHaveLength(5);
+        ).toHaveLength(3);
 
         expect(
             container.querySelector('[data-budget-actions-overflow]').hidden
-        ).toBe(true);
+        ).toBe(false);
 
         expect(
             container.querySelectorAll('[data-budget-actions-menu] > li')
-        ).toHaveLength(0);
+        ).toHaveLength(3);
     });
 
     it('moves the lowest-priority actions to the overflow menu when icon-only mode is not enough', async () => {
@@ -297,13 +315,13 @@ describe('budget-actions.js', () => {
 
         expect(
             menuActions.map(action => action.dataset.actionPriority)
-        ).toEqual(['1', '2']);
+        ).toEqual(['1', '2', '3']);
 
         expect(
             Array.from(
                 container.querySelectorAll(':scope > .budget-action')
             ).map(action => action.dataset.actionPriority)
-        ).toEqual(['5', '4', '3']);
+        ).toEqual(['6', '5', '4']);
     });
 
     it('keeps the real action wrappers and buttons when moving them to overflow', async () => {
@@ -341,7 +359,7 @@ describe('budget-actions.js', () => {
 
         // The original button classes must be restored when the action
         // comes back to the toolbar.
-        setDimensions(container, 600);
+        setDimensions(container, 700);
         window.dispatchEvent(new Event('resize'));
 
         expect(
@@ -367,16 +385,16 @@ describe('budget-actions.js', () => {
                     '[data-budget-actions-menu] .budget-action'
                 )
             ).map(action => action.dataset.actionPriority)
-        ).toEqual(['1', '2']);
+        ).toEqual(['1', '2', '3']);
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
         window.dispatchEvent(new Event('resize'));
 
         expect(
             Array.from(
                 container.querySelectorAll(':scope > .budget-action')
             ).map(action => action.dataset.actionPriority)
-        ).toEqual(['5', '4', '3', '2', '1']);
+        ).toEqual(['6', '5', '4', '3', '2', '1']);
 
         expect(
             container.querySelector('[data-budget-actions-overflow]').hidden
@@ -398,9 +416,9 @@ describe('budget-actions.js', () => {
             container.querySelectorAll(
                 '[data-budget-actions-menu] .budget-action'
             )
-        ).toHaveLength(2);
+        ).toHaveLength(3);
 
-        dimensions.setWidth(600);
+        dimensions.setWidth(700);
 
         window.dispatchEvent(new Event('resize'));
 
@@ -412,7 +430,7 @@ describe('budget-actions.js', () => {
 
         expect(
             container.querySelectorAll(':scope > .budget-action')
-        ).toHaveLength(5);
+        ).toHaveLength(6);
 
         expect(
             container.classList.contains('budget-actions-icons-only')
@@ -468,7 +486,7 @@ describe('budget-actions.js', () => {
 
         expect(
             container.querySelectorAll(':scope > .budget-action')
-        ).toHaveLength(5);
+        ).toHaveLength(6);
     });
 
     it('handles a missing overflow menu', async () => {
@@ -484,7 +502,7 @@ describe('budget-actions.js', () => {
 
         expect(
             container.querySelectorAll(':scope > .budget-action')
-        ).toHaveLength(5);
+        ).toHaveLength(6);
     });
 
     it('ignores an action without a button when moving actions to overflow', async () => {
@@ -515,7 +533,7 @@ describe('budget-actions.js', () => {
             container.querySelectorAll(
                 '[data-budget-actions-menu] .budget-action'
             )
-        ).toHaveLength(2);
+        ).toHaveLength(3);
     });
 
     it('removes invalid menu items when restoring actions', async () => {
@@ -530,14 +548,14 @@ describe('budget-actions.js', () => {
         const invalidItem = document.createElement('li');
         menu.appendChild(invalidItem);
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
         window.dispatchEvent(new Event('resize'));
 
         expect(invalidItem.parentElement).toBeNull();
 
         expect(
             container.querySelectorAll(':scope > .budget-action')
-        ).toHaveLength(5);
+        ).toHaveLength(6);
     });
 
     it('ignores a resize event while another resize is pending', async () => {
@@ -566,7 +584,7 @@ describe('budget-actions.js', () => {
             container.querySelectorAll(
                 '[data-budget-actions-menu] .budget-action'
             )
-        ).toHaveLength(2);
+        ).toHaveLength(3);
     });
 
     it('keeps button event handlers when actions are moved to and restored from overflow', async () => {
@@ -602,7 +620,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="lock"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -647,7 +665,7 @@ describe('budget-actions.js', () => {
             post: vi.fn()
         };
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -695,7 +713,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="lock"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -756,7 +774,7 @@ describe('budget-actions.js', () => {
             '.js-budget-action-confirm-cancel'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -799,7 +817,7 @@ describe('budget-actions.js', () => {
         unlockButton.dataset.budgetActionConfirmation =
             'Êtes-vous sûr de vouloir déverrouiller ce budget&nbsp;?';
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -854,7 +872,7 @@ describe('budget-actions.js', () => {
         unlockButton.dataset.budgetActionConfirmation =
             'Êtes-vous sûr de vouloir déverrouiller ce budget&nbsp;?';
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -906,7 +924,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="delete"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -955,7 +973,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="delete"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1017,7 +1035,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="lock"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1077,7 +1095,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1140,7 +1158,7 @@ describe('budget-actions.js', () => {
             '.js-budget-action-form-cancel'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1193,7 +1211,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1266,7 +1284,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1323,7 +1341,7 @@ describe('budget-actions.js', () => {
             get: vi.fn()
         };
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1350,7 +1368,7 @@ describe('budget-actions.js', () => {
             get: vi.fn()
         };
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1379,7 +1397,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1419,7 +1437,7 @@ describe('budget-actions.js', () => {
 
         delete renameButton.dataset.budgetActionFormPostUrl;
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1477,7 +1495,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1539,7 +1557,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1589,7 +1607,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="rename"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1708,7 +1726,7 @@ describe('budget-actions.js', () => {
             post: vi.fn()
         };
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1744,7 +1762,7 @@ describe('budget-actions.js', () => {
         actionButton.dataset.budgetAction = 'lock';
         container.appendChild(actionButton);
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1782,7 +1800,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="delete"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1826,7 +1844,7 @@ describe('budget-actions.js', () => {
             '[data-budget-action="lock"]'
         );
 
-        setDimensions(container, 600);
+        setDimensions(container, 700);
 
         await loadScript('budget-actions.js');
 
@@ -1858,6 +1876,365 @@ describe('budget-actions.js', () => {
 
         expect(globalThis.axios.post).not.toHaveBeenCalled();
         expect(modal.classList.contains('show')).toBe(false);
+    });
+
+    it('opens the form modal in readonly mode for a readonly form budget action', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <input type="text" name="Name" value="Budget actuel" readonly>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const detailsButton = container.querySelector(
+            '[data-budget-action="details"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        detailsButton.click();
+
+        expect(globalThis.axios.get).toHaveBeenCalledTimes(1);
+        expect(globalThis.axios.get).toHaveBeenCalledWith(
+            '/Budget/GetDetailsPartial?id=42'
+        );
+
+        await shown;
+
+        expect(modal.classList.contains('show')).toBe(true);
+
+        expect(
+            modal.querySelector('.modal-title').textContent
+        ).toBe('Détails du budget');
+
+        expect(
+            modal.querySelector('[name="Id"]').value
+        ).toBe('42');
+
+        expect(
+            modal.querySelector('[name="Name"]').value
+        ).toBe('Budget actuel');
+
+        expect(
+            modal.querySelector('.js-budget-action-form-submit').hidden
+        ).toBe(true);
+
+        expect(
+            modal.querySelector('.js-budget-action-form-cancel').hidden
+        ).toBe(true);
+
+        expect(
+            modal.querySelector('.js-budget-action-form-close').hidden
+        ).toBe(false);
+    });
+
+    it('closes the readonly form modal without posting', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <input type="text" name="Name" value="Budget actuel" readonly>
+            `
+            })),
+            post: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const detailsButton = container.querySelector(
+            '[data-budget-action="details"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        detailsButton.click();
+
+        await shown;
+
+        const closeButton = modal.querySelector(
+            '.js-budget-action-form-close'
+        );
+
+        const hidden = new Promise(resolve => {
+            modal.addEventListener('hidden.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        closeButton.click();
+
+        await hidden;
+
+        expect(globalThis.axios.post).not.toHaveBeenCalled();
+        expect(modal.classList.contains('show')).toBe(false);
+
+        expect(
+            modal.querySelector('.js-budget-action-form-content').innerHTML
+        ).toBe('');
+    });
+
+    it('focuses the first visible enabled input when the form modal is shown', async () => {
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        globalThis.axios = {
+            get: vi.fn(() =>
+                Promise.resolve({
+                    data: `
+                    <form class="js-budget-action-form">
+                        <div class="js-budget-action-form-content">
+                            <input name="Id" type="hidden" value="42">
+                            <input name="First" type="text" value="Premier">
+                            <input name="Second" type="text" value="Second">
+                        </div>
+                    </form>
+                `
+                })
+            ),
+            post: vi.fn()
+        };
+
+        setDimensions(container, 1000);
+
+        const originalOffsetWidth = Object.getOwnPropertyDescriptor(
+            HTMLElement.prototype,
+            'offsetWidth'
+        );
+        const originalOffsetHeight = Object.getOwnPropertyDescriptor(
+            HTMLElement.prototype,
+            'offsetHeight'
+        );
+
+        Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
+            configurable: true,
+            get() {
+                return this.matches('input[type="hidden"]') ? 0 : 100;
+            }
+        });
+
+        Object.defineProperty(HTMLElement.prototype, 'offsetHeight', {
+            configurable: true,
+            get() {
+                return this.matches('input[type="hidden"]') ? 0 : 20;
+            }
+        });
+
+        try {
+            await loadScript('budget-actions.js');
+
+            const shown = new Promise(resolve => {
+                $('.js-budget-action-form-modal').one(
+                    'shown.bs.modal',
+                    resolve
+                );
+            });
+
+            button.click();
+
+            await shown;
+
+            const modal = document.querySelector(
+                '.js-budget-action-form-modal'
+            );
+
+            const firstInput = modal.querySelector('[name="First"]');
+            const secondInput = modal.querySelector('[name="Second"]');
+
+            expect(document.activeElement).toBe(firstInput);
+            expect(document.activeElement).not.toBe(secondInput);
+        }
+        finally {
+            if (originalOffsetWidth) {
+                Object.defineProperty(
+                    HTMLElement.prototype,
+                    'offsetWidth',
+                    originalOffsetWidth
+                );
+            }
+            else {
+                delete HTMLElement.prototype.offsetWidth;
+            }
+
+            if (originalOffsetHeight) {
+                Object.defineProperty(
+                    HTMLElement.prototype,
+                    'offsetHeight',
+                    originalOffsetHeight
+                );
+            }
+            else {
+                delete HTMLElement.prototype.offsetHeight;
+            }
+        }
+    });
+
+    it('submits the form when Enter is pressed in a form input', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <input type="text" name="Name" value="Budget actuel">
+            `
+            })),
+            post: vi.fn(() => Promise.resolve({
+                data: {
+                    success: true
+                }
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const renameButton = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        renameButton.click();
+
+        await shown;
+
+        const input = modal.querySelector('[name="Name"]');
+
+        input.dispatchEvent(
+            new KeyboardEvent('keydown', {
+                key: 'Enter',
+                bubbles: true,
+                cancelable: true
+            })
+        );
+
+        expect(globalThis.axios.post).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not submit the form when Enter is pressed in a textarea', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <textarea name="Description">Description</textarea>
+            `
+            })),
+            post: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const renameButton = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        renameButton.click();
+
+        await shown;
+
+        modal.querySelector('[name="Description"]').dispatchEvent(
+            new KeyboardEvent('keydown', {
+                key: 'Enter',
+                bubbles: true,
+                cancelable: true
+            })
+        );
+
+        expect(globalThis.axios.post).not.toHaveBeenCalled();
+    });
+
+    it('does not submit the readonly form when Enter is pressed', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <input type="text" name="Name" value="Budget actuel" readonly>
+            `
+            })),
+            post: vi.fn()
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const detailsButton = container.querySelector(
+            '[data-budget-action="details"]'
+        );
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        detailsButton.click();
+
+        await shown;
+
+        modal.querySelector('[name="Name"]').dispatchEvent(
+            new KeyboardEvent('keydown', {
+                key: 'Enter',
+                bubbles: true,
+                cancelable: true
+            })
+        );
+
+        expect(globalThis.axios.post).not.toHaveBeenCalled();
     });
 
 });

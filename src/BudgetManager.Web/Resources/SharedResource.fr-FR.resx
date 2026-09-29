@@ -438,4 +438,7 @@
   <data name="Password.Hide" xml:space="preserve">
     <value>Masquer le mot de passe</value>
   </data>
+  <data name="Action.Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
 </root>
