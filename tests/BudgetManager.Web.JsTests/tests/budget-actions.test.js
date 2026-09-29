@@ -1155,6 +1155,362 @@ describe('budget-actions.js', () => {
         ).toBe('Budget actuel');
     });
 
+    it('initializes the category select-all checkbox as unchecked when no category is selected', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <div class="budget-categories-form">
+                <input type="checkbox" id="select-all-categories">
+                <input type="checkbox" name="CategoriesIds" value="1">
+                <input type="checkbox" name="CategoriesIds" value="2">
+            </div>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        button.dataset.budgetAction = 'add-category';
+        button.dataset.budgetActionFormGetUrl = '/Budget/GetCategoriesPartial';
+        button.dataset.budgetActionFormPostUrl = '/Budget/AssociateCategories';
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        button.click();
+
+        await shown;
+
+        const selectAll = modal.querySelector('#select-all-categories');
+
+        expect(selectAll.checked).toBe(false);
+        expect(selectAll.indeterminate).toBe(false);
+    });
+
+    it('initializes the category select-all checkbox as checked when all categories are selected', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <div class="budget-categories-form">
+                <input type="checkbox" id="select-all-categories">
+                <input type="checkbox" name="CategoriesIds" value="1" checked>
+                <input type="checkbox" name="CategoriesIds" value="2" checked>
+            </div>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        button.dataset.budgetAction = 'add-category';
+        button.dataset.budgetActionFormGetUrl = '/Budget/GetCategoriesPartial';
+        button.dataset.budgetActionFormPostUrl = '/Budget/AssociateCategories';
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        button.click();
+
+        await shown;
+
+        const selectAll = modal.querySelector('#select-all-categories');
+
+        expect(selectAll.checked).toBe(true);
+        expect(selectAll.indeterminate).toBe(false);
+    });
+
+    it('initializes the category select-all checkbox as indeterminate when some categories are selected', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <div class="budget-categories-form">
+                <input type="checkbox" id="select-all-categories">
+                <input type="checkbox" name="CategoriesIds" value="1" checked>
+                <input type="checkbox" name="CategoriesIds" value="2">
+            </div>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        button.dataset.budgetAction = 'add-category';
+        button.dataset.budgetActionFormGetUrl = '/Budget/GetCategoriesPartial';
+        button.dataset.budgetActionFormPostUrl = '/Budget/AssociateCategories';
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        button.click();
+
+        await shown;
+
+        const selectAll = modal.querySelector('#select-all-categories');
+
+        expect(selectAll.checked).toBe(false);
+        expect(selectAll.indeterminate).toBe(true);
+    });
+
+    it('ignores disabled associated categories when updating the select-all state', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <div class="budget-categories-form">
+                <input type="checkbox" id="select-all-categories">
+                <input type="checkbox" name="CategoriesIds" value="1" checked disabled>
+                <input type="checkbox" name="CategoriesIds" value="2">
+                <input type="checkbox" name="CategoriesIds" value="3">
+            </div>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        button.dataset.budgetAction = 'add-category';
+        button.dataset.budgetActionFormGetUrl = '/Budget/GetCategoriesPartial';
+        button.dataset.budgetActionFormPostUrl = '/Budget/AssociateCategories';
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        button.click();
+
+        await shown;
+
+        const selectAll = modal.querySelector('#select-all-categories');
+        const availableCategories = modal.querySelectorAll(
+            'input[name="CategoriesIds"]:not(:disabled)'
+        );
+
+        expect(selectAll.checked).toBe(false);
+        expect(selectAll.indeterminate).toBe(false);
+
+        availableCategories.forEach(category => {
+            category.checked = true;
+        });
+
+        availableCategories[0].dispatchEvent(
+            new Event('change', { bubbles: true })
+        );
+
+        expect(selectAll.checked).toBe(true);
+        expect(selectAll.indeterminate).toBe(false);
+
+        const associatedCategory = modal.querySelector(
+            'input[name="CategoriesIds"][disabled]'
+        );
+
+        expect(associatedCategory.checked).toBe(true);
+    });
+
+    it('selects and deselects all available categories without changing associated categories', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <div class="budget-categories-form">
+                <input type="checkbox" id="select-all-categories">
+                <input type="checkbox" name="CategoriesIds" value="1" checked disabled>
+                <input type="checkbox" name="CategoriesIds" value="2">
+                <input type="checkbox" name="CategoriesIds" value="3">
+            </div>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        button.dataset.budgetAction = 'add-category';
+        button.dataset.budgetActionFormGetUrl = '/Budget/GetCategoriesPartial';
+        button.dataset.budgetActionFormPostUrl = '/Budget/AssociateCategories';
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        button.click();
+
+        await shown;
+
+        const selectAll = modal.querySelector('#select-all-categories');
+        const availableCategories = modal.querySelectorAll(
+            'input[name="CategoriesIds"]:not(:disabled)'
+        );
+        const associatedCategory = modal.querySelector(
+            'input[name="CategoriesIds"][disabled]'
+        );
+
+        selectAll.checked = true;
+        selectAll.dispatchEvent(
+            new Event('change', { bubbles: true })
+        );
+
+        availableCategories.forEach(category => {
+            expect(category.checked).toBe(true);
+        });
+
+        expect(associatedCategory.checked).toBe(true);
+        expect(selectAll.indeterminate).toBe(false);
+
+        selectAll.checked = false;
+        selectAll.dispatchEvent(
+            new Event('change', { bubbles: true })
+        );
+
+        availableCategories.forEach(category => {
+            expect(category.checked).toBe(false);
+        });
+
+        expect(associatedCategory.checked).toBe(true);
+        expect(selectAll.checked).toBe(false);
+        expect(selectAll.indeterminate).toBe(false);
+    });
+
+    it('updates the category select-all state when an individual category changes', async () => {
+        globalThis.axios = {
+            get: vi.fn(() => Promise.resolve({
+                data: `
+            <input type="hidden" name="Id" value="42">
+            <div class="budget-categories-form">
+                <input type="checkbox" id="select-all-categories">
+                <input type="checkbox" name="CategoriesIds" value="1">
+                <input type="checkbox" name="CategoriesIds" value="2">
+            </div>
+            `
+            }))
+        };
+
+        const container = document.querySelector('[data-budget-actions]');
+        const button = container.querySelector(
+            '[data-budget-action="rename"]'
+        );
+
+        button.dataset.budgetAction = 'add-category';
+        button.dataset.budgetActionFormGetUrl = '/Budget/GetCategoriesPartial';
+        button.dataset.budgetActionFormPostUrl = '/Budget/AssociateCategories';
+
+        setDimensions(container, 700);
+
+        await loadScript('budget-actions.js');
+
+        const modal = document.querySelector(
+            '.js-budget-action-form-modal'
+        );
+
+        const shown = new Promise(resolve => {
+            modal.addEventListener('shown.bs.modal', resolve, {
+                once: true
+            });
+        });
+
+        button.click();
+
+        await shown;
+
+        const selectAll = modal.querySelector('#select-all-categories');
+        const categories = modal.querySelectorAll(
+            'input[name="CategoriesIds"]:not(:disabled)'
+        );
+
+        categories[0].checked = true;
+        categories[0].dispatchEvent(
+            new Event('change', { bubbles: true })
+        );
+
+        expect(selectAll.checked).toBe(false);
+        expect(selectAll.indeterminate).toBe(true);
+
+        categories[1].checked = true;
+        categories[1].dispatchEvent(
+            new Event('change', { bubbles: true })
+        );
+
+        expect(selectAll.checked).toBe(true);
+        expect(selectAll.indeterminate).toBe(false);
+
+        categories[0].checked = false;
+        categories[0].dispatchEvent(
+            new Event('change', { bubbles: true })
+        );
+
+        expect(selectAll.checked).toBe(false);
+        expect(selectAll.indeterminate).toBe(true);
+    });
+
     it('closes the form modal without posting when the user cancels', async () => {
         globalThis.axios = {
             get: vi.fn(() => Promise.resolve({

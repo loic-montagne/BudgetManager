@@ -125,12 +125,6 @@
             return;
         }
 
-        console.log(formModalForm.find('input[name="CategoriesIds"]:checked').length);
-        console.log(formModalForm.find('input[name="CategoriesIds"]:checked').map(function () {
-            return this.value;
-        }).get());
-        console.log(formModalForm.serialize());
-
         const formData = formModalForm.serialize();
 
         formModalForm.find(':input').prop('disabled', true);
